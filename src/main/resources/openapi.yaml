@@ -1,0 +1,1197 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "alojamiento quindio",
+    "description": "API REST para la gestión completa",
+    "contact": {
+      "name": "Equipo de Desarrollo",
+      "url": "https://tiendavirtual.com",
+      "email": "dev@tiendavirtual.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Servidor de Desarrollo"
+    },
+    {
+      "url": "https://api-test.tiendavirtual.com",
+      "description": "Servidor de Pruebas"
+    },
+    {
+      "url": "https://api.tiendavirtual.com",
+      "description": "Servidor de Producción"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Host Bookings",
+      "description": "Operaciones de reservas desde la perspectiva del anfitrión"
+    },
+    {
+      "name": "Main Dashboard",
+      "description": "Operaciones para el dashboard principal (administradores)"
+    },
+    {
+      "name": "Authentication",
+      "description": "Operaciones de autenticación y registro"
+    },
+    {
+      "name": "Accommodations",
+      "description": "Operaciones relacionadas con la gestión de alojamientos"
+    },
+    {
+      "name": "Guest Dashboard",
+      "description": "Operaciones para el dashboard del huésped"
+    },
+    {
+      "name": "Guest Bookings",
+      "description": "Operaciones de reservas desde la perspectiva del huésped"
+    },
+    {
+      "name": "Host Dashboard",
+      "description": "Operaciones para el dashboard del anfitrión"
+    }
+  ],
+  "paths": {
+    "/api/v1/host/bookings/{id}/cancel": {
+      "put": {
+        "tags": [
+          "Host Bookings"
+        ],
+        "summary": "Cancelar reserva por anfitrión",
+        "description": "Solo para anfitrión propietario; según políticas, genera notificación.",
+        "operationId": "cancelBookingByHost",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID de la reserva",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reserva cancelada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Fuera de plazo",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No propietario",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/host/bookings/{id}/approve": {
+      "put": {
+        "tags": [
+          "Host Bookings"
+        ],
+        "summary": "Aprobar reserva",
+        "description": "Solo para anfitrión propietario; cambia estado a CONFIRMED, genera notificación.",
+        "operationId": "approveBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID de la reserva",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reserva aprobada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Estado inválido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No propietario",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/guest/bookings/{id}": {
+      "put": {
+        "tags": [
+          "Guest Bookings"
+        ],
+        "summary": "Modificar reserva",
+        "description": "Solo para huésped propietario; valida políticas de modificación.",
+        "operationId": "updateBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID de la reserva",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Reserva modificada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validación fallida",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No propietario",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Guest Bookings"
+        ],
+        "summary": "Cancelar reserva",
+        "description": "Solo para huésped propietario; según políticas de cancelación, genera notificación.",
+        "operationId": "cancelBooking",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID de la reserva",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Reserva cancelada"
+          },
+          "400": {
+            "description": "Fuera de plazo de cancelación"
+          },
+          "401": {
+            "description": "No autenticado"
+          },
+          "403": {
+            "description": "No propietario"
+          },
+          "404": {
+            "description": "No encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/accommodations/{id}": {
+      "get": {
+        "tags": [
+          "Accommodations"
+        ],
+        "summary": "Obtener detalles de alojamiento",
+        "description": "Incluye mapa y comentarios promedio.",
+        "operationId": "getAccommodationById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID del alojamiento",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalles del alojamiento",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Accommodations"
+        ],
+        "summary": "Actualizar alojamiento",
+        "description": "Solo para host propietario. Soft update.",
+        "operationId": "updateAccommodation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID del alojamiento",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccommodationUpdateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Actualizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validación fallida",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "No propietario",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Accommodations"
+        ],
+        "summary": "Soft delete de alojamiento",
+        "description": "Marca como deleted; solo para host propietario.",
+        "operationId": "deleteAccommodation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID del alojamiento",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Eliminado lógicamente"
+          },
+          "401": {
+            "description": "No autenticado"
+          },
+          "403": {
+            "description": "No propietario"
+          },
+          "404": {
+            "description": "No encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/guest/bookings": {
+      "get": {
+        "tags": [
+          "Guest Bookings"
+        ],
+        "summary": "Listar reservas del huésped",
+        "description": "Historial con filtros (activas, canceladas). Paginado.",
+        "operationId": "getGuestBookings",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Estado de la reserva",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "CONFIRMED"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número de página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Tamaño de página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de reservas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingDTO"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingDTO"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Guest Bookings"
+        ],
+        "summary": "Crear reserva",
+        "description": "Valida disponibilidad; genera notificación a host.",
+        "operationId": "createBooking",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookingCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Reserva creada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No disponible o validación fallida",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Rol no autorizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/signup": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Registrar nuevo usuario",
+        "description": "Registro de usuarios o anfitriones con validaciones (email, edad, contraseña); retorna JWT.",
+        "operationId": "signUp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignUpDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario registrado exitosamente con JWT",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validación fallida (e.g., email duplicado)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponseDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Iniciar sesión",
+        "description": "Autenticación con email y contraseña; retorna JWT para autorización.",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión exitoso con JWT",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Credenciales inválidas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponseDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accommodations": {
+      "get": {
+        "tags": [
+          "Accommodations"
+        ],
+        "summary": "Buscar alojamientos disponibles",
+        "description": "Consulta por ciudad, fechas, precio; integra Mapbox para ubicaciones. Filtros opcionales.",
+        "operationId": "searchAccommodations",
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "description": "Ciudad para filtrar",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "Madrid"
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Fecha inicio disponibilidad",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2025-10-01"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Fecha fin disponibilidad",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "2025-10-10"
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "description": "Precio máximo por noche",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            },
+            "example": 100
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número de página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Tamaño de página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de alojamientos disponibles",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccommodationDTO"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Parámetros inválidos (e.g., fechas erróneas)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccommodationDTO"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccommodationDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Accommodations"
+        ],
+        "summary": "Crear nuevo alojamiento",
+        "description": "Solo para hosts. Incluye hasta 10 imágenes (URLs de servicio externo).",
+        "operationId": "createAccommodation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccommodationCreateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Alojamiento creado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validación fallida (e.g., imágenes \u003E10)",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Rol no autorizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccommodationDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/host/dashboard": {
+      "get": {
+        "tags": [
+          "Host Dashboard"
+        ],
+        "summary": "Obtener resumen del dashboard del anfitrión",
+        "description": "Incluye ingresos, calificaciones promedio, reservas pendientes y métricas de propiedades.",
+        "operationId": "getHostDashboard",
+        "responses": {
+          "200": {
+            "description": "Resumen obtenido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/host/bookings": {
+      "get": {
+        "tags": [
+          "Host Bookings"
+        ],
+        "summary": "Listar reservas de los alojamientos del anfitrión",
+        "description": "Historial con filtros. Paginado.",
+        "operationId": "getHostBookings",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Estado de la reserva",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "PENDING"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número de página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            },
+            "example": 0
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Tamaño de página",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de reservas",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingDTO"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingDTO"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/guest/dashboard": {
+      "get": {
+        "tags": [
+          "Guest Dashboard"
+        ],
+        "summary": "Obtener resumen del dashboard del huésped",
+        "description": "Incluye historial resumido, reservas activas, comentarios pendientes y métricas personales.",
+        "operationId": "getGuestDashboard",
+        "responses": {
+          "200": {
+            "description": "Resumen obtenido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/v1/dashboard": {
+      "get": {
+        "tags": [
+          "Main Dashboard"
+        ],
+        "summary": "Obtener resumen del dashboard principal",
+        "description": "Estadísticas globales del sistema: usuarios, reservas, ingresos totales, etc.",
+        "operationId": "getMainDashboard",
+        "responses": {
+          "200": {
+            "description": "Resumen obtenido",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalDashboardSummaryDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalDashboardSummaryDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Rol no autorizado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobalDashboardSummaryDTO"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BookingDTO": {
+
+      },
+      "BookingUpdateDTO": {
+        "description": "Datos actualizados de la reserva"
+      },
+      "AccommodationUpdateDTO": {
+        "description": "Datos actualizados del alojamiento"
+      },
+      "AccommodationDTO": {
+
+      },
+      "BookingCreateDTO": {
+        "description": "Datos de la reserva a crear"
+      },
+      "UserSignUpDTO": {
+
+      },
+      "JwtResponseDTO": {
+
+      },
+      "UserLoginDTO": {
+
+      },
+      "AccommodationCreateDTO": {
+        "description": "Datos del alojamiento a crear"
+      },
+      "DashboardSummaryDTO": {
+
+      },
+      "GlobalDashboardSummaryDTO": {
+
+      }
+    }
+  }
+}
