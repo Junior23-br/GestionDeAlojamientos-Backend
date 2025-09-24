@@ -14,8 +14,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "host")
 public class Host extends UserBasic {

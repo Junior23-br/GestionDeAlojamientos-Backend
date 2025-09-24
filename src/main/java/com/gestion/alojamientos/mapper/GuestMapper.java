@@ -20,13 +20,13 @@ public interface GuestMapper {
  * @param dto datos para crear nuevo huesped
  * @return entidad de huesped mapeada
  */
-@Mapping(target = "email", source = "email")
-@Mapping(target = "password", source = "password")
-@Mapping(target = "birthDate", source = "birthDate")
-@Mapping(target = "firstName", source = "firstName")
-@Mapping(target = "lastName", source = "lastName")
-@Mapping(target = "phoneNumber", source = "phoneNumber")
-Guest toEntity(CreateGuestDto dto);
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "password", source = "password")
+    @Mapping(target = "birthDate", source = "birthDate")
+    @Mapping(target = "firstName", source = "firstName")
+    @Mapping(target = "lastName", source = "lastName")
+    @Mapping(target = "phoneNumber", source = "phoneNumber")
+    Guest toEntity(CreateGuestDto dto);
     /**
      * Convierte una entidad de huesped a un DTO
      * @param dto  entidad de huesped a convertir
