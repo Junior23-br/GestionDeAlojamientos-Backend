@@ -1,14 +1,11 @@
-package com.gestion.alojamientos.dto.usuario;
-
-
+package com.gestion.alojamientos.dto.guest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 /**
-*DTO para eliminar logicamente a un usuario del sistema
+*DTO para eliminar logicamente a un huesped del sistema
 * Este objeto es utilizado para validar la identidad del solicitante
  */
-public record EliminarUsuarioDto (
+public record DeleteGuestDto(
         /**
          * Identificador único del usuario.
          * Campo obligatorio.
@@ -18,6 +15,6 @@ public record EliminarUsuarioDto (
          * Contraseña del usuario.
          * Campo obligatorio para validar la eliminación.
          */
-        @NotBlank String contrasenia
+        @NotBlank String password
 ){
 }

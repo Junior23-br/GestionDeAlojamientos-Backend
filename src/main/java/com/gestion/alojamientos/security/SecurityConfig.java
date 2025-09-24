@@ -28,7 +28,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/usuarios/**").permitAll() // Permitir acceso público a endpoints de usuarios por ahora
+                        .requestMatchers("/api/guests/**").permitAll() // Permitir acceso público a endpoints de usuarios por ahora
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling()
