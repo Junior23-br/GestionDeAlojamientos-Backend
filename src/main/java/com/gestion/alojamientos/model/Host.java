@@ -29,4 +29,9 @@ public class Host extends UserBasic {
     @Column(name = "statusHost", nullable = false, length = 20)
     @Comment("Estado actual del usuario: Activo, Inactivo, Suspendido, Eliminado" + "\n" + " Pendiente, Aprovado, Rechazado.")
     private StatesOfHost status;
+
+
+
+
+
 }

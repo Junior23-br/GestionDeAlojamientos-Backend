@@ -8,6 +8,7 @@ import com.gestion.alojamientos.exception.ElementNotFoundException;
 import com.gestion.alojamientos.exception.InvalidElementException;
 import com.gestion.alojamientos.exception.RepeatedElementException;
 import com.gestion.alojamientos.mapper.GuestMapper;
+import com.gestion.alojamientos.model.Enums.StatesOfHost;
 import com.gestion.alojamientos.model.Guest;
 import com.gestion.alojamientos.repository.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +77,7 @@ public class GuestService {
         if(!passwordEncoder.matches(dto.password(), guest.getPassword())) {
             throw new InvalidElementException("Contraseñia incorrecta");
         }
-            guest.setStatus("deleted"); //cambiar el estado del huesped
+            guest.setState(StatesOfHost.DELETED); //cambiar el estado del huesped
             guestRepository.save(guest);
         }
 

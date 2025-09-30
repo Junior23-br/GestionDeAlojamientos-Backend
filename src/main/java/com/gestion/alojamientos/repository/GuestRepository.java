@@ -14,6 +14,7 @@ import java.util.Optional;
  */
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Long>, JpaSpecificationExecutor<Guest> {
+
     /**
     *Buscar un huesped a partir del correo registrado
      */
