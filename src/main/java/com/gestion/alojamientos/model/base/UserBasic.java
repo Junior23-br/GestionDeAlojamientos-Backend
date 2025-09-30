@@ -75,12 +75,7 @@ public abstract class UserBasic {
      */
     @Embedded
     private ResetCode resetCode;
-    /**
-     * Estado de eliminación del usuario: activo o eliminado.
-     */
-    @Column(name = "status", nullable = false, length = 20)
-    @Comment("Estado de eliminación del usuario: activo o eliminado")
-    private String status;
+
 
     public Long getId() {
         return id;
@@ -130,10 +125,5 @@ public abstract class UserBasic {
     public void setResetCode(ResetCode resetCode) {
         this.resetCode = resetCode;
     }
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
+
 }
