@@ -1,5 +1,4 @@
 package com.gestion.alojamientos.controller;
-
 // IMPORTACIONES PARA SWAGGER
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

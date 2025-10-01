@@ -8,13 +8,14 @@ import com.gestion.alojamientos.exception.ElementNotFoundException;
 import com.gestion.alojamientos.exception.InvalidElementException;
 import com.gestion.alojamientos.exception.RepeatedElementException;
 import com.gestion.alojamientos.mapper.GuestMapper;
-import com.gestion.alojamientos.model.Enums.StatesOfHost;
+import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.Guest;
 import com.gestion.alojamientos.repository.GuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Service
 public class GuestService {
@@ -30,7 +31,6 @@ public class GuestService {
     private GuestMapper guestMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     /**
      * @param dto DTO con los datos del huesped a registrar
      * @return DTO del huesped creadp
@@ -46,6 +46,9 @@ public class GuestService {
         }
         if (dto.birthDate().isAfter((LocalDate.now()))) {
             throw new InvalidElementException("Fecha nacimiento es invalida");
+        }
+        if(!isOfAge(dto.birthDate())) {
+            throw new InvalidElementException("Eres menor de edad, lo lamentamos;(");
         }
 
         Guest guest = guestMapper.toEntity(dto);
@@ -80,7 +83,6 @@ public class GuestService {
             guest.setState(StatesOfHost.DELETED); //cambiar el estado del huesped
             guestRepository.save(guest);
         }
-
     /**
      *
      * @param id identificacor del huesped
@@ -89,6 +91,15 @@ public class GuestService {
      */
         public GuestDto getGuestById (Long id) throws ElementNotFoundException {
             return guestMapper.toDto(guestRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con ID: " + id)));
+        }
+    /**
+     * @param guest verificar que el huesped sea mayor de edad
+     * @return verdadero o falso dependiendo si tiene la idea minima requerida
+     */
+    public boolean isOfAge(LocalDate guest) {
+            LocalDate today = LocalDate.now();
+            Period period = Period.between(guest, today);
+            return period.getYears() >=18;
         }
 }
 

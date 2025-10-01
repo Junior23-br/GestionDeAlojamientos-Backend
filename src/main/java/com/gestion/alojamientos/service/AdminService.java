@@ -1,8 +1,8 @@
 package com.gestion.alojamientos.service;
 
-import com.gestion.alojamientos.dto.Admin.AdminDto;
-import com.gestion.alojamientos.dto.Admin.CreateAdminDto;
-import com.gestion.alojamientos.dto.Admin.EditAdminDto;
+import com.gestion.alojamientos.dto.admin.AdminDto;
+import com.gestion.alojamientos.dto.admin.CreateAdminDto;
+import com.gestion.alojamientos.dto.admin.EditAdminDto;
 import com.gestion.alojamientos.mapper.AdminMapper;
 import com.gestion.alojamientos.model.Admin;
 import com.gestion.alojamientos.repository.AdminRepository;

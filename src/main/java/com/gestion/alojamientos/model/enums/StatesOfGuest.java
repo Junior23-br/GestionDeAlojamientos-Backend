@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.model.Enums;
+package com.gestion.alojamientos.model.enums;
 
 public enum StatesOfGuest {
     ACTIVE("El huésped está activo y puede usar la plataforma"),

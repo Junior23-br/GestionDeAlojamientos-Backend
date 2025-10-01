@@ -45,8 +45,9 @@ public abstract class UserBasic {
      * Teléfono de la persona.
      * Campo obligatorio.
      */
-    @Column(name = "phone_number", nullable = false, length = 10)
+    @Column(name = "phone_number", nullable = false, length = 10, unique = true)
     @Comment("Número telefónico de contacto")
+
     private String phoneNumber;
     /**
      * Fecha de nacimiento de la persona.
@@ -59,7 +60,7 @@ public abstract class UserBasic {
      * Dirección de correo del usuario único.
      * Campo obligatorio, con formato válido.
      */
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @Comment("Dirección de correo electrónico única para autenticación.")
     private String email;
     /**

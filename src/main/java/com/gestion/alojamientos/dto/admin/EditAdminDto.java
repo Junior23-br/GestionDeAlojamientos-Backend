@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.dto.Admin;
+package com.gestion.alojamientos.dto.admin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

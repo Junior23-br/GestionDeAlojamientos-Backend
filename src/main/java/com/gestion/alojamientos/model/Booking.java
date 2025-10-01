@@ -2,6 +2,7 @@ package com.gestion.alojamientos.model;
 
 import java.util.Date;
 
+import com.gestion.alojamientos.model.enums.BookingStatus;
 import jakarta.persistence.*;
 
 @Entity

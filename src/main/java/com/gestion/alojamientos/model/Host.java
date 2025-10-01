@@ -1,6 +1,6 @@
 package com.gestion.alojamientos.model;
 
-import com.gestion.alojamientos.model.Enums.StatesOfHost;
+import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.base.UserBasic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,11 +27,8 @@ public class Host extends UserBasic {
      * Descripcion: En src/main/java/com/gestion/alojamientos/model/Enums/StatusOfHost se encuentra la descripcion de cada uno de los estados
      */
     @Column(name = "statusHost", nullable = false, length = 20)
-    @Comment("Estado actual del usuario: Activo, Inactivo, Suspendido, Eliminado" + "\n" + " Pendiente, Aprovado, Rechazado.")
+    @Comment("Estado actual del usuario: Activo, Inactivo, Suspendido, Eliminado" + "\n" + " Pendiente, Aprobdo, Rechazado.")
     private StatesOfHost status;
-
-
-
 
 
 }

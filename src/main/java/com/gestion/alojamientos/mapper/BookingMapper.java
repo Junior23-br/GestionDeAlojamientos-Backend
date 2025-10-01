@@ -3,7 +3,7 @@ package com.gestion.alojamientos.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.gestion.alojamientos.dto.BookingDTO;
+import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.model.Booking;
 
 @Mapper(componentModel = "spring")

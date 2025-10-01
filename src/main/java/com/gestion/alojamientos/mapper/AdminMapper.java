@@ -1,14 +1,13 @@
 package com.gestion.alojamientos.mapper;
 
 
-import com.gestion.alojamientos.dto.Admin.AdminDto;
-import com.gestion.alojamientos.dto.Admin.CreateAdminDto;
-import com.gestion.alojamientos.dto.Admin.EditAdminDto;
+import com.gestion.alojamientos.dto.admin.AdminDto;
+import com.gestion.alojamientos.dto.admin.CreateAdminDto;
+import com.gestion.alojamientos.dto.admin.EditAdminDto;
 import com.gestion.alojamientos.model.Admin;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.InheritConfiguration;
 
 
 /**

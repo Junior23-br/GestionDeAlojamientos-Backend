@@ -4,9 +4,13 @@ import com.gestion.alojamientos.dto.guest.EditGuestDto;
 import com.gestion.alojamientos.dto.guest.DeleteGuestDto;
 import com.gestion.alojamientos.dto.guest.GuestDto;
 import com.gestion.alojamientos.service.GuestService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 /**
  * Será el controlador REST el cual gestionara las operaciones relacionadas
  * con huespedes. Además proporciona endpoints para poder registrar, eliminar editar y consultar huespedes.

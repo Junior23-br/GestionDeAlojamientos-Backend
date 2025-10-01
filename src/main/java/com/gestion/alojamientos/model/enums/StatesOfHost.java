@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.model.Enums;
+package com.gestion.alojamientos.model.enums;
 
 public enum StatesOfHost {
     ACTIVE("El anfitrión está activo y puede ofrecer alojamientos"),

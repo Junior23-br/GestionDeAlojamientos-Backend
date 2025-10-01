@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.model;
+package com.gestion.alojamientos.model.enums;
 
 public enum BookingStatus {
     PENDING,

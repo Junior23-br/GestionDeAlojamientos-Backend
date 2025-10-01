@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.dto;
+package com.gestion.alojamientos.dto.booking;
 
 public record BookingDTO(
     String id,

@@ -16,26 +16,29 @@ import java.util.Optional;
 public interface GuestRepository extends JpaRepository<Guest, Long>, JpaSpecificationExecutor<Guest> {
 
     /**
-    *Buscar un huesped a partir del correo registrado
+     * Busca un huésped a partir del correo registrado.
+     * @param email correo del huésped a buscar
+     * @return un Optional con el huésped si existe, vacío en caso contrario
      */
     Optional<Guest> findByEmail(String email);
     /**
     *Buscar un huesped por su numero de phoneNumber
+     *@param phoneNumber  telefono del huesped a buscar
+     * @return un Optional con el huésped si existe, vacío en caso contrario
      */
     Optional<Guest> findByPhoneNumber(String phoneNumber);
     /**
     *Buscar huesped por su firstName
+     * @param firstName nombre del huesped
+     * @return un Optional con el huésped si existe, vacío en caso contrario
      */
     Optional<Guest> findByFirstName(String firstName);
     /**
     *Buscar un huesped por su lastName
+     * @param lastName apellido del huesped
+     * @return un Optional con el huésped si existe, vacío en caso contrario
      */
     Optional<Guest> findByLastName(String lastName);
-    /**
-     *Buscar huesped por su id
-     */
-    Optional<Guest> findById(Long id);
-
     /**
      * Verifica si existe un huesped con el correo especificado
      * @param email correo electronico a verificar
