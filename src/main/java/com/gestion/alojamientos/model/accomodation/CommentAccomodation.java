@@ -3,6 +3,7 @@ package com.gestion.alojamientos.model.accomodation;
 import java.time.LocalDateTime;
 
 import com.gestion.alojamientos.model.base.NormalUser;
+import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class CommentAccomodation {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private NormalUser author; // Autor del comentario
+    private Guest author; // Autor del comentario
 
     @Column(name = "is_visible", nullable = false)
     private Boolean isVisible; // Visibilidad

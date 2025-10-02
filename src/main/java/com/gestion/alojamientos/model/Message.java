@@ -3,6 +3,7 @@ package com.gestion.alojamientos.model;
 import java.util.Date;
 
 import com.gestion.alojamientos.model.base.SuperUser;
+import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,11 +26,11 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    private SuperUser sender; // User who sends the message
+    private Guest sender; // User who sends the message
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private SuperUser receiver; // User who receives the message
+    private Guest receiver; // User who receives the message
 
     @Column(name = "text", columnDefinition = "TEXT", nullable = false)
     private String text; // Message text

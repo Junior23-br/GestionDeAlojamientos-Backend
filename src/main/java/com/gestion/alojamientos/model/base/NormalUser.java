@@ -14,9 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.JOINED)
-@Entity
-@Table(name = "user")
+@MappedSuperclass
 public abstract class NormalUser extends SuperUser  {
 
     @Column(name = "name", nullable = false, length = 100)
@@ -31,12 +29,6 @@ public abstract class NormalUser extends SuperUser  {
 
     @Column(name = "url_profile_photo", length = 255)
     private String urlProfilePhoto; // URL of profile photo (optional)
-
-    @OneToMany(mappedBy = "guest")
-    private List<Booking> bookingList; // List of bookings
-
-    @OneToMany(mappedBy = "holder")
-    private List<Transaction> transactionHistory; // Transaction history
 
     public NormalUser() {
         super();

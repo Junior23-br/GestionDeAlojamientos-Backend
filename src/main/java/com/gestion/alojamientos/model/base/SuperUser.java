@@ -15,8 +15,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
-@Entity
+@MappedSuperclass
 public abstract class SuperUser {
 
     @Id
@@ -32,10 +31,4 @@ public abstract class SuperUser {
 
     @Column(name = "username", nullable = false, length = 100)
     private String username; // Username
-
-    // @OneToMany(mappedBy = "receiver")
-    // private List<Notification> notificationList; // List of notifications
-
-    // @ManyToMany(mappedBy = "membersList")
-    // private List<Chat> chatList; // List of chats
 }

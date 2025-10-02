@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.gestion.alojamientos.model.base.SuperUser;
+import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -45,5 +46,5 @@ public class Chat {
         inverseJoinColumns = @JoinColumn(name = "user_id") // FK de SuperUser
     )
     @Builder.Default
-    private List<SuperUser> membersList = new ArrayList<>();
+    private List<Guest> membersList = new ArrayList<>();
 }

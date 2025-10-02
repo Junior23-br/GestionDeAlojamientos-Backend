@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.model;
 
-import com.gestion.alojamientos.model.base.SuperUser;
+import com.gestion.alojamientos.model.users.Guest;
+import com.gestion.alojamientos.model.users.Host;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,12 +22,12 @@ public class CommentHost {
     // Relación Many-to-One con el usuario que envía el comentario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
-    private SuperUser sender;
+    private Guest sender;
 
     // Relación Many-to-One con el usuario que recibe el comentario (Host)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", nullable = false)
-    private SuperUser receiver;
+    private Host receiver;
 
     @Column(name = "content", nullable = false, length = 1000)
     private String content;
