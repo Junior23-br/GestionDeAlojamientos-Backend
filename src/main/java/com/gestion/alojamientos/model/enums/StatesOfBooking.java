@@ -1,9 +1,9 @@
 package com.gestion.alojamientos.model.enums;
 
-public enum BookingStatus {
+public enum StatesOfBooking {
     PENDING,
     CONFIRMED,
     CANCELLED,
-    CHECKED_IN, 
-    CHECKED_OUT
+    CHECK_IN,
+    CHECK_OUT
 }
