@@ -1,77 +1,80 @@
-package com.gestion.alojamientos.model;
-
-import java.util.Date;
-
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
 public class Booking {
 
     @Id
-    @Column(name = "id", length = 36, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "guest_id", length = 36, nullable = false)
-    private String guestId;
+    @Column(name = "creation_date", nullable = false)
+    private LocalDateTime creationDate;
 
-    @Column(name = "accomodation_id", length = 36, nullable = false)
-    private String accomodationId;
-
-    @Column(name = "transaction_id", length = 36)
-    private String transactionId;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "start_date", nullable = false)
-    private Date startDate;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "end_date", nullable = false)
-    private Date endDate;
-
-    @Column(name = "total", nullable = false)
-    private long total;
+    @Column(name = "update_time")
+    private LocalDateTime updateTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private BookingStatus status;
+    @Column(name = "booking_state", nullable = false)
+    private StatesOfBooking bookingState;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
-    private Date createdAt;
+    @Column(name = "total_price", nullable = false)
+    private Double totalPrice;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @Column(name = "payment_status", nullable = false)
+    private Boolean paymentStatus;
 
-    // Getters and Setters
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_method_id")
+    private FinancialAccount paymentMethod;
 
-    public String getGuestId() { return guestId; }
-    public void setGuestId(String guestId) { this.guestId = guestId; }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guest_id", nullable = false)
+    private Guest guest;
 
-    public String getAccomodationId() { return accomodationId; }
-    public void setAccomodationId(String accomodationId) { this.accomodationId = accomodationId; }
+    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    private DetailBooking detailBooking;
 
-    public String getTransactionId() { return transactionId; }
-    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voucher_id")
+    private Voucher voucher;
 
-    public Date getStartDate() { return startDate; }
-    public void setStartDate(Date startDate) { this.startDate = startDate; }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accomodation_id", nullable = false)
+    private Accomodation accomodation;
 
-    public Date getEndDate() { return endDate; }
-    public void setEndDate(Date endDate) { this.endDate = endDate; }
+    // ====== Getters y Setters ======
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public long getTotal() { return total; }
-    public void setTotal(long total) { this.total = total; }
+    public LocalDateTime getCreationDate() { return creationDate; }
+    public void setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; }
 
-    public void setStatus(BookingStatus status) { this.status = status; }
-    public BookingStatus getStatus() { return status; }
+    public LocalDateTime getUpdateTime() { return updateTime; }
+    public void setUpdateTime(LocalDateTime updateTime) { this.updateTime = updateTime; }
 
-    public Date getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public StatesOfBooking getBookingState() { return bookingState; }
+    public void setBookingState(StatesOfBooking bookingState) { this.bookingState = bookingState; }
 
-    public Date getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
+    public Double getTotalPrice() { return totalPrice; }
+    public void setTotalPrice(Double totalPrice) { this.totalPrice = totalPrice; }
+
+    public Boolean getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(Boolean paymentStatus) { this.paymentStatus = paymentStatus; }
+
+    public FinancialAccount getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(FinancialAccount paymentMethod) { this.paymentMethod = paymentMethod; }
+
+    public Guest getGuest() { return guest; }
+    public void setGuest(Guest guest) { this.guest = guest; }
+
+    public DetailBooking getDetailBooking() { return detailBooking; }
+    public void setDetailBooking(DetailBooking detailBooking) { this.detailBooking = detailBooking; }
+
+    public Voucher getVoucher() { return voucher; }
+    public void setVoucher(Voucher voucher) { this.voucher = voucher; }
+
+    public Accomodation getAccomodation() { return accomodation; }
+    public void setAccomodation(Accomodation accomodation) { this.accomodation = accomodation; }
 }

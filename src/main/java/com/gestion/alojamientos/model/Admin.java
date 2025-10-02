@@ -15,7 +15,7 @@ import org.hibernate.annotations.Comment;
 @Builder
 @Entity
 @Table(name = "guest")
-public class Admin {
+public class  Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment("ID interno único del administrados creado automáticamente por el sistema")
