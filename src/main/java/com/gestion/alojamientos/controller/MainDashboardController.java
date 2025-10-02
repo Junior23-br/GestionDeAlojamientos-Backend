@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import com.gestion.alojamientos.dto.GlobalDashboardSummaryDTO;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-
 @RestController
 @RequestMapping("/api/v1/dashboard")
 @Tag(name = "Main Dashboard", description = "Endpoints para el dashboard principal de administradores (ROLE_ADMIN). Proporciona estadísticas globales con autenticación JWT, optimizado para monitoreo del sistema.")

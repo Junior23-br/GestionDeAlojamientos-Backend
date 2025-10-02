@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import com.gestion.alojamientos.dto.DashboardSummaryDTO;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-
 @RestController
 @RequestMapping("/api/v1/guest/dashboard")
 @Tag(name = "Guest Dashboard", description = "Endpoints para el dashboard del huésped (ROLE_GUEST). Proporciona un resumen personalizado con autenticación JWT, incluyendo historial de reservas, reservas activas, comentarios pendientes y métricas personales. Optimizado para usabilidad y rendimiento.")

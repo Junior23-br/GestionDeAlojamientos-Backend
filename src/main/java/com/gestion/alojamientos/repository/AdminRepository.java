@@ -1,8 +1,9 @@
 package com.gestion.alojamientos.repository;
 
-import com.gestion.alojamientos.model.Admin;
-import com.gestion.alojamientos.model.Guest;
-import com.gestion.alojamientos.model.base.UserBasic;
+// import com.gestion.alojamientos.model.base.UserBasic;
+import com.gestion.alojamientos.model.users.Admin;
+import com.gestion.alojamientos.model.users.Guest;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,29 +14,29 @@ import java.util.Optional;
 
 public interface AdminRepository extends JpaRepository<Admin, Integer>, JpaSpecificationExecutor<Admin> {
 
-    /**
-     * Buscar un administrador por correo electrónico
-     */
-    @Query("SELECT a FROM Admin a where a.email =?")
-    Optional<Admin> findByEmail(String email);
+    // /**
+    //  * Buscar un administrador por correo electrónico
+    //  */
+    // @Query("SELECT a FROM Admin a where a.email =?")
+    // Optional<Admin> findByEmail(String email);
 
 
-    /**
-     * Buscar un administrador por correo electrónico
-     */
-    @Query("SELECT a FROM Admin a where a.id =?")
-    Optional<Admin> findByID(Long id);
+    // /**
+    //  * Buscar un administrador por correo electrónico
+    //  */
+    // @Query("SELECT a FROM Admin a where a.id =?")
+    // Optional<Admin> findByID(Long id);
 
 
 
 
 
-    /**
-     * Verificar si existe un administrador con el correo especificado
-     * @param email correo electrónico
-     * @return true si existe, falso si no
-     */
-    boolean existsByEmail(String email);
+    // /**
+    //  * Verificar si existe un administrador con el correo especificado
+    //  * @param email correo electrónico
+    //  * @return true si existe, falso si no
+    //  */
+    // boolean existsByEmail(String email);
 
 
 

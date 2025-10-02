@@ -14,9 +14,10 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.gestion.alojamientos.dto.BookingCreateDTO;
-import com.gestion.alojamientos.dto.BookingDTO;
-import com.gestion.alojamientos.dto.BookingUpdateDTO;
+
+import com.gestion.alojamientos.dto.booking.BookingCreateDTO;
+import com.gestion.alojamientos.dto.booking.BookingDTO;
+import com.gestion.alojamientos.dto.booking.BookingUpdateDTO;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 
