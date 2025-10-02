@@ -3,6 +3,7 @@ package com.gestion.alojamientos.model.transaction;
 import java.util.List;
 
 import com.gestion.alojamientos.model.base.NormalUser;
+import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,5 @@ public class Transaction {
     // Relación Many-to-One con NormalUser
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "holder_id", nullable = false)
-    private NormalUser holder;
+    private Guest holder;
 }

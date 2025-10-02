@@ -7,6 +7,7 @@ import com.gestion.alojamientos.model.FinancialAccount;
 import com.gestion.alojamientos.model.accomodation.Accomodation;
 import com.gestion.alojamientos.model.base.NormalUser;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -28,9 +29,6 @@ import java.util.List;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "host")
 public class Host extends NormalUser {
@@ -43,23 +41,22 @@ public class Host extends NormalUser {
     @Comment("Estado actual del usuario: Activo, Inactivo, Suspendido, Eliminado" + "\n" + " Pendiente, Aprobdo, Rechazado.")
     private StatesOfHost status;
 
-    @OneToOne
-    @JoinColumn(name = "guest_id")
-    private Guest guest; // Relación de uno a uno con Guest
-
     @Column(name = "personal_description", columnDefinition = "TEXT")
     private String personalDescription; // Descripción personal
 
-    @OneToMany(mappedBy = "host")
-    private List<Accomodation> listAccommodations; // Relación de uno a muchos con Accomodation
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Accomodation> listAccommodations = new ArrayList<>();
+
     @OneToMany(mappedBy = "receiver", fetch = FetchType.LAZY)
     @Builder.Default
     private List<CommentHost> hostCommentList = new ArrayList<>();
-    @OneToOne
-    @JoinColumn(name = "financial_account_id")
-    private FinancialAccount receiptPayment; // Cuenta financiera para pagos
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "financial_account_id")
+    private FinancialAccount receiptPayment;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "service_fee_id")
-    private ServiceFee serviceFee; // Tarifa de servicio
+    private ServiceFee serviceFee;
 }

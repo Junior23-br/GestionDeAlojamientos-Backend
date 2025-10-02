@@ -17,8 +17,8 @@ import com.gestion.alojamientos.model.base.SuperUser;
 @NoArgsConstructor
 @Table(name = "admin")
 public class Admin extends SuperUser {
+    
+    @Column(name = "acces_level", nullable = false)
+    private int acces_level;
 
-    @OneToOne
-    @JoinColumn(name = "super_id", referencedColumnName = "id")
-    private Long id;
 }
