@@ -8,14 +8,6 @@ import jakarta.validation.constraints.Pattern;
  * Incluye validaciones para garantizar la integridad de los datos.
  */
 public record CreateAdminDto(
-        /**
-         * id administrador.
-         * Campo obligatorio con formato válido.
-         */
-        @NotBlank
-        @Email
-        String id,
-
 
         /**
          * Correo electrónico del administrador.
