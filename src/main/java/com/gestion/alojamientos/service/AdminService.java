@@ -17,92 +17,15 @@ import com.gestion.alojamientos.exception.*;
  * y obtener administradores por ID o correo electrónico.
  * Cada operación lanzará excepciones específicas en caso de errores.
  */
-@Service
-public class AdminService {
+public interface AdminService {
 
-//     @Autowired
-//     private AdminRepository adminRepository;
+    AdminDto registerAdmin(CreateAdminDto dto) throws RepeatedElementException;
 
-//     @Autowired
-//     private AdminMapper adminMapper;
+    AdminDto editAdmin(Long id, EditAdminDto dto) throws ElementNotFoundException;
 
-//     @Autowired
-//     private PasswordEncoder passwordEncoder;
+    void deleteAdmin(Long id) throws ElementNotFoundException;
 
-//     /**
-//      * Registra un nuevo administrador en el sistema.
-//      *Nota: Si deseamos sumarle un estado a la informacion de aldministrador cuando se cree desde aca
-//      * @param dto DTO con los datos del administrador a registrar.
-//      * @return DTO del administrador creado.
-//      * @throws RepeatedElementException Si el correo ya está registrado.
-//      */
-//     public AdminDto registerAdmin(CreateAdminDto dto) throws RepeatedElementException {
-//         if (adminRepository.existsByEmail(dto.email())) {
-//             throw new RepeatedElementException("El correo electrónico ya está registrado");
-//         }
+    AdminDto getAdminById(Long id) throws ElementNotFoundException;
 
-//         Admin admin = adminMapper.toEntity(dto);
-//         admin.setPassword(passwordEncoder.encode(dto.password())); // encripta contraseña
-//         adminRepository.save(admin);
-//         return adminMapper.toDto(admin);
-//     }
-
-//     /**
-//      * Edita la contraseña de un administrador existente.
-//      *
-//      * @param id  Identificador único del administrador.
-//      * @param dto DTO con los datos a actualizar.
-//      * @return DTO del administrador actualizado.
-//      * @throws ElementNotFoundException Si el administrador no existe.
-//      */
-//     public AdminDto editAdmin(Long id, EditAdminDto dto) throws ElementNotFoundException {
-//         Admin admin = adminRepository.findByID(id)
-//                 .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con ID: " + id));
-//         // Solo actualiza la contraseña
-//         adminMapper.updateFromDto(dto, admin);
-//         admin.setPassword(passwordEncoder.encode(dto.password()));
-
-//         return adminMapper.toDto(adminRepository.save(admin));
-//     }
-
-
-//     //Esta funcionalidad sirve siempre y cuando le agregemos atributo de estado al admin, por si lo queremos borrar
-// //    /**
-// //     * Elimina lógicamente un administrador del sistema.
-// //     *
-// //     * @param id Identificador único del administrador.
-// //     * @throws ElementNotFoundException Si el administrador no existe.
-// //     */
-// //    public void deleteAdmin(Long id) throws ElementNotFoundException {
-// //        Admin admin = adminRepository.findByID(id)
-// //                .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con ID: " + id));
-// //
-// //        admin.se // eliminación lógica
-// //        adminRepository.save(admin);
-// //    }
-
-//     /**
-//      * Obtiene un administrador por su identificador único.
-//      *
-//      * @param id identificador del administrador
-//      * @return DTO del administrador obtenido
-//      * @throws ElementNotFoundException si el administrador no existe
-//      */
-//     public AdminDto getAdminById(Long id) throws ElementNotFoundException {
-//         return adminMapper.toDto(adminRepository.findByID(id)
-//                 .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con ID: " + id)));
-//     }
-
-//     /**
-//      * Obtiene un administrador por su correo electrónico.
-//      *
-//      * @param email correo electrónico del administrador
-//      * @return DTO del administrador obtenido
-//      * @throws ElementNotFoundException si el administrador no existe
-//      */
-//     public AdminDto getAdminByEmail(String email) throws ElementNotFoundException {
-//         Admin admin = adminRepository.findByEmail(email)
-//                 .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con correo: " + email));
-//         return adminMapper.toDto(admin);
-//     }
+    AdminDto getAdminByEmail(String email) throws ElementNotFoundException;
 }
