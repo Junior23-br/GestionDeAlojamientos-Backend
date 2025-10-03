@@ -30,7 +30,7 @@ public class ServiceFee {
     private TypeFee typeFee;
 
     @Column(name = "prom_calification_minimum")
-    private Double promCalificationMinimun;
+    private double promCalificationMinimun;
 
     @Column(name = "number_bookings_minimum")
     private Integer numberBookingsMinimum;
