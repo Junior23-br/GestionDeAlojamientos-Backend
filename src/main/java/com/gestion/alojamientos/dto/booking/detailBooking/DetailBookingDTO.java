@@ -11,7 +11,7 @@ import java.util.List;
  * Tiene la información basica del detalle del alojamiento
  *
  */
-public record  DetailBookingDTO (Long idDetailBooking, LocalDate checkIn, LocalDate checkOut,
+public record  DetailBookingDTO (Long idDetailBooking, LocalDate checkInDate, LocalDate checkOutDate,
                                  Integer numberOfGuest, Double priceNightAccommodation,
                                  Double subTotal, Double discount, ServiceFeeDTO serviceDTO, List<Services> servicesList, Long idBooking){
 }

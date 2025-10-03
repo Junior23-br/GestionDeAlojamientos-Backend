@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.service;
 
 import com.gestion.alojamientos.dto.booking.BookingDTO;
+import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
 import com.gestion.alojamientos.exception.InvalidElementException;
 /**
@@ -19,7 +20,7 @@ public interface EmailService {
      * @param bookingDTO detalles de la reservq
      * @throws InvalidElementException si el email es invalido
      */
-    void SendNewBookingEmail(String email, BookingDTO bookingDTO) throws InvalidElementException;
+    void SendNewBookingEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException;
 
     /**
      *Envia un email con los detalles de una reserva cancelada, tipo pdf
@@ -27,14 +28,14 @@ public interface EmailService {
      * @param bookingDTO detalles de la reserva cancelada
      * @throws InvalidElementException si el email es invalido o falla el envio
      */
-    void sendCancelledBookingEmail(String email, BookingDTO bookingDTO) throws InvalidElementException;
+    void sendCancelledBookingEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException;
     /**
      *
      * @param email email del destinatario huesped
      * @param bookingDTO detalles de la reserva proxima a check-in (24 horas antes del check in)
      * @throws InvalidElementException si el email es invalido o falla el envio
      */
-    void sendCheckInReminderEmail(String email, BookingDTO bookingDTO) throws InvalidElementException;
+    void sendCheckInReminderEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException;
 
     /**
      * Enviar email de bienvenida al crear cuenta nueva

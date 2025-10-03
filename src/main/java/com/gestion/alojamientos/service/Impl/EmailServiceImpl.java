@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.service.Impl;
 
 import com.gestion.alojamientos.dto.booking.BookingDTO;
+import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
 import com.gestion.alojamientos.exception.InvalidElementException;
 import com.gestion.alojamientos.service.EmailService;
@@ -17,6 +18,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
@@ -37,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void SendResetCodeEmail(String email, String code) throws InvalidElementException {
         emailValidator(email);
-        /*try {
+        try {
             byte[] emailBytes = generateResetCodePdf(email, code);
             sendEmail(email, "El código de recuperación de contraseña",
                     "Adjunto a este archivo encontrará el código de recuperación, el cual " +
@@ -46,44 +48,44 @@ public class EmailServiceImpl implements EmailService {
             throw new InvalidElementException("Error al enviar el email de recuperación" + e.getMessage());
         }
 
-         */
+
     }
 
     @Override
-    public void SendNewBookingEmail(String toEmail, BookingDTO bookingDTO) throws InvalidElementException {
-        emailValidator(toEmail);
-        /*try {
-            byte[] pdfBytes = generateNewBookinPdf(bookingDTO);
-            sendEmail(toEmail, "Confirmación de Nueva Reserva",
+    public void SendNewBookingEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException {
+        emailValidator(email);
+        try {
+            byte[] pdfBytes = generateNewBookinPdf(email, bookingDTO, detailBookingDTO);
+            sendEmail(email, "Confirmación de Nueva Reserva",
                     "Adjunto encontrarás los detalles de tu nueva reserva.",
                     "NewBooking.pdf", pdfBytes);
         } catch (Exception e) {
             throw new InvalidElementException("Error al enviar el email de nueva reserva: " + e.getMessage());
         }
 
-         */
+
     }
 
     @Override
-    public void sendCancelledBookingEmail(String email, BookingDTO bookingDTO) throws InvalidElementException {
+    public void sendCancelledBookingEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException {
         emailValidator(email);
-        /* try {
-            byte[] pdfBytes = generateCancelledBookingPdf(bookingDTO);
+         try {
+            byte[] pdfBytes = generateCancelledBookingPdf(email, bookingDTO,detailBookingDTO);
             sendEmail(email, "Confirmación de Cancelación de Reserva",
                     "Adjunto a este documento encontrarás los detalles de tu reserva cancelada.",
                     "CancelledBooking.pdf", pdfBytes);
         } catch (Exception e) {
             throw new InvalidElementException("Error al enviar el email de cancelación: " + e.getMessage());
         }
-         */
+
 
     }
 
     @Override
-    public void sendCheckInReminderEmail(String email, BookingDTO bookingDTO) throws InvalidElementException {
+    public void sendCheckInReminderEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException {
         emailValidator(email);
-        /*try {
-            byte[] pdfBytes = generateCheckInReminderPdf(bookingDTO);
+        try {
+            byte[] pdfBytes = generateCheckInReminderPdf(email, bookingDTO, detailBookingDTO);
             sendEmail(email, "Recordatorio de Check-In",
                     "Tu check-in está programado para mañana. Adjunto los detalles de tu reserva.",
                     "CheckInReminder.pdf", pdfBytes);
@@ -91,15 +93,15 @@ public class EmailServiceImpl implements EmailService {
             throw new InvalidElementException("Error al enviar el email de recordatorio: " + e.getMessage());
         }
 
-         */
+
 
     }
 
     @Override
     public void sendWelcomeEmail(String email, GuestDto guestDto) throws InvalidElementException {
         emailValidator(email);
-        /* try {
-            byte[] pdfBytes = generateCreationPdf(email, guestDto.firstName());
+         try {
+            byte[] pdfBytes = generateCreationPdf(email, guestDto);
             sendEmail(email, "Bienvenido a Rincón del Viajero",
                     "Adjunto encontrarás tu confirmación de registro. ¡Gracias por unirte!",
                     "AccountCreation.pdf", pdfBytes);
@@ -107,7 +109,7 @@ public class EmailServiceImpl implements EmailService {
             throw new InvalidElementException("Error al enviar el email de creación de cuenta: " + e.getMessage());
         }
 
-         */
+
     }
 
     @Override
@@ -209,7 +211,7 @@ public class EmailServiceImpl implements EmailService {
      * @return byte del pdf
      * @throws Exception si falla la generacion
      */
-    /* private byte[] generateResetCodePdf(String email, String code) throws Exception {
+    private byte[] generateResetCodePdf(String email, String code) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
@@ -225,33 +227,33 @@ public class EmailServiceImpl implements EmailService {
         return byteArrayOutputStream.toByteArray();
     }
 
-     */
     /**
      * Genera un pdf para una reserva nueva
+     *
      * @param bookingDTO detalles de la reserva
      * @return tmñ pdf, bytes
      * @throws Exception si falla la generación del pdf
      */
-   /* private byte[] generateNewBookinPdf(BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws Exception {
+    private byte[] generateNewBookinPdf(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Confirmacíon de la nueva reserva: "));
-       document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.id()));
+       document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.idDetailBooking()));
        document.add(new Paragraph("Alojamiento ID: "+bookingDTO.id()));
        document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkInDate()));
        document.add(new Paragraph("Fecha de Check-Out: " +
         (detailBookingDTO.checkOutDate() != null ?
          detailBookingDTO.checkOutDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) :
          "N/A")));
-       document.add(new Paragraph("Estado: " + bookingDTO.statesOfbooking()));
+       document.add(new Paragraph("Estado: " + bookingDTO.StatesOfBookingState()));
        document.add(new Paragraph("Precio Total: $" + bookingDTO.totalPrice()));
        document.add(new Paragraph("Gracias por tu reserva. Te esperamos en la fecha indicada."));
        document.close();
        return byteArrayOutputStream.toByteArray();
     }
-   */
+
 
     /**
      * Generar pdf para una reserva cancelada
@@ -259,60 +261,60 @@ public class EmailServiceImpl implements EmailService {
      * @return bytes del pdf
      * @throws Exception si falla la generación
      */
-    /* private byte [] generateCancelledBookingPdf(BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws
+     private byte [] generateCancelledBookingPdf(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws
             Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Confirmación de Cancelación de Reserva -El  Rincon del Viajero"));
-        document.add(new Paragraph("ID de Reserva: " + detailBookingDTO.id()));
+        document.add(new Paragraph("ID de Reserva: " + detailBookingDTO.idDetailBooking()));
         document.add(new Paragraph("Alojamiento ID: " + bookingDTO.accommodationId()));
         document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkInDate()));
         document.add(new Paragraph("Fecha de Check-Out: " +
         (detailBookingDTO.checkOutDate() != null ?
          detailBookingDTO.checkOutDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) :
          "N/A")));
-        document.add(new Paragraph("Estado: " + bookingDTO.statesOfbooking()));
+        document.add(new Paragraph("Estado: " + bookingDTO.StatesOfBookingState()));
         document.add(new Paragraph("Precio Total: $" + bookingDTO.totalPrice()));
         document.add(new Paragraph("Tu reserva ha sido cancelada. Si necesitas ayuda no dudes en contáctanos."));
 
         document.close();
         return byteArrayOutputStream.toByteArray();
     }
-     */
+
     /**
      * Genera un PDF para el recordatorio de check-in
      * @param bookingDTO Detalles de la reserva
      * @return Bytes del PDF
      * @throws Exception Si falla la generación
      */
-   /* private byte [] generateCheckInReminderPdf(BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws Exception {
+    private byte [] generateCheckInReminderPdf(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Recordatorio de Check-In - Alojamiento Quindío"));
         document.add(new Paragraph("ID de Reserva: " + bookingDTO.id()));
-        document.add(new Paragraph("Alojamiento ID: " + detailBookingDTO.id()));
-        document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.startDate()));
-        document.add(new Paragraph("Estado: " + bookingDTO.statesOfbooking()));
+        document.add(new Paragraph("Alojamiento ID: " + bookingDTO.accommodationId()));
+        document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkOutDate()));
+        document.add(new Paragraph("Estado: " + bookingDTO.StatesOfBookingState()));
         document.add(new Paragraph("Precio Total: $" + bookingDTO.totalPrice()));
         document.add(new Paragraph("Tu check-in es mañana. ¡Prepárate para tu estadía!"));
 
         document.close();
         return byteArrayOutputStream.toByteArray();
     }
-    */
+
 
     /**
      * Genera un pdf para dar la bienvenida al usuario
      * @param email del destinatario
-     * @param name del usuario a crear cuenta
+     * @param guestDto del usuario a crear cuenta
      * @return bytes del pdf
      * @throws Exception si falla el envioo
      */
-    /* private byte [] generateCreationPdf(String email, GuestDTO guestDTO) throws Exception {
+     private byte [] generateCreationPdf(String email, GuestDto guestDto) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
@@ -326,16 +328,14 @@ public class EmailServiceImpl implements EmailService {
         return byteArrayOutputStream.toByteArray();
     }
 
-     */
-    /*
     private byte [] generateCheckOutPdf(BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Agradecimiento Post Check-Out - El Rincón Del Viajero"));
-        document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.id()));
-        document.add(new Paragraph("Alojamiento ID: " + detailBookingDTO.accommodatioId()));
+        document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.idDetailBooking()));
+        document.add(new Paragraph("Alojamiento ID: " + bookingDTO.accommodationId()));
         document.add(new Paragraph("Fecha de Check-Out: " +
         (detailBookingDTO.checkOutDate() != null ?
          detailBookingDTO.checkOutDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) :
@@ -345,7 +345,7 @@ public class EmailServiceImpl implements EmailService {
         document.close();
         return byteArrayOutputStream.toByteArray();
     }
-    */
+
 
     /**
      * Genera un pdf para la confirmacion de cambio de rol
