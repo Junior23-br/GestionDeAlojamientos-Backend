@@ -3,7 +3,7 @@ package com.gestion.alojamientos.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HostService {
+public interface HostService {
 
     /**
      *Servicio que define las operaciones principales para la gestion
