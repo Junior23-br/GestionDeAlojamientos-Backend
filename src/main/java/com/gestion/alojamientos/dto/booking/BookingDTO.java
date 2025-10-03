@@ -4,7 +4,7 @@ import com.gestion.alojamientos.model.enums.StatesOfBooking;
 
 import java.time.LocalDateTime;
 
-public record BookingDTO(
+public record  BookingDTO(
 
         Long id,
         LocalDateTime creationDate,

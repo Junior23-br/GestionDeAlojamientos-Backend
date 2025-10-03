@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Un DTO (Data Transfer Object) es un objeto plano que se usa para intercambiar datos entre capas
- * Tiene la información basica del alojamiento, no la contraseña por temas de seguridad
+ * Tiene la información basica del alojamiento
  *
  */
 public record AccommodationDTO(Long id, String title, String accomodationType,
