@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.repository;
+package com.gestion.alojamientos.repository.transaction;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.gestion.alojamientos.model.transaction.Transaction;
 
-public interface TransactionRepository extends JpaRepository<Transaction, String> {
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
      /**
       * Busca una transacción por su identificador único.

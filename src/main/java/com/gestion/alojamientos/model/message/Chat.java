@@ -1,9 +1,8 @@
-package com.gestion.alojamientos.model;
+package com.gestion.alojamientos.model.message;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gestion.alojamientos.model.base.SuperUser;
 import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.CascadeType;

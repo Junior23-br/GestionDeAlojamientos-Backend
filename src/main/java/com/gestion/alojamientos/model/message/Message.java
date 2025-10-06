@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.model;
+package com.gestion.alojamientos.model.message;
 
 import java.util.Date;
 
@@ -46,8 +46,4 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private Chat chat; // Associated chat
-
-    @ManyToOne
-    @JoinColumn(name = "notification_id")
-    private Notification notification; // Associated notification
 }

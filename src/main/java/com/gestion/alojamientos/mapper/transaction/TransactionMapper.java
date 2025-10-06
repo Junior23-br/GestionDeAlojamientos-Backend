@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.mapper;
+package com.gestion.alojamientos.mapper.transaction;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

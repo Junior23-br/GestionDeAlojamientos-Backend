@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.repository;
+package com.gestion.alojamientos.repository.user;
 
 // import com.gestion.alojamientos.model.base.UserBasic;
 import com.gestion.alojamientos.model.users.Admin;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface AdminRepository extends JpaRepository<Admin, Integer>, JpaSpecificationExecutor<Admin> {
+public interface AdminRepository extends JpaRepository<Admin, Long>, JpaSpecificationExecutor<Admin> {
 
      /**
       * Buscar un administrador por correo electrónico

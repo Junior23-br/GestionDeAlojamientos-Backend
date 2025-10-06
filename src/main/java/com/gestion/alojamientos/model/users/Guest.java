@@ -1,12 +1,12 @@
 package com.gestion.alojamientos.model.users;
 
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
+import com.gestion.alojamientos.model.transaction.FinancialAccount;
 import com.gestion.alojamientos.model.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gestion.alojamientos.model.FinancialAccount;
 import com.gestion.alojamientos.model.base.NormalUser;
 import com.gestion.alojamientos.model.booking.Booking;
 

@@ -5,7 +5,8 @@ import com.gestion.alojamientos.dto.admin.CreateAdminDto;
 import com.gestion.alojamientos.dto.admin.EditAdminDto;
 // import com.gestion.alojamientos.mapper.AdminMapper;
 import com.gestion.alojamientos.model.users.Admin;
-import com.gestion.alojamientos.repository.AdminRepository;
+import com.gestion.alojamientos.repository.user.AdminRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

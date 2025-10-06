@@ -3,7 +3,6 @@ package com.gestion.alojamientos.model.transaction;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import com.gestion.alojamientos.model.FinancialAccount;
 import com.gestion.alojamientos.model.booking.Booking;
 import com.gestion.alojamientos.model.users.Guest;
 
@@ -24,9 +23,6 @@ public class Voucher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "voucher_id", unique = true, nullable = false, length = 50)
-    private String voucherID;
 
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;

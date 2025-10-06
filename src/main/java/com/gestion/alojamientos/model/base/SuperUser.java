@@ -2,8 +2,8 @@ package com.gestion.alojamientos.model.base;
 
 import java.util.List;
 
-import com.gestion.alojamientos.model.Notification;
-import com.gestion.alojamientos.model.Chat;
+import com.gestion.alojamientos.model.message.Chat;
+import com.gestion.alojamientos.model.message.Notification;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

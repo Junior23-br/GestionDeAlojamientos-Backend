@@ -1,8 +1,6 @@
 package com.gestion.alojamientos.model.transaction;
 
-import java.util.List;
 
-import com.gestion.alojamientos.model.base.NormalUser;
 import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.*;

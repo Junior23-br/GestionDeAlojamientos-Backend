@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.mapper;
+package com.gestion.alojamientos.mapper.users;
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
 import com.gestion.alojamientos.dto.guest.EditGuestDto;
 import com.gestion.alojamientos.dto.guest.GuestDto;
@@ -14,8 +14,8 @@ import org.mapstruct.MappingTarget;
 * Este componente esta integrado con Spring mediante componentModel = "spring" y usa mapper auxiliares
 *
  */
-// @Mapper(componentModel = "spring")
-// public interface GuestMapper {
+@Mapper(componentModel = "spring")
+public interface GuestMapper {
 // /**
 //  * Convierte un DTO de creación de huesped a una entidad de usuario.
 //  * @param dto datos para crear nuevo huesped
@@ -47,5 +47,5 @@ import org.mapstruct.MappingTarget;
 //     @Mapping(target = "lastName", source = "lastName")
 //     @Mapping(target = "phoneNumber", source = "phoneNumber")
 //     void updateFromDto(EditGuestDto dto, @MappingTarget Guest guest);
-// }
+}
 

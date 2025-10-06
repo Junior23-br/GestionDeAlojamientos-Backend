@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.model;
+package com.gestion.alojamientos.model.transaction;
 
 import com.gestion.alojamientos.model.base.NormalUser;
 import com.gestion.alojamientos.model.users.Guest;

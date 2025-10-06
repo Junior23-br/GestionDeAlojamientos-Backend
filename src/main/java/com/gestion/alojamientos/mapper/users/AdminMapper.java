@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.mapper;
+package com.gestion.alojamientos.mapper.users;
 
 
 import com.gestion.alojamientos.dto.admin.AdminDto;

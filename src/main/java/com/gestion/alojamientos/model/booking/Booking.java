@@ -2,8 +2,8 @@ package com.gestion.alojamientos.model.booking;
 
 import java.time.LocalDateTime;
 
-import com.gestion.alojamientos.model.FinancialAccount;
 import com.gestion.alojamientos.model.enums.StatesOfBooking;
+import com.gestion.alojamientos.model.transaction.FinancialAccount;
 import com.gestion.alojamientos.model.transaction.Voucher;
 import com.gestion.alojamientos.model.users.Guest;
 

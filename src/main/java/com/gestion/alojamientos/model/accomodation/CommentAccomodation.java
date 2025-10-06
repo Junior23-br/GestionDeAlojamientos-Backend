@@ -2,7 +2,6 @@ package com.gestion.alojamientos.model.accomodation;
 
 import java.time.LocalDateTime;
 
-import com.gestion.alojamientos.model.base.NormalUser;
 import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.*;

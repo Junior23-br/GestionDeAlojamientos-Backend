@@ -1,8 +1,9 @@
-package com.gestion.alojamientos.model;
+package com.gestion.alojamientos.model.message;
 
 import java.time.LocalDateTime;
 
 import com.gestion.alojamientos.model.enums.ClasificationNotification;
+import com.gestion.alojamientos.model.users.Guest;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,4 +40,8 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     @Column(name = "clasification_notification", nullable = false, length = 50)
     private ClasificationNotification clasificationNotification; // Notification classification
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private Guest receiver;
 }

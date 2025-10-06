@@ -1,9 +1,8 @@
 package com.gestion.alojamientos.model.users;
 
 import com.gestion.alojamientos.model.enums.StatesOfHost;
+import com.gestion.alojamientos.model.transaction.FinancialAccount;
 import com.gestion.alojamientos.model.transaction.ServiceFee;
-import com.gestion.alojamientos.model.CommentHost;
-import com.gestion.alojamientos.model.FinancialAccount;
 import com.gestion.alojamientos.model.accomodation.Accomodation;
 import com.gestion.alojamientos.model.base.NormalUser;
 
