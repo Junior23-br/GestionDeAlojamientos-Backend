@@ -17,41 +17,41 @@ import java.util.Optional;
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Long>, JpaSpecificationExecutor<Guest> {
 
-//     /**
-//      * Busca un huésped a partir del correo registrado.
-//      * @param email correo del huésped a buscar
-//      * @return un Optional con el huésped si existe, vacío en caso contrario
-//      */
-//     Optional<Guest> findByEmail(String email);
-//     /**
-//     *Buscar un huesped por su numero de phoneNumber
-//      *@param phoneNumber  telefono del huesped a buscar
-//      * @return un Optional con el huésped si existe, vacío en caso contrario
-//      */
-//     Optional<Guest> findByPhoneNumber(String phoneNumber);
-//     /**
-//     *Buscar huesped por su firstName
-//      * @param firstName nombre del huesped
-//      * @return un Optional con el huésped si existe, vacío en caso contrario
-//      */
-//     Optional<Guest> findByFirstName(String firstName);
-//     /**
-//     *Buscar un huesped por su lastName
-//      * @param lastName apellido del huesped
-//      * @return un Optional con el huésped si existe, vacío en caso contrario
-//      */
-//     Optional<Guest> findByLastName(String lastName);
-//     /**
-//      * Verifica si existe un huesped con el correo especificado
-//      * @param email correo electronico a verificar
-//      * @return true si existe
-//      */
-//     boolean existsByEmail(String email);
-// ;
-//     /**
-//      * Verifica si un huesped existe con el numero de phoneNumber especificado
-//      * @param phoneNumber numero telefonico a verificar
-//      * @return true si existe, falso si no existe
-//      */
-//    boolean existsByPhoneNumber(String phoneNumber);
+     /**
+      * Busca un huésped a partir del correo registrado.
+      * @param email correo del huésped a buscar
+      * @return un Optional con el huésped si existe, vacío en caso contrario
+      */
+     Optional<Guest> findByEmail(String email);
+     /**
+     *Buscar un huesped por su numero de phoneNumber
+      *@param phoneNumber  telefono del huesped a buscar
+      * @return un Optional con el huésped si existe, vacío en caso contrario
+      */
+     Optional<Guest> findByPhoneNumber(String phoneNumber);
+     /**
+     *Buscar huesped por su firstName
+      * @param firstName nombre del huesped
+      * @return un Optional con el huésped si existe, vacío en caso contrario
+      */
+     Optional<Guest> findByFirstName(String firstName);
+     /**
+     *Buscar un huesped por su lastName
+      * @param lastName apellido del huesped
+      * @return un Optional con el huésped si existe, vacío en caso contrario
+      */
+     Optional<Guest> findByLastName(String lastName);
+     /**
+      * Verifica si existe un huesped con el correo especificado
+      * @param email correo electronico a verificar
+      * @return true si existe
+      */
+     boolean existsByEmail(String email);
+ ;
+     /**
+      * Verifica si un huesped existe con el numero de phoneNumber especificado
+      * @param phoneNumber numero telefonico a verificar
+      * @return true si existe, falso si no existe
+      */
+    boolean existsByPhoneNumber(String phoneNumber);
 }
