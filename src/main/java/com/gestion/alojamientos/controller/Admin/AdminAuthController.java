@@ -1,9 +1,8 @@
 package com.gestion.alojamientos.controller.Admin;
 
-import com.gestion.alojamientos.dto.Admin.AdminDto;
-import com.gestion.alojamientos.dto.Admin.CreateAdminDto;
-import com.gestion.alojamientos.mapper.AdminMapper;
-import com.gestion.alojamientos.model.Admin;
+import com.gestion.alojamientos.dto.admin.AdminDto;
+import com.gestion.alojamientos.dto.admin.CreateAdminDto;
+import com.gestion.alojamientos.model.users.Admin;
 import com.gestion.alojamientos.repository.AdminRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
