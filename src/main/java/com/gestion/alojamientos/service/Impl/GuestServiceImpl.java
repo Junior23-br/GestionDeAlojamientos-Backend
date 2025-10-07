@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.service.impl;
+package com.gestion.alojamientos.service.Impl;
 
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
 import com.gestion.alojamientos.dto.guest.DeleteGuestDto;
@@ -63,7 +63,7 @@ import java.time.Period;
      public GuestDto editGuest(Long id, EditGuestDto dto) throws ElementNotFoundException {
          Guest guest = guestRepository.findById(id)
                  .orElseThrow(() -> new ElementNotFoundException("Usuario no encontrado con ID: " + id));
-         guestMapper.updateFromDto(dto, guest);
+         guestMapper.updateFromdDTO(dto, guest);
          return guestMapper.toDto(guestRepository.save(guest));
      }
      /**

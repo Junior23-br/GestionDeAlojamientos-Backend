@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.mapper.users;
 
+import com.gestion.alojamientos.dto.guest.CreateGuestDto;
 import com.gestion.alojamientos.dto.guest.EditGuestDto;
 import com.gestion.alojamientos.dto.guest.GuestDto;
 import com.gestion.alojamientos.model.booking.Booking;
@@ -46,6 +47,10 @@ public interface GuestMapper {
     @Mapping(target = "name", source = "firstName")
     @Mapping(target = "id", source = "id")
     Guest toEntity(GuestDto dto);
+
+
+    Guest toEntity(CreateGuestDto dto);
+
 
     // ===============================
     // Métodos auxiliares
