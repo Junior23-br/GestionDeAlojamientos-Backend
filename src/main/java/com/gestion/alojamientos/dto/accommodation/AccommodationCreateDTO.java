@@ -1,10 +1,9 @@
 package com.gestion.alojamientos.dto.accommodation;
 
-import com.gestion.alojamientos.dto.Ubication.UbicationCreateDTO;
+import com.gestion.alojamientos.dto.accommodation.Ubication.UbicationCreateDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import com.gestion.alojamientos.dto.Ubication.UbicationDTO;
 
 import java.util.List;
 

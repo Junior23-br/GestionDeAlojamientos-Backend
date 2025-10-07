@@ -7,7 +7,7 @@ import com.gestion.alojamientos.model.base.SuperUser;
 
 /**
  * Entidad que representa a un huésped en el sistema.
- * Extiende de UserBasic y se mapea a la tabla 'guest'.
+ * Extiende de SuperUser y se mapea a la tabla 'Admin'.
  */
 @Getter
 @Setter

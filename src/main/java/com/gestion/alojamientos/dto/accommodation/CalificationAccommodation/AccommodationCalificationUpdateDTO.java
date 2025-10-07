@@ -1,11 +1,10 @@
-package com.gestion.alojamientos.dto.accommodation.CommentAccommodation;
+package com.gestion.alojamientos.dto.accommodation.CalificationAccommodation;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateAccommodationCalificationDTO(
-
+public record AccommodationCalificationUpdateDTO(
         /**
          * Campo para asignar la calificacion referente a la limpieza del alojamiento dejada por el huesped
          * con la reserva finalizada
@@ -47,7 +46,7 @@ public record CreateAccommodationCalificationDTO(
          * Referencia al Id del alojamiento a el que se hizo la calificacion
          * Este campo debe de ser obligatoria, no nulo, no blanco ni vacio
          */
-        @NotBlank  @NotNull @NotEmpty
+        @NotBlank @NotNull @NotEmpty
         Long idAccommodation,
 
 
@@ -58,7 +57,6 @@ public record CreateAccommodationCalificationDTO(
          */
 
         Integer comunicationHost
-
 
 
 

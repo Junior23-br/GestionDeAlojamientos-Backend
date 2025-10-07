@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.dto.Ubication;
+package com.gestion.alojamientos.dto.accommodation.Ubication;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

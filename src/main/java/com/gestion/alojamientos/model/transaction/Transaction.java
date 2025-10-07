@@ -24,7 +24,7 @@ public class Transaction {
     // Relación One-to-One con Voucher
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "voucher_id")
-    private Voucher voucherList;
+    private Voucher voucher;
 
     // Relación Many-to-One con NormalUser
     @ManyToOne(fetch = FetchType.LAZY)

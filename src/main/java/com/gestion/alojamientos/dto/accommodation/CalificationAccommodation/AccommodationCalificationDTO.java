@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.dto.accommodation.CommentAccommodation;
+package com.gestion.alojamientos.dto.accommodation.CalificationAccommodation;
 /**
  * Un DTO (Data Transfer Object) es un objeto plano que se usa para intercambiar datos entre capas
  * Tiene la información basica de la calificacion del alojamiento
