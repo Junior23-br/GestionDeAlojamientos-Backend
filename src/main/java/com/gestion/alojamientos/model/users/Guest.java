@@ -12,6 +12,7 @@ import com.gestion.alojamientos.model.booking.Booking;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Entity representing a guest in the system.
@@ -21,9 +22,11 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "guest")
+@EqualsAndHashCode(callSuper = true)
+
 public class Guest extends NormalUser {
     /**
      * Guest states: Active, Deleted, Suspended, Inactive.

@@ -10,11 +10,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
 @Getter
 @Setter
 @MappedSuperclass
+@SuperBuilder
 public abstract class NormalUser extends SuperUser  {
 
     @Column(name = "name", nullable = false, length = 100)

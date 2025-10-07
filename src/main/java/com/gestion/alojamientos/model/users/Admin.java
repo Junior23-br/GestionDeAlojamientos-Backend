@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import com.gestion.alojamientos.model.base.SuperUser;
+import lombok.experimental.SuperBuilder;
 
 /**
  * Entidad que representa a un huésped en el sistema.
@@ -11,11 +12,12 @@ import com.gestion.alojamientos.model.base.SuperUser;
  */
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "admin")
+@EqualsAndHashCode(callSuper = true)
 public class Admin extends SuperUser {
     
     @Column(name = "acces_level", nullable = false)

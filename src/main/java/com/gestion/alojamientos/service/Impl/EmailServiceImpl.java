@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.service.impl;
+package com.gestion.alojamientos.service.Impl;
 
 import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingDTO;

@@ -7,11 +7,18 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Un DTO (Data Transfer Object) es un objeto plano que se usa para intercambiar datos entre capas
- * Tiene la información basica del detalle del alojamiento
- *
+ * DTO que representa el detalle de una reserva.
+ * Contiene información básica del alojamiento y sus servicios asociados.
  */
-public record  DetailBookingDTO (Long idDetailBooking, LocalDate checkInDate, LocalDate checkOutDate,
-                                 Integer numberOfGuest, Double priceNightAccommodation,
-                                 Double subTotal, Double discount, ServiceFeeDTO serviceDTO, List<Services> servicesList, Long idBooking){
-}
+public record DetailBookingDTO(
+        Long id,
+        LocalDate checkInDate,
+        LocalDate checkOutDate,
+        Integer numberOfGuest,
+        Double priceNightAccommodation,
+        Double subTotal,
+        Double discount,
+        ServiceFeeDTO serviceFeeDTO,   // nombre corregido
+        List<Services> listServices,   // nombre coherente con la entidad
+        Long idBooking                 // ID de la reserva asociada
+) { }

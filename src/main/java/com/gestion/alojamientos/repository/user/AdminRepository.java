@@ -1,15 +1,10 @@
 package com.gestion.alojamientos.repository.user;
 
-// import com.gestion.alojamientos.model.base.UserBasic;
 import com.gestion.alojamientos.model.users.Admin;
-import com.gestion.alojamientos.model.users.Guest;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 import java.util.Optional;
 
 public interface AdminRepository extends JpaRepository<Admin, Long>, JpaSpecificationExecutor<Admin> {

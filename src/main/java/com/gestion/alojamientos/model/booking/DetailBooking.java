@@ -52,9 +52,9 @@ public class DetailBooking {
     // Relación Many-to-Many con Services (tabla intermedia)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "detail_booking_services",
-        joinColumns = @JoinColumn(name = "detail_booking_id"),
-        inverseJoinColumns = @JoinColumn(name = "service_id")
+            name = "detail_booking_services",
+            joinColumns = @JoinColumn(name = "detail_booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
     )
     private List<Services> listServices;
 

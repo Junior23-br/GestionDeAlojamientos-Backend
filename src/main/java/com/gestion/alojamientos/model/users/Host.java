@@ -17,6 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
 
 import java.util.ArrayList;
@@ -26,10 +27,13 @@ import java.util.List;
  * Entidad que representa a un anfitrión en el sistema.
  * Extiende de UserBasic y se mapea a la tabla 'anfitrion'.
  */
+@Data
+@SuperBuilder
 @Getter
 @Setter
 @Entity
 @Table(name = "host")
+@EqualsAndHashCode(callSuper = true)
 public class Host extends NormalUser {
     /**
      * Estados del Anfitrion: Activo, Inactivo, Suspendido, Eliminado, Pendiente, Aprovado, Rechazado.
@@ -58,4 +62,9 @@ public class Host extends NormalUser {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "service_fee_id")
     private ServiceFee serviceFee;
+
+
+    public Host() {
+
+    }
 }

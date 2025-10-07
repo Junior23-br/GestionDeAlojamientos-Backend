@@ -12,11 +12,24 @@ import java.util.List;
  * Tiene la información basica del alojamiento
  *
  */
-public record AccommodationDTO(Long id, String title, String accomodationType,
-                               String houseRules, Long ubicationID, Integer maxGuestCapacity,
-                               Integer numberOfBeds, String approvalStatus, String status,
-                               LocalDateTime createdTime, LocalDateTime updatedTime, Long hostID, List<Long> bookingsID,
-                               List<Long> accommodationCalificationsIDs, List<Services> services) {
+public record AccommodationDTO(        Long id,
+                                       String title,
+                                       String accomodationType,
+                                       String houseRules,
+                                       Long ubicationID,
+                                       Integer maxGuestCapacity,
+                                       Integer numberOfBeds,
+                                       Integer numberOfBathrooms,
+                                       String approvalStatus,
+                                       String operationalStatus, //
+                                       LocalDateTime createdTime,
+                                       LocalDateTime updatedTime,
+                                       Long hostID,
+                                       List<Long> bookingsID,
+                                       List<Long> accommodationCalificationsIDs,
+                                       List<Long> commentaryIDs, //
+                                       List<String> urlPhotos,   //
+                                       List<Services> services ) {
 
 }
 

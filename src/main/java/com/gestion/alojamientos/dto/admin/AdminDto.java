@@ -4,5 +4,5 @@ package com.gestion.alojamientos.dto.admin;
  * Tiene la información basica del Admin, no la contraseña por temas de seguridad
  *
  */
-public record AdminDto(Long id, String email, String userName, int acces_Level ) {
+public record AdminDto(Long id, String email, String userName, int acces_level ) {
 }

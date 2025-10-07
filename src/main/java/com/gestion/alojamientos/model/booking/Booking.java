@@ -56,7 +56,7 @@ public class Booking {
     // Relación One-to-One con DetailBooking
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "detail_booking_id", nullable = false)
-    private DetailBooking detaillBooking;
+    private DetailBooking detailBooking;
 
     // Relación One-to-One con Voucher (opcional)
     @OneToOne(cascade = CascadeType.ALL)
