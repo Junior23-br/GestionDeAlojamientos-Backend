@@ -33,7 +33,10 @@ public record DeleteBookingDTO(
          * Campo obligatorio
          */
         @NotNull @NotEmpty @NotBlank
-        Long idGuest
+        Long idGuest,
+
+        @NotNull 
+        Long idHost  // Agregado para validación de anfitrión
 
 ) {
 }

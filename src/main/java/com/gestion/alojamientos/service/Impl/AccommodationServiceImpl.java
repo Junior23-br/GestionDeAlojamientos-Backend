@@ -16,7 +16,7 @@ import com.gestion.alojamientos.model.accomodation.OperationalStatus;
 import com.gestion.alojamientos.model.accomodation.Services;
 import com.gestion.alojamientos.model.accomodation.Ubication;
 import com.gestion.alojamientos.model.users.Host;
-import com.gestion.alojamientos.repository.accomodation.AccomodationRepo;
+import com.gestion.alojamientos.repository.accomodation.AccommodationRepo;
 import com.gestion.alojamientos.repository.accomodation.ServicesRepo;
 import com.gestion.alojamientos.repository.accomodation.UbicationRepo;
 import com.gestion.alojamientos.repository.user.HostRepo;
@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AccommodationServiceImpl implements AccomodationService {
 
     @Autowired
-    private AccomodationRepo accommodationRepo;
+    private AccommodationRepo accommodationRepo;
     @Autowired
     private  HostRepo hostRepo;
     @Autowired

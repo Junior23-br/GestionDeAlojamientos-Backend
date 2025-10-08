@@ -13,7 +13,7 @@ import com.gestion.alojamientos.model.booking.DetailBooking;
 @Repository
 public interface DetailBookingRepo extends JpaRepository<DetailBooking, Long> {
     
-    // ✅ CONSULTAS BÁSICAS
+    // CONSULTAS BÁSICAS
     
     /**
      * Encuentra DetailBooking por Booking ID
@@ -34,7 +34,7 @@ public interface DetailBookingRepo extends JpaRepository<DetailBooking, Long> {
     List<DetailBooking> findByCheckInDateRange(@Param("startDate") LocalDate startDate,
                                               @Param("endDate") LocalDate endDate);
     
-    // ✅ CONSULTAS PARA REPORTES
+    // CONSULTAS PARA REPORTES
     
     /**
      * Calcula estadísticas de ocupación por Accommodation
