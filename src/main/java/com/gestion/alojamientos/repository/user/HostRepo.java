@@ -85,7 +85,7 @@ public interface HostRepo extends JpaRepository<Host, Long>, JpaSpecificationExe
     /**
      * Cuenta Accommodations por Host
      */
-    @Query("SELECT COUNT(a) FROM Accommodation a WHERE a.host.id = :hostId")
+    @Query("SELECT COUNT(a) FROM Accomodation a WHERE a.host.id = :hostId")
     Long countAccommodationsByHostId(@Param("hostId") Long hostId);
     
     /**
@@ -125,9 +125,24 @@ public interface HostRepo extends JpaRepository<Host, Long>, JpaSpecificationExe
     /**
      * Verifica si existe Accommodation con título para un Host
      */
-    @Query("SELECT COUNT(a) > 0 FROM Accommodation a " +
+    @Query("SELECT COUNT(a) > 0 FROM Accomodation a " +
            "WHERE a.host.id = :hostId AND a.title = :title")
     boolean existsAccommodationWithTitle(@Param("hostId") Long hostId, 
                                         @Param("title") String title);
+
+
+    /**
+     * Busca un host por identificador
+     */
+    @Query("select a from Host a where a.id =? ")
+    Optional<Host> findByHostId(@Param("hostId") Long hostId);
+
+    /**
+     * Encuentra un Host por el correo electronico
+     */
+    @Query("select a from Host a where a.email=?")
+    Optional<Host> findByEmail(@Param("email") String email);
+
+
 }
 

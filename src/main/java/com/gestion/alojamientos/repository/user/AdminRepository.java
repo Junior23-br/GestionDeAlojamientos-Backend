@@ -17,7 +17,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long>, JpaSpecific
 
 
      /**
-      * Buscar un administrador por correo electrónico
+      * Buscar un administrador por identificador
       */
      @Query("SELECT a FROM Admin a where a.id =?")
      Optional<Admin> findById(Long id);
