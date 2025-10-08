@@ -48,9 +48,23 @@ public interface GuestMapper {
     @Mapping(target = "id", source = "id")
     Guest toEntity(GuestDto dto);
 
-
     Guest toEntity(CreateGuestDto dto);
 
+    // ===============================
+// UPDATE -> DTO (Edición limitada)
+// ===============================
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "state", ignore = true)
+    @Mapping(target = "birthDate", ignore = true)
+    @Mapping(target = "paymentMethods", ignore = true)
+    @Mapping(target = "bookingList", ignore = true)
+    @Mapping(target = "transactionHistory", ignore = true)
+    @Mapping(target = "name", source = "firstName")
+    @Mapping(target = "phoneNumber", source = "phoneNumber")
+    @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
+    void updateFromDto(EditGuestDto dto, @MappingTarget Guest guest);
 
     // ===============================
     // Métodos auxiliares
