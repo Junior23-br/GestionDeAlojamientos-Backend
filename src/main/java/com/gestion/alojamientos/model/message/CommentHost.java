@@ -1,5 +1,7 @@
-package com.gestion.alojamientos.model.users;
+package com.gestion.alojamientos.model.message;
 
+import com.gestion.alojamientos.model.users.Guest;
+import com.gestion.alojamientos.model.users.Host;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
