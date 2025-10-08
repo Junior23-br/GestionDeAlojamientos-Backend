@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.service.Impl;
 
-import com.gestion.alojamientos.dto.ResetPasswordDto;
+import com.gestion.alojamientos.dto.password.ChangePasswordDto;
+import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
 import com.gestion.alojamientos.dto.guest.DeleteGuestDto;
 import com.gestion.alojamientos.dto.guest.EditGuestDto;
@@ -128,6 +129,11 @@ public class GuestServiceImpl implements GuestService {
         Guest guest = guestRepository.findByEmail(email)
                 .orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con email: " + email));
         return resetCodeServiceImpl.generateAndSendCode(guest);
+    }
+
+    @Override
+    public void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException {
+
     }
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo
