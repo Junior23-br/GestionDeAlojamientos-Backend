@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.service;
 
+import com.gestion.alojamientos.dto.ResetPasswordDto;
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
 import com.gestion.alojamientos.dto.guest.EditGuestDto;
 import com.gestion.alojamientos.dto.guest.DeleteGuestDto;
@@ -22,5 +23,8 @@ public interface GuestService {
     void deleteGuest(Long id, DeleteGuestDto dto) throws ElementNotFoundException, InvalidElementException;
     GuestDto getGuestById(Long id) throws ElementNotFoundException;
     boolean isOfAge(LocalDate guest);
+    void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException;
+    String generateResetCode(String email) throws ElementNotFoundException;
+
 }
 

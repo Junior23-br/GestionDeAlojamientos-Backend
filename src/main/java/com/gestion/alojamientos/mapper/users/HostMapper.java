@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.mapper.users;
 
 import com.gestion.alojamientos.dto.Host.HostDTO;
+import com.gestion.alojamientos.model.message.CommentHost;
 import com.gestion.alojamientos.model.users.Host;
 import org.mapstruct.*;
 
@@ -47,10 +48,10 @@ public interface HostMapper {
                 .collect(Collectors.toList());
     }
 
-    default List<Long> mapCommentsToIds(List<com.gestion.alojamientos.model.users.CommentHost> list) {
+    default List<Long> mapCommentsToIds(List<CommentHost> list) {
         if (list == null) return null;
         return list.stream()
-                .map(com.gestion.alojamientos.model.users.CommentHost::getId)
+                .map(CommentHost::getId)
                 .collect(Collectors.toList());
     }
 

@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.model.users;
 
+import com.gestion.alojamientos.model.common.ResetCode;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.transaction.FinancialAccount;
 import com.gestion.alojamientos.model.transaction.Transaction;
@@ -46,4 +47,7 @@ public class Guest extends NormalUser {
     @OneToMany(mappedBy = "holder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Transaction> transactionHistory = new ArrayList<>();
+    @Embedded
+    private ResetCode resetCode;
+
 }

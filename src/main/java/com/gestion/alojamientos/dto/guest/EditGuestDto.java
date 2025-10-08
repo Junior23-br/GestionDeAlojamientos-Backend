@@ -15,6 +15,8 @@ public record EditGuestDto(
     @Length(max = 50) String firstName,
     // Apellido que puede ser modificado
     @Length(max = 60) String lastName,
-    @NotBlank @Pattern(regexp = "\\+57\\d{10}", message = "El phoneNumber debe contener solo números y exactamente 10 digitos") String phoneNumber
-    ){
+    @NotBlank @Pattern(regexp = "\\+57\\d{10}", message =
+            "El phoneNumber debe contener solo números y exactamente 10 digitos") String phoneNumber,
+          String urlProfilePhoto
+){
 }

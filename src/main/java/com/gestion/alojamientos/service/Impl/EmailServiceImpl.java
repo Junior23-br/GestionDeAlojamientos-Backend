@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 /**
  * Inmplementación del servicio para enviar correos con pdf adjunto
  */
@@ -240,14 +241,14 @@ public class EmailServiceImpl implements EmailService {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Confirmacíon de la nueva reserva: "));
-       document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.idDetailBooking()));
+       document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.id()));
        document.add(new Paragraph("Alojamiento ID: "+bookingDTO.id()));
        document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkInDate()));
        document.add(new Paragraph("Fecha de Check-Out: " +
         (detailBookingDTO.checkOutDate() != null ?
          detailBookingDTO.checkOutDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) :
          "N/A")));
-       document.add(new Paragraph("Estado: " + bookingDTO.StatesOfBookingState()));
+       document.add(new Paragraph("Estado: " + bookingDTO.bookingState().toString()));
        document.add(new Paragraph("Precio Total: $" + bookingDTO.totalPrice()));
        document.add(new Paragraph("Gracias por tu reserva. Te esperamos en la fecha indicada."));
        document.close();
@@ -268,14 +269,14 @@ public class EmailServiceImpl implements EmailService {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Confirmación de Cancelación de Reserva -El  Rincon del Viajero"));
-        document.add(new Paragraph("ID de Reserva: " + detailBookingDTO.idDetailBooking()));
+        document.add(new Paragraph("ID de Reserva: " + detailBookingDTO.id()));
         document.add(new Paragraph("Alojamiento ID: " + bookingDTO.accommodationId()));
         document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkInDate()));
         document.add(new Paragraph("Fecha de Check-Out: " +
         (detailBookingDTO.checkOutDate() != null ?
          detailBookingDTO.checkOutDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) :
          "N/A")));
-        document.add(new Paragraph("Estado: " + bookingDTO.StatesOfBookingState()));
+        document.add(new Paragraph("Estado: " + bookingDTO.bookingState().toString()));
         document.add(new Paragraph("Precio Total: $" + bookingDTO.totalPrice()));
         document.add(new Paragraph("Tu reserva ha sido cancelada. Si necesitas ayuda no dudes en contáctanos."));
 
@@ -298,7 +299,7 @@ public class EmailServiceImpl implements EmailService {
         document.add(new Paragraph("ID de Reserva: " + bookingDTO.id()));
         document.add(new Paragraph("Alojamiento ID: " + bookingDTO.accommodationId()));
         document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkOutDate()));
-        document.add(new Paragraph("Estado: " + bookingDTO.StatesOfBookingState()));
+        document.add(new Paragraph("Estado: " + bookingDTO.bookingState().toString()));
         document.add(new Paragraph("Precio Total: $" + bookingDTO.totalPrice()));
         document.add(new Paragraph("Tu check-in es mañana. ¡Prepárate para tu estadía!"));
 
@@ -334,7 +335,7 @@ public class EmailServiceImpl implements EmailService {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Agradecimiento Post Check-Out - El Rincón Del Viajero"));
-        document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.idDetailBooking()));
+        document.add(new Paragraph("ID de la reserva: " +detailBookingDTO.id()));
         document.add(new Paragraph("Alojamiento ID: " + bookingDTO.accommodationId()));
         document.add(new Paragraph("Fecha de Check-Out: " +
         (detailBookingDTO.checkOutDate() != null ?

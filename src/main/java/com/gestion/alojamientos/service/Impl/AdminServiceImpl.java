@@ -5,6 +5,7 @@ package com.gestion.alojamientos.service.Impl;
  import com.gestion.alojamientos.exception.ElementNotFoundException;
  import com.gestion.alojamientos.exception.RepeatedElementException;
  import com.gestion.alojamientos.mapper.users.AdminMapper;
+ import com.gestion.alojamientos.model.enums.StatesAdmin;
  import com.gestion.alojamientos.model.users.Admin;
  import com.gestion.alojamientos.repository.user.AdminRepository;
  import com.gestion.alojamientos.service.AdminService;
@@ -41,6 +42,7 @@ package com.gestion.alojamientos.service.Impl;
          adminRepository.save(admin);
          return adminMapper.toDTO(admin);
      }
+
      /**
       * Edita la contraseña de un administrador existente.
       *
@@ -51,13 +53,25 @@ package com.gestion.alojamientos.service.Impl;
       */
      @Override
      public AdminDto editAdmin(Long id, EditAdminDto dto) throws ElementNotFoundException {
-         Admin admin = adminRepository.findByID(id)
+         Admin admin = adminRepository.findById(id)
                  .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con ID: " + id));
-         // Solo actualiza la contraseña
+
+         // Verificar que el correo coincida (por seguridad)
+         if (!admin.getEmail().equals(dto.email())) {
+             throw new IllegalArgumentException("El correo del DTO no coincide con el del administrador registrado");
+         }
+
+         // Actualizar otros campos (aunque aquí solo tienes password, pero sirve si luego agrega mos más)
          adminMapper.updateFromDto(dto, admin);
+
+         // Actualizar y encriptar la nueva contraseña
          admin.setPassword(passwordEncoder.encode(dto.password()));
 
-         return adminMapper.toDto(adminRepository.save(admin));
+         // Guardar cambios
+         Admin updated = adminRepository.save(admin);
+
+         // Devolver DTO seguro (sin password)
+         return adminMapper.toDTO(updated);
      }
      //Esta funcionalidad sirve siempre y cuando le agregemos atributo de estado al admin, por si lo queremos borrar
 
@@ -68,9 +82,9 @@ package com.gestion.alojamientos.service.Impl;
       */
      @Override
      public void deleteAdmin(Long id) throws ElementNotFoundException {
-         Admin admin = adminRepository.findByID(id)
+         Admin admin = adminRepository.findById(id)
                  .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con ID: " + id));
-         admin.set // eliminación lógica
+         admin.setStatesAdmin(StatesAdmin.DELETED); // eliminación lógica
          adminRepository.save(admin);
      }
      /**
@@ -82,7 +96,7 @@ package com.gestion.alojamientos.service.Impl;
       */
      @Override
      public AdminDto getAdminById(Long id) throws ElementNotFoundException {
-         return adminMapper.toDto(adminRepository.findByID(id)
+         return adminMapper.toDTO(adminRepository.findById(id)
                  .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con ID: " + id)));
      }
      /**
@@ -96,7 +110,7 @@ package com.gestion.alojamientos.service.Impl;
      public AdminDto getAdminByEmail(String email) throws ElementNotFoundException {
          Admin admin = adminRepository.findByEmail(email)
                  .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con correo: " + email));
-         return adminMapper.toDto(admin);
+         return adminMapper.toDTO(admin);
      }
 
  }

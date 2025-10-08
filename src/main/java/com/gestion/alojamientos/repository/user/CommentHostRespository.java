@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.gestion.alojamientos.model.users.CommentHost;
+import com.gestion.alojamientos.model.message.CommentHost;
 
 public interface CommentHostRespository extends JpaRepository<CommentHost, Long>, JpaSpecificationExecutor<CommentHost> {
     /**
