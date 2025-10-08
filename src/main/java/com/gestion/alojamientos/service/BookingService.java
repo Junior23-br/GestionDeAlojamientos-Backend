@@ -1,7 +1,12 @@
 package com.gestion.alojamientos.service;
 
-public interface BookingService{
-    
-    
+import java.util.List;
 
+import com.gestion.alojamientos.dto.booking.*;
+
+public interface BookingService{
+    BookingDTO createBooking(BookingCreateDTO createBookingDTO) throws Exception;
+    boolean  cancelBooking(DeleteBookingDTO cancelBookingDTO) throws Exception;
+    List<BookingDTO> getGuestBookings(Long idGuest) throws Exception;
+    List<BookingDTO> getAccommodationBookings(Long idAccommodation) throws Exception;
 }

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public interface AccomodationRepo extends JpaRepository<Accomodation, Long>, JpaSpecificationExecutor<Accomodation> {
+public interface AccommodationRepo extends JpaRepository<Accomodation, Long>, JpaSpecificationExecutor<Accomodation> {
       /**
      * Encuentra Accommodations por Host ID
      */
