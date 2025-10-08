@@ -29,7 +29,7 @@ public record AccommodationDTO(        Long id,
                                        List<Long> accommodationCalificationsIDs,
                                        List<Long> commentaryIDs, //
                                        List<String> urlPhotos,   //
-                                       List<Services> services ) {
+                                       List<ServiceDTO> services ) {
 
 }
 
