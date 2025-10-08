@@ -27,4 +27,5 @@ public class ResetCode {
      */
     @Column(name = "expiration_date")
     private LocalDateTime expirationDate;
+
 }
