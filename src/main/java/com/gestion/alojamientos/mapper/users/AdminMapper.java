@@ -36,5 +36,5 @@ public interface AdminMapper {
     @Mapping(target = "password", ignore = true) // lo setearemos manualmente
     @Mapping(target = "email", ignore = true)    // el correo no debe cambiar
     @Mapping(target = "id", ignore = true)       // el ID tampoco debe cambiar
-    void updateFromDto(EditAdminDto editAdminDto, Admin admin);
+    Admin updateFromDto(EditAdminDto editAdminDto, Admin admin);
 }

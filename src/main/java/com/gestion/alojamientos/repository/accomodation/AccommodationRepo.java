@@ -30,7 +30,7 @@ public interface AccommodationRepo extends JpaRepository<Accomodation, Long>, Jp
     /**
      * Encuentra Accommodations por Host ID paginadas
      */
-    @Query("SELECT a FROM Accommodation a " +
+    @Query("SELECT a FROM Accomodation a " +
            "LEFT JOIN FETCH a.ubication " +
            "WHERE a.host.id = :hostId")
     Page<Accomodation> findByHostId(@Param("hostId") Long hostId, Pageable pageable);
@@ -38,10 +38,10 @@ public interface AccommodationRepo extends JpaRepository<Accomodation, Long>, Jp
     /**
      * Cuenta Accommodations por estado para un Host
      */
-    @Query("SELECT a.approvalStatus, COUNT(a) FROM Accommodation a " +
+    @Query("SELECT a.approvalStatus, COUNT(a) FROM Accomodation a " +
            "WHERE a.host.id = :hostId " +
            "GROUP BY a.approvalStatus")
-    List<Object[]> countAccommodationsByStatus(@Param("hostId") Long hostId);
+    List<Object[]> countAccommodationsByApprovalStatus(@Param("hostId") Long hostId);
 
 
 

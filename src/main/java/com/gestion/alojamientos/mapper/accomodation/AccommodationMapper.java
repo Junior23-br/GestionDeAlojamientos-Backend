@@ -29,7 +29,6 @@ public interface AccommodationMapper {
     AccommodationDTO toDto(Accomodation entity);
 
     // ======= DTO → ENTITY =======
-    @InheritInverseConfiguration
     @Mapping(target = "ubication", ignore = true)
     @Mapping(target = "host", ignore = true)
     @Mapping(target = "bookingList", ignore = true)

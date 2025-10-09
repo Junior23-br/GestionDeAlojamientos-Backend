@@ -134,13 +134,13 @@ public interface HostRepo extends JpaRepository<Host, Long>, JpaSpecificationExe
     /**
      * Busca un host por identificador
      */
-    @Query("select a from Host a where a.id =? ")
+    @Query("select a from Host a where a.id = :hostId ")
     Optional<Host> findByHostId(@Param("hostId") Long hostId);
 
     /**
      * Encuentra un Host por el correo electronico
      */
-    @Query("select a from Host a where a.email=?")
+    @Query("select a from Host a where a.email= :email")
     Optional<Host> findByEmail(@Param("email") String email);
 
 

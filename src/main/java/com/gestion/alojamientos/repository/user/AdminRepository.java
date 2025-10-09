@@ -12,14 +12,14 @@ public interface AdminRepository extends JpaRepository<Admin, Long>, JpaSpecific
      /**
       * Buscar un administrador por correo electrónico
       */
-     @Query("SELECT a FROM Admin a where a.email =?")
+     @Query("SELECT a FROM Admin a where a.email = :email")
      Optional<Admin> findByEmail(String email);
 
 
      /**
       * Buscar un administrador por identificador
       */
-     @Query("SELECT a FROM Admin a where a.id =?")
+     @Query("SELECT a FROM Admin a where a.id = :id")
      Optional<Admin> findById(Long id);
 
 
