@@ -14,7 +14,7 @@ import com.gestion.alojamientos.model.transaction.DetailVoucher;
 @Repository
 public interface DetailVoucherRepo extends JpaRepository<DetailVoucher, Long> {
     
-    // ✅ CONSULTAS BÁSICAS
+    // CONSULTAS BÁSICAS
     
     /**
      * Encuentra DetailVoucher por Voucher ID
@@ -23,7 +23,7 @@ public interface DetailVoucherRepo extends JpaRepository<DetailVoucher, Long> {
            "WHERE dv.id IN (SELECT v.detailVoucher.id FROM Voucher v WHERE v.id = :voucherId)")
     Optional<DetailVoucher> findByVoucherId(@Param("voucherId") Long voucherId);
     
-    // ✅ CONSULTAS PARA ANÁLISIS
+    // CONSULTAS PARA ANÁLISIS
     
     /**
      * Encuentra estadísticas de precios por noche

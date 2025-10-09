@@ -59,6 +59,6 @@ public class DetailBooking {
     private List<Services> listServices;
 
     // Relación inversa One-to-One con Booking
-    @OneToOne(mappedBy = "detaillBooking")
+    @OneToOne(mappedBy = "detailBooking")
     private Booking booking;
 }

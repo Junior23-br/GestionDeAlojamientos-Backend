@@ -27,7 +27,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Table(name = "guest")
 @EqualsAndHashCode(callSuper = true)
-
 public class Guest extends NormalUser {
     /**
      * Guest states: Active, Deleted, Suspended, Inactive.
