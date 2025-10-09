@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.service.Impl;
 
+import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.password.ChangePasswordDto;
 import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
@@ -53,11 +54,17 @@ public class GuestServiceImpl implements GuestService {
         if (!isOfAge(dto.birthDate())) {
             throw new InvalidElementException("Eres menor de edad, lo lamentamos ");
         }
+        if(dto.role()== null) {
+            throw new InvalidElementException("El rol es obligatorio");
+        }
 
         Guest guest = guestMapper.toEntity(dto);
         guest.setPassword(passwordEncoder.encode(dto.password())); // Encripta la contraseña
+        guest.setState(StatesOfGuest.ACTIVE);
         guestRepository.save(guest);
-        return guestMapper.toDto(guest);
+        GuestDto guestDto = guestMapper.toDto(guest);
+        emailServiceImpl.sendWelcomeEmail(guest.getEmail(), guestDto); //Mandar correo de bienvenida
+        return guestDto;
     }
 
     /**
@@ -98,6 +105,8 @@ public class GuestServiceImpl implements GuestService {
         }
         guest.setState(StatesOfGuest.DELETED); // Cambiar el estado del huésped
         guestRepository.save(guest);
+        GuestDto guestDto = guestMapper.toDto(guest);
+        emailServiceImpl.sendAccountDeletionConfirmationEmail(guest.getEmail(), guestDto);
     }
 
     /**
@@ -133,7 +142,30 @@ public class GuestServiceImpl implements GuestService {
 
     @Override
     public void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException {
+        Guest guest = guestRepository.findById(userId)
+                .orElseThrow(() -> new ElementNotFoundException("Usuario no encontrado con ID: " + userId));
+        if(!passwordEncoder.matches(dto.currentPassword(), guest.getPassword())) {
+            throw  new InvalidElementException("Contraseña incorrecta");
+        }
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+        if(!dto.newPassword().matches(passwordPattern)) {
+            throw new InvalidElementException("La nueva contraseña no cumple las politicas de privacidad");
+        }
+        guest.setPassword(passwordEncoder.encode(dto.newPassword()));
+        guestRepository.save(guest);
 
+
+
+    }
+
+    @Override
+    public GuestDto login(UserLoginDTO dto) throws InvalidElementException {
+        Guest guest = guestRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new InvalidElementException("Credenciales inválidas"));
+        if (!passwordEncoder.matches(dto.password(), guest.getPassword())) {
+            throw new InvalidElementException("Credenciales inválidas");
+        }
+        return guestMapper.toDto(guest);
     }
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo
@@ -142,7 +174,18 @@ public class GuestServiceImpl implements GuestService {
         Guest guest = guestRepository.findByEmail(dto.email())
                 .orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con email: " + dto.email()));
         //validar codigo
-        resetCodeServiceImpl.validateCode(guest,dto.resetCode());
+        try {
+            // Validar código
+            resetCodeServiceImpl.validateCode(guest, dto.resetCode());
+        } catch (InvalidElementException e) {
+            if (e.getMessage().equals("Código de recuperación expirado.")) {
+                // Generar y enviar un nuevo código automáticamente
+                String newCode = resetCodeServiceImpl.generateAndSendCode(guest);
+                throw new InvalidElementException("El código ha expirado. Se ha enviado un nuevo código a " + dto.email() + ". Por favor, usa el nuevo código para restablecer tu contraseña.");
+            }
+            // Si es otro error (ej. código incorrecto o no generado), relanzar la excepción original
+            throw e;
+        }
         //validar politica calve
         String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
         if (!dto.newPassword().matches(passwordPattern)) {
