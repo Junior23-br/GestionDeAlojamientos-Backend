@@ -29,4 +29,7 @@ public class DetailVoucher {
 
     @Column(name = "sub_total", nullable = false)
     private Double subTotal;
+
+    @Column(name = "Id_del_voucher", nullable = false)
+    private Long idVoucher;
 }
