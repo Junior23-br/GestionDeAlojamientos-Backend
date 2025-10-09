@@ -1,4 +1,4 @@
-package com.gestion.alojamientos.service.impl;
+package com.gestion.alojamientos.service.Impl;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;

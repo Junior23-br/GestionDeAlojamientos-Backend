@@ -1,8 +1,8 @@
-package com.gestion.alojamientos.dto.accommodation.CommentAccomodation;
+package com.gestion.alojamientos.dto.accommodation.CommentHost;
 
 import jakarta.validation.constraints.NotNull;
 
-public record DelateAccomodationCommentDTO(
+public record DeleteCommentHostDTO(
         /**
          * ID del comentario a eliminar.
          */
@@ -10,10 +10,10 @@ public record DelateAccomodationCommentDTO(
         Long id,
 
         /**
-         * ID del autor que intenta eliminar el comentario.
-         * Se usa para verificar que tiene permisos.
+         * ID del usuario (Guest) que realizó el comentario.
+         * Se usa para verificar que el autor es quien solicita la eliminación.
          */
         @NotNull(message = "El ID del autor es obligatorio")
-        Long authorId
+        Long senderId
 ) {
 }

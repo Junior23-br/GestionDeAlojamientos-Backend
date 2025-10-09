@@ -21,7 +21,7 @@ public interface AccommodationRepo extends JpaRepository<Accomodation, Long>, Jp
       /**
      * Encuentra Accommodations por Host ID
      */
-    @Query("SELECT a FROM Accommodation a " +
+    @Query("SELECT a FROM Accomodation a " +
            "LEFT JOIN FETCH a.ubication " +
            "LEFT JOIN FETCH a.servicesList " +
            "WHERE a.host.id = :hostId")

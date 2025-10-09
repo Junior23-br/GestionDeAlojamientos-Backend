@@ -1,6 +1,9 @@
 package com.gestion.alojamientos.mapper.users;
 
+import com.gestion.alojamientos.dto.Host.DeleteHostDTO;
+import com.gestion.alojamientos.dto.Host.HostCreateDTO;
 import com.gestion.alojamientos.dto.Host.HostDTO;
+import com.gestion.alojamientos.dto.Host.HostUpdateDTO;
 import com.gestion.alojamientos.model.message.CommentHost;
 import com.gestion.alojamientos.model.users.Host;
 import org.mapstruct.*;
@@ -40,6 +43,43 @@ public interface HostMapper {
     @Mapping(target = "serviceFee", ignore = true)
     Host toEntity(HostDTO hostDTO);
 
+
+    // ===== UPDATE DTO → ENTITY =====
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "username", ignore = true)
+    @Mapping(target = "listAccommodations", ignore = true)
+    @Mapping(target = "hostCommentList", ignore = true)
+    @Mapping(target = "receiptPayment", ignore = true)
+    @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "financialAccount", ignore = true)
+    void updateHostFromDTO(HostUpdateDTO dto, @MappingTarget Host host);
+
+
+    // ===== DELETE DTO → ENTITY (para validación o autenticación) =====
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "username", ignore = true)
+    @Mapping(target = "name", ignore = true)
+    @Mapping(target = "phoneNumber", ignore = true)
+    @Mapping(target = "birthDate", ignore = true)
+    @Mapping(target = "urlProfilePhoto", ignore = true)
+    @Mapping(target = "listAccommodations", ignore = true)
+    @Mapping(target = "hostCommentList", ignore = true)
+    @Mapping(target = "receiptPayment", ignore = true)
+    @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "financialAccount", ignore = true)
+    Host toEntityDelete(DeleteHostDTO dto);
+
+    // ===== CREATE DTO → ENTITY =====
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "username", source = "email") // opcional, depende de tu lógica
+    @Mapping(target = "urlProfilePhoto", ignore = true)
+    @Mapping(target = "listAccommodations", ignore = true)
+    @Mapping(target = "hostCommentList", ignore = true)
+    @Mapping(target = "receiptPayment", ignore = true)
+    @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "financialAccount", ignore = true)
+    Host toEntity(HostCreateDTO dto);
     // ===== Métodos auxiliares para IDs =====
     default List<Long> mapAccommodationsToIds(List<com.gestion.alojamientos.model.accomodation.Accomodation> list) {
         if (list == null) return null;
