@@ -351,7 +351,6 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
 //                .collect(Collectors.toList());
         return null;
     }
-
     // ===== 3. Alojamientos =====
 
     @Override
