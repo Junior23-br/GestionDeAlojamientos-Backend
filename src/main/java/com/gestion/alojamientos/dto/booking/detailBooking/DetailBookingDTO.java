@@ -1,6 +1,6 @@
 package com.gestion.alojamientos.dto.booking.detailBooking;
 
-import com.gestion.alojamientos.dto.transaction.ServiceFeeDTO;
+import com.gestion.alojamientos.dto.transaction.ServiceFee.ServiceFeeDTO;
 import com.gestion.alojamientos.model.accomodation.Services;
 
 import java.time.LocalDate;
