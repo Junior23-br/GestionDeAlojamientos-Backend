@@ -6,15 +6,14 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CommentHostMapper {
-
-
-    // Convierte de entidad a DTO
-    @Mapping(source = "host.id", target = "hostId")
-    @Mapping(source = "guest.id", target = "guestId")
+     // De entidad a DTO
+    @Mapping(source = "sender.id", target = "senderId")
+    @Mapping(source = "receiver.id", target = "receiverId")
+    @Mapping(source = "sender.name", target = "senderName")
     CommentHostDTO toDto(CommentHost entity);
 
-    // Convierte de DTO a entidad
-    @Mapping(source = "hostId", target = "host.id")
-    @Mapping(source = "guestId", target = "guest.id")
+    // De DTO a entidad
+    @Mapping(source = "senderId", target = "sender.id")
+    @Mapping(source = "receiverId", target = "receiver.id")
     CommentHost toEntity(CommentHostDTO dto);
 }

@@ -25,7 +25,7 @@ public interface HostMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "username", source = "username")
-    @Mapping(target = "name", source = "name") // NormalUser.name → firstName
+    @Mapping(target = "name", source = "name")
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "birthDate", expression = "java(host.getBirthDate())")
     @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
@@ -36,13 +36,12 @@ public interface HostMapper {
     HostDTO toDTO(Host host);
 
     // ===== DTO → ENTITY =====
-    @Mapping(target = "password", ignore = true) // por seguridad
+    @Mapping(target = "password", ignore = true)
     @Mapping(target = "listAccommodations", ignore = true)
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
     Host toEntity(HostDTO hostDTO);
-
 
     // ===== UPDATE DTO → ENTITY =====
     @Mapping(target = "password", ignore = true)
@@ -52,11 +51,9 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
-    @Mapping(target = "financialAccount", ignore = true)
     void updateHostFromDTO(HostUpdateDTO dto, @MappingTarget Host host);
 
-
-    // ===== DELETE DTO → ENTITY (para validación o autenticación) =====
+    // ===== DELETE DTO → ENTITY =====
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "username", ignore = true)
     @Mapping(target = "name", ignore = true)
@@ -67,18 +64,16 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
-    @Mapping(target = "financialAccount", ignore = true)
     Host toEntityDelete(DeleteHostDTO dto);
 
     // ===== CREATE DTO → ENTITY =====
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "username", source = "email") // opcional, depende de tu lógica
+    @Mapping(target = "username", source = "email")
     @Mapping(target = "urlProfilePhoto", ignore = true)
     @Mapping(target = "listAccommodations", ignore = true)
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
-    @Mapping(target = "financialAccount", ignore = true)
     Host toEntity(HostCreateDTO dto);
     // ===== Métodos auxiliares para IDs =====
     default List<Long> mapAccommodationsToIds(List<com.gestion.alojamientos.model.accomodation.Accomodation> list) {

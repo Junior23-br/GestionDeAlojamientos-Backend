@@ -39,7 +39,6 @@ public interface GuestMapper {
     // ===============================
     // DTO → Entity
     // ===============================
-    @InheritInverseConfiguration
     @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "bookingList", ignore = true)
     @Mapping(target = "transactionHistory", ignore = true)
