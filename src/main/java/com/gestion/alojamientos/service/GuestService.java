@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.service;
 
+import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.password.ChangePasswordDto;
 import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
@@ -27,6 +28,12 @@ public interface GuestService {
     void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException;
     String generateResetCode(String email) throws ElementNotFoundException;
     void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException;
-
+    /**
+     * Autentica un usuario con email y contraseña.
+     * @param dto DTO con las credenciales del usuario (email y contraseña).
+     * @return DTO del huésped autenticado.
+     * @throws InvalidElementException Si las credenciales son inválidas.
+     */
+    GuestDto login(UserLoginDTO dto) throws InvalidElementException;
 }
 
