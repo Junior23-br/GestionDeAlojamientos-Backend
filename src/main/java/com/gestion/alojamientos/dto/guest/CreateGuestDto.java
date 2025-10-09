@@ -1,4 +1,5 @@
 package com.gestion.alojamientos.dto.guest;
+import com.gestion.alojamientos.model.enums.Role;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 import java.time.LocalDate;
@@ -38,6 +39,11 @@ public record CreateGuestDto(
          * Campo obligatorio con longitud mínima de 8 caracteres, cumpliendo las especificaciones
          */
         @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",message = "La contraseña debe contener mínimo 8 caracteres, entre: mayusculas,minusculas y números")
-        String password
+        String password,
+        /**
+         * Rol del usuario
+         * Campo obligatorio, debe ser GUEST o HOST
+         */
+        @NotNull(message = "El rol es obligatorio") Role role
 ) {
 }

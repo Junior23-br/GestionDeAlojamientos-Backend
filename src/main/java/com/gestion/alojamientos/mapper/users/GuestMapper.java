@@ -30,6 +30,7 @@ public interface GuestMapper {
     @Mapping(target = "birthDate", expression = "java(convertDateToLocalDate(guest.getBirthDate()))")
     @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
     @Mapping(target = "state", source = "state")
+    @Mapping(target = "role", source = "role")
     @Mapping(target = "paymentMethodsIds", expression = "java(mapFinancialAccountsToIds(guest.getPaymentMethods()))")
     @Mapping(target = "bookingIds", expression = "java(mapBookingsToIds(guest.getBookingList()))")
     @Mapping(target = "transactionIds", expression = "java(mapTransactionsToIds(guest.getTransactionHistory()))")
@@ -48,6 +49,16 @@ public interface GuestMapper {
     @Mapping(target = "id", source = "id")
     Guest toEntity(GuestDto dto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "username", expression = "java(dto.firstName() + '.' + dto.lastName())")
+    @Mapping(target = "name", source = "firstName")
+    @Mapping(target = "state", expression = "java(com.gestion.alojamientos.model.enums.StatesOfGuest.ACTIVE)")
+    @Mapping(target = "role", source = "role")
+    @Mapping(target = "birthDate", expression = "java(convertLocalDateToDate(dto.birthDate()))")
+    @Mapping(target = "paymentMethods", ignore = true)
+    @Mapping(target = "bookingList", ignore = true)
+    @Mapping(target = "transactionHistory", ignore = true)
+    @Mapping(target = "resetCode", ignore = true)
     Guest toEntity(CreateGuestDto dto);
 
     // ===============================
@@ -57,6 +68,7 @@ public interface GuestMapper {
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "state", ignore = true)
+    @Mapping(target = "role", ignore = true)
     @Mapping(target = "birthDate", ignore = true)
     @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "bookingList", ignore = true)

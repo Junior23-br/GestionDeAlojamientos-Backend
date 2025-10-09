@@ -1,4 +1,5 @@
 package com.gestion.alojamientos.dto.guest;
+import com.gestion.alojamientos.model.enums.Role;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import java.time.LocalDate;
 import java.util.List;
@@ -58,6 +59,10 @@ public record GuestDto(
          * Estado actual del huésped: ACTIVE, DELETED, SUSPENDED, INACTIVE.
          */
         StatesOfGuest state,
+        /**
+         * Rol del huésped: GUEST o HOST.
+         */
+        Role role,
 
         /**
          * Lista de IDs de cuentas financieras asociadas (métodos de pago).

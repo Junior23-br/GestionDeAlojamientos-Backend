@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.model.users;
 
 import com.gestion.alojamientos.model.common.ResetCode;
+import com.gestion.alojamientos.model.enums.Role;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.transaction.FinancialAccount;
 import com.gestion.alojamientos.model.transaction.Transaction;
@@ -36,6 +37,12 @@ public class Guest extends NormalUser {
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false, length = 50)
     private StatesOfGuest state;
+    /**
+     * Role of the user: GUEST or HOST.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 50)
+    private Role role;
 
     @OneToMany(mappedBy = "carHolder")
     private List<FinancialAccount> paymentMethods;
