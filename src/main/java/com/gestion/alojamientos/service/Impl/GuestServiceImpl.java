@@ -59,6 +59,7 @@ public class GuestServiceImpl implements GuestService {
         }
 
         Guest guest = guestMapper.toEntity(dto);
+        System.out.println(guest.getEmail());
         guest.setPassword(passwordEncoder.encode(dto.password())); // Encripta la contraseña
         guest.setState(StatesOfGuest.ACTIVE);
         guestRepository.save(guest);
@@ -153,9 +154,6 @@ public class GuestServiceImpl implements GuestService {
         }
         guest.setPassword(passwordEncoder.encode(dto.newPassword()));
         guestRepository.save(guest);
-
-
-
     }
 
     @Override
@@ -165,7 +163,9 @@ public class GuestServiceImpl implements GuestService {
         if (!passwordEncoder.matches(dto.password(), guest.getPassword())) {
             throw new InvalidElementException("Credenciales inválidas");
         }
-        return guestMapper.toDto(guest);
+        GuestDto Guestdto = guestMapper.toDto(guest);
+        System.out.println(Guestdto.email());
+        return Guestdto;
     }
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo

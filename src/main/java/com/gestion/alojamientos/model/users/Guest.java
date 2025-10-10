@@ -20,8 +20,7 @@ import lombok.experimental.SuperBuilder;
  * Entity representing a guest in the system.
  * Extends NormalUser and maps to the 'guest' table.
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder

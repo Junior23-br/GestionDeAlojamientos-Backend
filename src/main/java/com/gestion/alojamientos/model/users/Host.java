@@ -30,8 +30,6 @@ import java.util.List;
  */
 @Data
 @SuperBuilder
-@Getter
-@Setter
 @Entity
 @Table(name = "host")
 @EqualsAndHashCode(callSuper = true)

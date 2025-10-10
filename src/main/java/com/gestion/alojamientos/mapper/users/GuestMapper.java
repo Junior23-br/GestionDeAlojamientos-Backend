@@ -3,9 +3,6 @@ package com.gestion.alojamientos.mapper.users;
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
 import com.gestion.alojamientos.dto.guest.EditGuestDto;
 import com.gestion.alojamientos.dto.guest.GuestDto;
-import com.gestion.alojamientos.model.booking.Booking;
-import com.gestion.alojamientos.model.transaction.FinancialAccount;
-import com.gestion.alojamientos.model.transaction.Transaction;
 import com.gestion.alojamientos.model.users.Guest;
 import org.mapstruct.*;
 
@@ -17,103 +14,76 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface GuestMapper {
-
-    // ===============================
-    // Entity → DTO
-    // ===============================
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "email", source = "email")
-    @Mapping(target = "username", source = "username")
-    @Mapping(target = "firstName", source = "name") // NormalUser.name → firstName
-    @Mapping(target = "lastName", ignore = true) // No existe en entidad base
-    @Mapping(target = "phoneNumber", source = "phoneNumber")
-    @Mapping(target = "birthDate", expression = "java(convertDateToLocalDate(guest.getBirthDate()))")
-    @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
-    @Mapping(target = "state", source = "state")
-    @Mapping(target = "role", source = "role")
-    @Mapping(target = "paymentMethodsIds", expression = "java(mapFinancialAccountsToIds(guest.getPaymentMethods()))")
-    @Mapping(target = "bookingIds", expression = "java(mapBookingsToIds(guest.getBookingList()))")
-    @Mapping(target = "transactionIds", expression = "java(mapTransactionsToIds(guest.getTransactionHistory()))")
+    
+    // ==========================================
+    // ENTITY → DTO (para consultas o responses)
+    // ==========================================
+    @Mapping(target = "firstName", source = "name")
+    @Mapping(target = "lastName", ignore = true) // no está en la entidad
+    @Mapping(target = "birthDate", source = "birthDate") // LocalDate → LocalDate (sin conversión)
+    @Mapping(target = "paymentMethodsIds", expression = "java(mapPaymentMethodIds(guest))")
+    @Mapping(target = "bookingIds", expression = "java(mapBookingIds(guest))")
+    @Mapping(target = "transactionIds", expression = "java(mapTransactionIds(guest))")
     GuestDto toDto(Guest guest);
 
-    // ===============================
-    // DTO → Entity
-    // ===============================
-    @Mapping(target = "paymentMethods", ignore = true)
-    @Mapping(target = "bookingList", ignore = true)
-    @Mapping(target = "transactionHistory", ignore = true)
-    @Mapping(target = "password", ignore = true) // No se expone en DTO
-    @Mapping(target = "birthDate", expression = "java(convertLocalDateToDate(dto.birthDate()))")
-    @Mapping(target = "name", source = "firstName")
-    @Mapping(target = "id", source = "id")
-    Guest toEntity(GuestDto dto);
-
+    // ==========================================
+    // CREATE DTO → ENTITY
+    // ==========================================
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "username", expression = "java(dto.firstName() + '.' + dto.lastName())")
     @Mapping(target = "name", source = "firstName")
-    @Mapping(target = "state", expression = "java(com.gestion.alojamientos.model.enums.StatesOfGuest.ACTIVE)")
+    @Mapping(target = "state", expression = "java(StatesOfGuest.ACTIVE)")
     @Mapping(target = "role", source = "role")
-    @Mapping(target = "birthDate", expression = "java(convertLocalDateToDate(dto.birthDate()))")
+    @Mapping(target = "birthDate", source = "birthDate") // LocalDate directo
     @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "bookingList", ignore = true)
     @Mapping(target = "transactionHistory", ignore = true)
     @Mapping(target = "resetCode", ignore = true)
+    @Mapping(target = "urlProfilePhoto", ignore = true)
     Guest toEntity(CreateGuestDto dto);
 
-    // ===============================
-// UPDATE -> DTO (Edición limitada)
-// ===============================
+    // ==========================================
+    // EDIT DTO → ENTITY (actualización parcial)
+    // ==========================================
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
-    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "username", ignore = true)
     @Mapping(target = "state", ignore = true)
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "birthDate", ignore = true)
     @Mapping(target = "paymentMethods", ignore = true)
     @Mapping(target = "bookingList", ignore = true)
     @Mapping(target = "transactionHistory", ignore = true)
+    @Mapping(target = "resetCode", ignore = true)
     @Mapping(target = "name", source = "firstName")
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
     void updateFromDto(EditGuestDto dto, @MappingTarget Guest guest);
 
-    // ===============================
-    // Métodos auxiliares
-    // ===============================
-    default List<Long> mapFinancialAccountsToIds(List<FinancialAccount> accounts) {
-        if (accounts == null) return null;
-        return accounts.stream()
-                .map(FinancialAccount::getId)
+    // ==========================================
+    // MÉTODOS AUXILIARES
+    // ==========================================
+    default List<Long> mapPaymentMethodIds(Guest guest) {
+        if (guest.getPaymentMethods() == null) return List.of();
+        return guest.getPaymentMethods()
+                .stream()
+                .map(pm -> pm.getId())
                 .collect(Collectors.toList());
     }
 
-    default List<Long> mapBookingsToIds(List<Booking> bookings) {
-        if (bookings == null) return null;
-        return bookings.stream()
-                .map(Booking::getId)
+    default List<Long> mapBookingIds(Guest guest) {
+        if (guest.getBookingList() == null) return List.of();
+        return guest.getBookingList()
+                .stream()
+                .map(b -> b.getId())
                 .collect(Collectors.toList());
     }
 
-    default List<Long> mapTransactionsToIds(List<Transaction> transactions) {
-        if (transactions == null) return null;
-        return transactions.stream()
-                .map(Transaction::getId)
+    default List<Long> mapTransactionIds(Guest guest) {
+        if (guest.getTransactionHistory() == null) return List.of();
+        return guest.getTransactionHistory()
+                .stream()
+                .map(t -> t.getId())
                 .collect(Collectors.toList());
     }
-
-    // ===============================
-    // Conversión de fechas
-    // ===============================
-    default LocalDate convertDateToLocalDate(Date date) {
-        return date != null
-                ? date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                : null;
-    }
-
-    default Date convertLocalDateToDate(LocalDate localDate) {
-        return localDate != null
-                ? Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-                : null;
-    }
-
 }

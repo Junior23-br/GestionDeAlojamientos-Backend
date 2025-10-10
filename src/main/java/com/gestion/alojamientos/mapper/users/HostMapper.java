@@ -8,6 +8,7 @@ import com.gestion.alojamientos.model.message.CommentHost;
 import com.gestion.alojamientos.model.users.Host;
 import org.mapstruct.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ public interface HostMapper {
     @Mapping(target = "username", source = "username")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "phoneNumber", source = "phoneNumber")
-    @Mapping(target = "birthDate", expression = "java(host.getBirthDate())")
+    @Mapping(target = "birthDate", source = "birthDate")
     @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
     @Mapping(target = "listAccommodationsIds", expression = "java(mapAccommodationsToIds(host.getListAccommodations()))")
     @Mapping(target = "hostCommentIds", expression = "java(mapCommentsToIds(host.getHostCommentList()))")
@@ -75,28 +76,19 @@ public interface HostMapper {
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
     Host toEntity(HostCreateDTO dto);
-    // ===== Métodos auxiliares para IDs =====
+
+    // ===== Métodos auxiliares =====
     default List<Long> mapAccommodationsToIds(List<com.gestion.alojamientos.model.accomodation.Accomodation> list) {
-        if (list == null) return null;
+        if (list == null) return List.of();
         return list.stream()
                 .map(com.gestion.alojamientos.model.accomodation.Accomodation::getId)
                 .collect(Collectors.toList());
     }
 
     default List<Long> mapCommentsToIds(List<CommentHost> list) {
-        if (list == null) return null;
+        if (list == null) return List.of();
         return list.stream()
                 .map(CommentHost::getId)
                 .collect(Collectors.toList());
-    }
-
-    // ===== Conversión opcional =====
-    default java.time.LocalDate convertDateToLocalDate(java.util.Date date) {
-        if (date == null) {
-            return null;
-        }
-        return date.toInstant()
-                .atZone(java.time.ZoneId.systemDefault())
-                .toLocalDate();
     }
 }
