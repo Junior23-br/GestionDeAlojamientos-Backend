@@ -51,7 +51,7 @@ public interface EmailService {
      * @param bookingDTO detalles de la reserva ya finalizada
      * @throws InvalidElementException si falla el envio
      */
-    void sendCheckOutThanksEmail(String email, BookingDTO bookingDTO) throws InvalidElementException;
+    void sendCheckOutThanksEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException;
     /**
      *ORGANIZAR BIEN SI ESTE METODO VA O NOOO CON ANTIONIO Y SANTI
      *  Envía un email de confirmación para cambio de rol de guest a host
