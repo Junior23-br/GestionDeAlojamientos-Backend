@@ -440,11 +440,7 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         throw new EntityNotFoundException("Comentario no encontrado con ID: " + commentId);
     }
 
-    @Override
-    public void approvePhoto(Long photoId) {
-        // TODO: Implementar cuando exista PhotoService/repository
-        throw new UnsupportedOperationException("approvePhoto no implementado - PhotoService requerido.");
-    }
+
 
     @Override
     public void deletePhoto(Long photoId) {

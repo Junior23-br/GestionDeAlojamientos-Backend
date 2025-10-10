@@ -98,7 +98,6 @@ public interface AdminService {
 //    ReportDTO classifyReport(Long reportId, ReportCategory category);
     void approveComment(Long commentId);
     void deleteComment(Long commentId);
-    void approvePhoto(Long photoId);
     void deletePhoto(Long photoId);
 
     // 8. Comunicaciones
