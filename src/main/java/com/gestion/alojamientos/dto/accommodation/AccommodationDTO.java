@@ -23,7 +23,7 @@ public record AccommodationDTO(        Long id,
                                        String approvalStatus,
                                        String operationalStatus, //
                                        LocalDateTime createdTime,
-                                       LocalDateTime updatedTime,
+                                       LocalDateTime updateTime,
                                        Long hostID,
                                        List<Long> bookingsID,
                                        List<Long> accommodationCalificationsIDs,

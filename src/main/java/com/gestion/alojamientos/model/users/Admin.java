@@ -19,7 +19,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "admin")
 @EqualsAndHashCode(callSuper = true)
 public class Admin extends SuperUser {
-    
+
     @Column(name = "acces_level", nullable = false)
     private int acces_level;
     @Column(name = "statesAdmin", nullable = false)

@@ -34,4 +34,12 @@ public class ServiceFee {
 
     @Column(name = "number_bookings_minimum")
     private Integer numberBookingsMinimum;
+
+    public double getPromCalification() {
+        return promCalificationMinimun;
+    }
+
+    public void setPromCalification(double v) {
+        promCalificationMinimun = v;
+    }
 }

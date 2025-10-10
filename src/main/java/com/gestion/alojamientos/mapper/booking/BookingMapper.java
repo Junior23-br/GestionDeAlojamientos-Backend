@@ -13,7 +13,11 @@ import org.mapstruct.*;
 /**
  * Mapper para convertir entre Booking y BookingDTO.
  */
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(
+        componentModel = "spring",
+        uses = { DetailBookingMapper.class },
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+
 public interface BookingMapper {
 
     // ========================================================

@@ -25,7 +25,7 @@ public interface AccommodationMapper {
     @Mapping(target = "accommodationCalificationsIDs", source = "accomodationCalificationList", qualifiedByName = "mapCalificationListToIds")
     @Mapping(target = "commentaryIDs", source = "commentary", qualifiedByName = "mapCommentaryListToIds")
     @Mapping(target = "services", source = "servicesList")
-    @Mapping(target = "updatedTime", source = "updateTime")
+    @Mapping(target = "updateTime", source = "updateTime")
     AccommodationDTO toDto(Accomodation entity);
 
     // ======= DTO → ENTITY =======
@@ -40,8 +40,6 @@ public interface AccommodationMapper {
     @Mapping(target = "approvalStatus", ignore = true)
     @Mapping(target = "operationalStatus", ignore = true)
     Accomodation toEntity(AccommodationDTO dto);
-
-    boolean deleteById(Long id);
 
     // ======= MÉTODOS AUXILIARES =======
     @Named("enumToString")

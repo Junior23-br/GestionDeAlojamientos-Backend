@@ -20,7 +20,7 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor
 @MappedSuperclass
 @SuperBuilder
-public abstract class SuperUser {
+public abstract class SuperUser  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

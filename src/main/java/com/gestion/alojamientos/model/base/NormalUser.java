@@ -10,6 +10,7 @@ import com.gestion.alojamientos.model.transaction.Transaction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
@@ -19,6 +20,8 @@ import org.hibernate.annotations.Comment;
 @Data
 @MappedSuperclass
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+
 public abstract class NormalUser extends SuperUser  {
 
     @Column(name = "name", nullable = false, length = 100)

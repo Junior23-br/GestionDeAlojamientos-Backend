@@ -1,6 +1,6 @@
 package com.gestion.alojamientos.dto.transaction.ServiceFee;
 
 public record ServiceFeeDTO(Long id, String description,
-                            double value, String typeFee, double promCalification,
+                            double value, String typeFee, double promCalificationMinimun,
                             Integer numberBookingsMinimum) {
 }

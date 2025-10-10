@@ -22,6 +22,8 @@ public interface AdminMapper {
     @Mapping(target = "email", source = "email")
     @Mapping(target = "acces_level", source = "acces_level")
     @Mapping(target = "username", source = "username")
+    @Mapping(target = "resetCode", ignore = true)
+    @Mapping(target = "statesAdmin", source = "statesAdmin")
     AdminDto toDTO(Admin admin);
 
     // ====== DTO → ENTITY ======
