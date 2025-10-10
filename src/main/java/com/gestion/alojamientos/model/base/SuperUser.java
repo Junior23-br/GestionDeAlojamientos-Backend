@@ -2,6 +2,7 @@ package com.gestion.alojamientos.model.base;
 
 import java.util.List;
 
+import com.gestion.alojamientos.model.common.ResetCode;
 import com.gestion.alojamientos.model.message.Chat;
 import com.gestion.alojamientos.model.message.Notification;
 
@@ -37,4 +38,7 @@ public abstract class SuperUser {
 
     @Column(name = "username", nullable = false, length = 100)
     private String username; // Username
+
+    @Embedded
+    private ResetCode resetCode;
 }

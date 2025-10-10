@@ -41,6 +41,8 @@ public interface AccommodationMapper {
     @Mapping(target = "operationalStatus", ignore = true)
     Accomodation toEntity(AccommodationDTO dto);
 
+    boolean deleteById(Long id);
+
     // ======= MÉTODOS AUXILIARES =======
     @Named("enumToString")
     default String enumToString(Enum<?> e) {

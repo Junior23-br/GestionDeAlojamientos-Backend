@@ -52,7 +52,6 @@ public class Guest extends NormalUser {
     @OneToMany(mappedBy = "holder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
     private List<Transaction> transactionHistory = new ArrayList<>();
-    @Embedded
-    private ResetCode resetCode;
+
 
 }

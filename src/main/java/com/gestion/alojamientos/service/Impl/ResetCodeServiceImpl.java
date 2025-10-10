@@ -1,5 +1,7 @@
 package com.gestion.alojamientos.service.Impl;
+import com.gestion.alojamientos.model.base.SuperUser;
 import com.gestion.alojamientos.model.common.ResetCode;
+import com.gestion.alojamientos.model.users.Admin;
 import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.service.EmailService;
 import com.gestion.alojamientos.service.ResetCodeService;
@@ -16,7 +18,7 @@ public class ResetCodeServiceImpl implements ResetCodeService {
     private EmailService emailService;
 
     @Override
-    public String generateAndSendCode(Guest guest) throws InvalidElementException {
+    public String generateAndSendCode(SuperUser guest) throws InvalidElementException {
         // Generar código aleatorio de 7 caracteres
         String code = generateRandomCode(7);
         // Crear ResetCode con expiración en 15 minutos
@@ -32,7 +34,7 @@ public class ResetCodeServiceImpl implements ResetCodeService {
     }
 
     @Override
-    public void validateCode(Guest guest, String code) throws InvalidElementException {
+    public void validateCode(SuperUser guest, String code) throws InvalidElementException {
         if (guest.getResetCode() == null || guest.getResetCode().getResetCode() == null) {
             throw new InvalidElementException("No se ha generado un código de restablecimiento.");
         }
@@ -54,4 +56,6 @@ public class ResetCodeServiceImpl implements ResetCodeService {
         }
         return code.toString();
     }
+
+
 }

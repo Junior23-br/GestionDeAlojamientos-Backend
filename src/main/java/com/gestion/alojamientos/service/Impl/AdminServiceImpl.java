@@ -2,6 +2,7 @@ package com.gestion.alojamientos.service.Impl;
 
 import com.gestion.alojamientos.dto.Host.HostDTO;
 import com.gestion.alojamientos.dto.Message.MessageDTO;
+import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.accommodation.AccommodationDTO;
 import com.gestion.alojamientos.dto.accommodation.CalificationAccommodation.AccommodationCalificationDTO;
 import com.gestion.alojamientos.dto.accommodation.CommentAccomodation.AccommodionCommentDTO;
@@ -11,6 +12,8 @@ import com.gestion.alojamientos.dto.admin.CreateAdminDto;
 import com.gestion.alojamientos.dto.admin.EditAdminDto;
 import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
+import com.gestion.alojamientos.dto.password.ChangePasswordDto;
+import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.exception.ElementNotFoundException;
 import com.gestion.alojamientos.exception.RepeatedElementException;
 import com.gestion.alojamientos.exception.InvalidElementException;
@@ -21,11 +24,10 @@ import com.gestion.alojamientos.mapper.accomodation.AccommodationMapper;
 import com.gestion.alojamientos.mapper.booking.BookingMapper;
 import com.gestion.alojamientos.mapper.accomodation.CommentAccomodationMapper;
 import com.gestion.alojamientos.mapper.accomodation.CommentHostMapper;
-import com.gestion.alojamientos.model.accomodation.Accomodation;
-import com.gestion.alojamientos.model.accomodation.CommentAccomodation;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.users.Admin;
+import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.repository.user.AdminRepository;
 import com.gestion.alojamientos.repository.user.GuestRepository;
 import com.gestion.alojamientos.repository.user.HostRepo;
@@ -41,7 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +65,11 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailServiceImpl emailServiceImpl;
+    @Autowired
+    private ResetCodeServiceImpl resetCodeServiceImpl;
 
     // Repositorios y mappers necesarios para operaciones de moderación/consulta
     @Autowired(required = false)
@@ -467,4 +473,72 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         // TODO: Implementar envío por lotes usando NotificationService y validación del admin
         throw new UnsupportedOperationException("sendEmailToAllGuests no implementado - NotificationService requerido.");
     }
+
+    //Codigo aleatorio, busca al guest,
+    // genera el código, lo asigna al guest y lo envía por email.
+    @Override
+    public String generateResetCode(String email) throws ElementNotFoundException {
+        Admin admin = adminRepository.findByEmail(email)
+                .orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con email: " + email));
+        return resetCodeServiceImpl.generateAndSendCode(admin);
+    }
+
+    @Override
+    public void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException {
+        Guest guest = guestRepository.findById(userId)
+                .orElseThrow(() -> new ElementNotFoundException("Usuario no encontrado con ID: " + userId));
+        if(!passwordEncoder.matches(dto.currentPassword(), guest.getPassword())) {
+            throw  new InvalidElementException("Contraseña incorrecta");
+        }
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+        if(!dto.newPassword().matches(passwordPattern)) {
+            throw new InvalidElementException("La nueva contraseña no cumple las politicas de privacidad");
+        }
+        guest.setPassword(passwordEncoder.encode(dto.newPassword()));
+        guestRepository.save(guest);
+    }
+
+    @Override
+    public GuestDto login(UserLoginDTO dto) throws InvalidElementException {
+        Guest guest = guestRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new InvalidElementException("Credenciales inválidas"));
+        if (!passwordEncoder.matches(dto.password(), guest.getPassword())) {
+            throw new InvalidElementException("Credenciales inválidas");
+        }
+        GuestDto Guestdto = guestMapper.toDto(guest);
+        System.out.println(Guestdto.email());
+        return Guestdto;
+    }
+
+    //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo
+    @Override
+    public void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException {
+        Guest guest = guestRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con email: " + dto.email()));
+        //validar codigo
+        try {
+            // Validar código
+            resetCodeServiceImpl.validateCode(guest, dto.resetCode());
+        } catch (InvalidElementException e) {
+            if (e.getMessage().equals("Código de recuperación expirado.")) {
+                // Generar y enviar un nuevo código automáticamente
+                String newCode = resetCodeServiceImpl.generateAndSendCode(guest);
+                throw new InvalidElementException("El código ha expirado. Se ha enviado un nuevo código a " + dto.email() + ". Por favor, usa el nuevo código para restablecer tu contraseña.");
+            }
+            // Si es otro error (ej. código incorrecto o no generado), relanzar la excepción original
+            throw e;
+        }
+        //validar politica calve
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+        if (!dto.newPassword().matches(passwordPattern)) {
+            throw new InvalidElementException("La nueva contraseña no cumple con la política de seguridad.");
+        }
+        guest.setPassword(passwordEncoder.encode(dto.newPassword()));
+        // Limpiar el resetCode para que no pueda reutilizarse
+        guest.setResetCode(null); //limpiar
+        guestRepository.save(guest);
+    }
 }
+
+
+

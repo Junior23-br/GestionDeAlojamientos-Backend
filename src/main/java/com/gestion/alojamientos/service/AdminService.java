@@ -2,6 +2,7 @@ package com.gestion.alojamientos.service;
 
 import com.gestion.alojamientos.dto.Host.HostDTO;
 import com.gestion.alojamientos.dto.Message.MessageDTO;
+import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.accommodation.AccommodationDTO;
 import com.gestion.alojamientos.dto.accommodation.CalificationAccommodation.AccommodationCalificationDTO;
 import com.gestion.alojamientos.dto.accommodation.CommentAccomodation.AccommodionCommentDTO;
@@ -12,6 +13,8 @@ import com.gestion.alojamientos.dto.admin.EditAdminDto;
 // import com.gestion.alojamientos.mapper.AdminMapper;
 import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
+import com.gestion.alojamientos.dto.password.ChangePasswordDto;
+import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.model.accomodation.CommentAccomodation;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
@@ -104,6 +107,17 @@ public interface AdminService {
     void sendEmailToUser( MessageDTO messageDTO);
     void sendEmailToAllHosts(Long adminId);
     void sendEmailToAllGuests(Long adminId);
+
+    //Codigo aleatorio, busca al guest,
+    // genera el código, lo asigna al guest y lo envía por email.
+    String generateResetCode(String email) throws ElementNotFoundException;
+
+    void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException;
+
+    GuestDto login(UserLoginDTO dto) throws InvalidElementException;
+
+    //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo
+    void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException;
 
     // 9. Métricas Generales
 //    PlatformStatsDTO getPlatformStats();
