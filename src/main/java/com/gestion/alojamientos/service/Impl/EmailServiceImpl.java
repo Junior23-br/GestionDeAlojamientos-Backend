@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
             byte[] emailBytes = generateResetCodePdf(email, code);
             sendEmail(email, "El código de recuperación de contraseña",
                     "Adjunto a este archivo encontrará el código de recuperación, el cual " +
-                            "solo es válido por 15 mínutos", "ResetCode.txt", emailBytes);
+                            "solo es válido por 15 mínutos", "ResetCode.pdf", emailBytes);
         } catch (Exception e) {
             throw new InvalidElementException("Error al enviar el email de recuperación" + e.getMessage());
         }
@@ -114,10 +114,10 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendCheckOutThanksEmail(String email, BookingDTO bookingDTO) throws InvalidElementException {
+    public void sendCheckOutThanksEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException {
         emailValidator(email);
-         /* try {
-            byte [] pdfBytes = generateCheckOutPdf(bookingDTO);
+          try {
+            byte [] pdfBytes = generateCheckOutPdf(email, bookingDTO, detailBookingDTO);
             sendEmail(email, "Gracias por tu estancia",
                     "Adjunto a este correo encontraras un archivo con un resumen de tu reserva." +
                             "¡Esperamos verte pronto de nuevo!", "CheckOutThanks.pdf", pdfBytes);
@@ -125,7 +125,6 @@ public class EmailServiceImpl implements EmailService {
             throw new InvalidElementException("error al enviar el email de agradecimiento post check-out: " +e.getMessage());
         }
 
-          */
     }
 
     @Override
@@ -184,11 +183,11 @@ public class EmailServiceImpl implements EmailService {
     private void sendEmail(String email, String subject, String body, String attachmentName, byte[] pdf)
             throws Exception {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         mimeMessageHelper.setTo(email);
         mimeMessageHelper.setSubject(subject);
         mimeMessageHelper.setText(body);
-        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(attachmentName, "application/pdf");
+        ByteArrayDataSource byteArrayDataSource = new ByteArrayDataSource(pdf, "application/pdf");
         mimeMessageHelper.addAttachment(attachmentName, byteArrayDataSource);
         mailSender.send(mimeMessage);
     }
@@ -298,7 +297,7 @@ public class EmailServiceImpl implements EmailService {
         document.add(new Paragraph("Recordatorio de Check-In - Alojamiento Quindío"));
         document.add(new Paragraph("ID de Reserva: " + bookingDTO.id()));
         document.add(new Paragraph("Alojamiento ID: " + bookingDTO.accommodationId()));
-        document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkOutDate()));
+        document.add(new Paragraph("Fecha de Check-In: " + detailBookingDTO.checkInDate()));
         document.add(new Paragraph("Estado: " + bookingDTO.bookingState().toString()));
         document.add(new Paragraph("Precio Total: $" + bookingDTO.totalPrice()));
         document.add(new Paragraph("Tu check-in es mañana. ¡Prepárate para tu estadía!"));
@@ -329,7 +328,7 @@ public class EmailServiceImpl implements EmailService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    private byte [] generateCheckOutPdf(BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws Exception {
+    private byte [] generateCheckOutPdf(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
@@ -360,7 +359,6 @@ public class EmailServiceImpl implements EmailService {
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
-
         document.add(new Paragraph("Confirmación de Cambio de Rol - Alojamiento Quindío"));
         document.add(new Paragraph("Nombre: " + buildGuestName(guestDto)));
         document.add(new Paragraph("Email: " + guestDto.email()));
