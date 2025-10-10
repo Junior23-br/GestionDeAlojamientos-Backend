@@ -1,21 +1,12 @@
 package com.gestion.alojamientos.dto.Message;
-
-import java.util.Date;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotEmpty;
 
 /**
- * DTO que representa un mensaje dentro de un chat.
- * Contiene la información principal del mensaje, incluyendo el remitente, receptor y contenido.
+ * DTO utilizado para la creación de un nuevo mensaje dentro de un chat.
+ * Contiene la información necesaria para registrar un mensaje enviado entre dos usuarios.
  */
-public record MessageDTO(
-
-        /**
-         * Identificador único del mensaje.
-         */
-        @NotNull(message = "El ID del mensaje no puede ser nulo.")
-        Long id,
+public record MessageCreateDTO(
 
         /**
          * Identificador del usuario que envía el mensaje.
@@ -40,12 +31,6 @@ public record MessageDTO(
          * Documento adjunto en formato binario (puede ser nulo si el mensaje no contiene archivo).
          */
         byte[] doc,
-
-        /**
-         * Fecha de creación del mensaje.
-         */
-        @NotNull(message = "La fecha de creación no puede ser nula.")
-        Date createDate,
 
         /**
          * Identificador del chat al que pertenece el mensaje.
