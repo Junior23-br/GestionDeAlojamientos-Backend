@@ -28,4 +28,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          AuthenticationException authException) throws IOException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Acceso no autorizado: " + authException.getMessage());
     }
+
+
+        
 }

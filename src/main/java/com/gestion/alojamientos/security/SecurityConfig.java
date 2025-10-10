@@ -2,48 +2,51 @@ package com.gestion.alojamientos.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
+     private final CustomAuthenticationEntryPoint customAuthEntryPoint;
 
-     /**
-     * Configura la cadena de filtros de seguridad.
-     *
-     * @param http Objeto para configurar las reglas de seguridad HTTP.
-     * @return Cadena de filtros de seguridad configurada.
-     * @throws Exception Si ocurre un error durante la configuración.
-     */
+    public SecurityConfig(CustomAuthenticationEntryPoint customAuthEntryPoint) {
+        this.customAuthEntryPoint = customAuthEntryPoint;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/guests/**").permitAll() // Permitir acceso público a endpoints de usuarios por ahora
-                        .anyRequest().authenticated()
-                )
-                .exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // Usar la nueva clase
-                .and();
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(customAuthEntryPoint)
+            )
+            .authorizeHttpRequests(auth -> auth
+                // Endpoints públicos (sin autenticación)
+                .requestMatchers(
+                    "/api/v1/auth/login",
+                    "/api/v1/auth/signup",
+                    "/api/v1/public/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
+                ).permitAll()
+
+                // Todo lo demás requiere autenticación JWT
+                .anyRequest().authenticated()
+            );
+
         return http.build();
     }
-    // @Bean
-    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    //     http
-    //         .authorizeHttpRequests(auth -> auth
-    //             .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll() // Permite acceso libre a Swagger
-    //             .anyRequest().authenticated()
-    //         )
-    //         .formLogin();
-    //     return http.build();
-    // }
 
     /**
      * Proporciona un bean de PasswordEncoder usando BCrypt.

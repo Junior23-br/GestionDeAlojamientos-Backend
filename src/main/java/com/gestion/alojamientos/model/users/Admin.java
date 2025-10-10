@@ -11,8 +11,7 @@ import lombok.experimental.SuperBuilder;
  * Entidad que representa a un huésped en el sistema.
  * Extiende de SuperUser y se mapea a la tabla 'Admin'.
  */
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @Entity
 @AllArgsConstructor
