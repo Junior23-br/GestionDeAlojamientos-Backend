@@ -49,7 +49,8 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
-    @Mapping(target = "role", source = "role") // ✅ NUEVO
+    @Mapping(target = "role", source = "role")
+    @Mapping(target = "resetCode", ignore = true)
     Host toEntity(HostDTO hostDTO);
 
     // ===== UPDATE DTO → ENTITY =====
@@ -60,7 +61,7 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
-    @Mapping(target = "role", ignore = true) // usualmente no se actualiza desde el DTO
+    @Mapping(target = "resetCode", ignore = true)    @Mapping(target = "role", ignore = true) // usualmente no se actualiza desde el DTO
     void updateHostFromDTO(HostUpdateDTO dto, @MappingTarget Host host);
 
     // ===== DELETE DTO → ENTITY =====
@@ -75,6 +76,7 @@ public interface HostMapper {
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
     @Mapping(target = "role", ignore = true)
+    @Mapping(target = "resetCode", ignore = true)
     Host toEntityDelete(DeleteHostDTO dto);
 
     // ===== CREATE DTO → ENTITY =====
@@ -85,6 +87,9 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "resetCode", ignore = true)
+    @Mapping(target = "personalDescription", source = "personalDescription")
+    @Mapping(target = "status", ignore = true)
     @Mapping(target = "role", constant = "HOST") // asignación por defecto para nuevos hosts
     Host toEntity(HostCreateDTO dto);
 

@@ -134,7 +134,7 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         String username = dto.email().split("@")[0];
         admin.setUsername(username);
         // nivel de acceso por defecto (podría variar según la política)
-        admin.setAcces_level(1);
+        admin.setAccess_level(1);
         // statesAdmin: si existe un enum, por defecto lo dejamos en ACTIVE (si no: TODO)
         // TODO: setear statesAdmin apropiadamente si existe el enum y valores
         // admin.setStatesAdmin(StatesAdmin.ACTIVE); // uncomment si StatesAdmin existe
@@ -515,9 +515,7 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         }
         AdminDto adminDto = adminMapper.toDTO(admin);
         System.out.println(adminDto.email());
-
-        UserLoginDTO userLoginDTO = userLoginMapper.toLoginDTO(adminDto);
-        return userLoginDTO;
+        return dto;
     }
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo

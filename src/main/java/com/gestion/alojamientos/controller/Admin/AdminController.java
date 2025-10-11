@@ -31,8 +31,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Administradores", description = "Endpoints para gestión y autenticación de administradores del sistema. Permite registrar, editar, eliminar, autenticar y administrar contraseñas.")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+
     @Autowired
     private AdminServiceImpl adminServiceImpl;
 
@@ -55,7 +54,7 @@ public class AdminController {
             @Valid @RequestBody CreateAdminDto dto
     ) {
         try {
-            AdminDto creado = adminService.registerAdmin(dto);
+            AdminDto creado = adminServiceImpl.registerAdmin(dto);
             return ResponseEntity.status(201).body(creado);
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
@@ -84,7 +83,7 @@ public class AdminController {
             @PathVariable String id
     ) {
         try {
-            AdminDto admin = adminService.getAdminById(Long.valueOf(id));
+            AdminDto admin = adminServiceImpl.getAdminById(Long.valueOf(id));
             return ResponseEntity.ok(admin);
         } catch (InvalidElementException e) {
             return ResponseEntity.notFound().build();
@@ -105,7 +104,7 @@ public class AdminController {
             @PathVariable String email
     ) {
         try {
-            AdminDto admin = adminService.getAdminByEmail(email);
+            AdminDto admin = adminServiceImpl.getAdminByEmail(email);
             return ResponseEntity.ok(admin);
         } catch (InvalidElementException e) {
             return ResponseEntity.notFound().build();
@@ -126,7 +125,7 @@ public class AdminController {
             @Valid @RequestBody EditAdminDto dto
     ) {
         try {
-            AdminDto actualizado = adminService.editAdmin(Long.valueOf(id), dto);
+            AdminDto actualizado = adminServiceImpl.editAdmin(Long.valueOf(id), dto);
             return ResponseEntity.ok(actualizado);
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
@@ -146,7 +145,7 @@ public class AdminController {
             @PathVariable String id
     ) {
         try {
-            adminService.deleteAdmin(Long.valueOf(id));
+            adminServiceImpl.deleteAdmin(Long.valueOf(id));
             return ResponseEntity.noContent().build();
         } catch (InvalidElementException e) {
             return ResponseEntity.notFound().build();
@@ -194,7 +193,7 @@ public class AdminController {
             @RequestBody ResetPasswordDto dto
     ) {
         try {
-            adminService.resetPassword(dto);
+            adminServiceImpl.resetPassword(dto);
             return ResponseEntity.ok().build();
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
@@ -215,7 +214,7 @@ public class AdminController {
             @RequestBody ChangePasswordDto dto, Long idUser
     ) {
         try {
-            adminService.changePassword(idUser, dto);
+            adminServiceImpl.changePassword(idUser, dto);
             return ResponseEntity.ok().build();
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();

@@ -55,6 +55,7 @@ public interface GuestMapper {
     @Mapping(target = "name", source = "firstName")
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
+    @Mapping(target = "password", ignore = true)
     void updateFromDto(EditGuestDto dto, @MappingTarget Guest guest);
 
     // ==========================================

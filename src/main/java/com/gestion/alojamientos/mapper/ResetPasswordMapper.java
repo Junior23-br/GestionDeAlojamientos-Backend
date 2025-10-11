@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.mapper;
 
 import com.gestion.alojamientos.dto.password.ResetPasswordDto;
+import com.gestion.alojamientos.model.base.SuperUser;
 import org.mapstruct.*;
 
 /**
@@ -23,5 +24,5 @@ public interface ResetPasswordMapper {
     @Mapping(target = "email", source = "source.email")
     @Mapping(target = "resetCode", expression = "java(resetCode)")
     @Mapping(target = "newPassword", expression = "java(newPassword)")
-    ResetPasswordDto toResetPasswordDto(Object source, String resetCode, String newPassword);
+    ResetPasswordDto toResetPasswordDto(SuperUser source, String resetCode, String newPassword);
 }

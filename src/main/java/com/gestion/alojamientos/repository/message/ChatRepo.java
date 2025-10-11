@@ -130,7 +130,7 @@ public interface ChatRepo extends JpaRepository<Chat, Long>, JpaSpecificationExe
      * Encuentra Chats que contengan texto específico en sus Messages
      */
     default List<Chat> findChatsWithMessageText(String searchText, Guest member) {
-        Specification<Chat> spec = Specification.where(hasMember(member))
+        Specification<Chat> spec = Specification.allOf(hasMember(member))
                                                .and(hasMessageWithText(searchText));
         return findAll(spec);
     }

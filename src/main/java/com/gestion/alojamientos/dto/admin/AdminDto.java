@@ -7,5 +7,5 @@ import com.gestion.alojamientos.model.common.ResetCode;
  * Tiene la información basica del Admin, no la contraseña por temas de seguridad
  *
  */
-public record AdminDto(Long id, String email, String username, int acces_level, String statesAdmin, ResetCode resetCode) {
+public record AdminDto(Long id, String email, String username, int access_level, String statesAdmin, ResetCode resetCode) {
 }

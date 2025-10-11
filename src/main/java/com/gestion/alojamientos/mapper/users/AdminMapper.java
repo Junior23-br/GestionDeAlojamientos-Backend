@@ -20,7 +20,7 @@ public interface AdminMapper {
     // ====== ENTITY → DTO ======
     @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
-    @Mapping(target = "acces_level", source = "acces_level")
+    @Mapping(target = "access_level", source = "access_level")
     @Mapping(target = "username", source = "username")
     @Mapping(target = "resetCode", ignore = true)
     @Mapping(target = "statesAdmin", source = "statesAdmin")
@@ -30,6 +30,12 @@ public interface AdminMapper {
     @Mapping(target = "password", ignore = true)     // No se mapea por seguridad
     Admin toEntity(AdminDto adminDto);
 
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "username", ignore = true)
+    @Mapping(target = "resetCode", ignore = true)
+    @Mapping(target = "access_level", ignore = true)
+    @Mapping(target = "statesAdmin", ignore = true)
     @Mapping(target = "password", ignore = true)     // No se mapea por seguridad
     Admin toEntity(CreateAdminDto adminDto);
 
@@ -38,5 +44,6 @@ public interface AdminMapper {
     @Mapping(target = "password", ignore = true) // lo setearemos manualmente
     @Mapping(target = "email", ignore = true)    // el correo no debe cambiar
     @Mapping(target = "id", ignore = true)       // el ID tampoco debe cambiar
+    @Mapping(target = "access_level", ignore = true)
     Admin updateFromDto(EditAdminDto editAdminDto, Admin admin);
 }
