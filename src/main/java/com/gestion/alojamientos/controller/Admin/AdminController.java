@@ -1,6 +1,7 @@
 package com.gestion.alojamientos.controller.Admin;
 
 
+import com.gestion.alojamientos.dto.JwtResponseDTO;
 import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.admin.*;
 import com.gestion.alojamientos.dto.password.ChangePasswordDto;
@@ -8,6 +9,7 @@ import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.exception.InvalidElementException;
 import com.gestion.alojamientos.exception.RepeatedElementException;
 import com.gestion.alojamientos.mapper.UserLoginMapper;
+import com.gestion.alojamientos.security.jwt.JwtUtil;
 import com.gestion.alojamientos.service.AdminService;
 import com.gestion.alojamientos.service.Impl.AdminServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +35,10 @@ public class AdminController {
 
 
     @Autowired
-    private AdminServiceImpl adminServiceImpl;
+    private AdminService adminService;
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
 
     // --------------------------
@@ -54,7 +59,7 @@ public class AdminController {
             @Valid @RequestBody CreateAdminDto dto
     ) {
         try {
-            AdminDto creado = adminServiceImpl.registerAdmin(dto);
+            AdminDto creado = adminService.registerAdmin(dto);
             return ResponseEntity.status(201).body(creado);
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
@@ -83,7 +88,7 @@ public class AdminController {
             @PathVariable String id
     ) {
         try {
-            AdminDto admin = adminServiceImpl.getAdminById(Long.valueOf(id));
+            AdminDto admin = adminService.getAdminById(Long.valueOf(id));
             return ResponseEntity.ok(admin);
         } catch (InvalidElementException e) {
             return ResponseEntity.notFound().build();
@@ -96,15 +101,10 @@ public class AdminController {
     // --------------------------
     // GET ADMIN BY EMAIL
     // --------------------------
-    @GetMapping("/email/{email}")
-    @Operation(summary = "Obtener administrador por email",
-            description = "Busca un administrador a partir de su dirección de correo electrónico.")
-    public ResponseEntity<AdminDto> getAdminByEmail(
-            @Parameter(description = "Email del administrador.", required = true)
-            @PathVariable String email
-    ) {
+    @GetMapping("/email")
+    public ResponseEntity<AdminDto> getAdminByEmail(@RequestParam String email) {
         try {
-            AdminDto admin = adminServiceImpl.getAdminByEmail(email);
+            AdminDto admin = adminService.getAdminByEmail(email);
             return ResponseEntity.ok(admin);
         } catch (InvalidElementException e) {
             return ResponseEntity.notFound().build();
@@ -125,7 +125,7 @@ public class AdminController {
             @Valid @RequestBody EditAdminDto dto
     ) {
         try {
-            AdminDto actualizado = adminServiceImpl.editAdmin(Long.valueOf(id), dto);
+            AdminDto actualizado = adminService.editAdmin(Long.valueOf(id), dto);
             return ResponseEntity.ok(actualizado);
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
@@ -145,7 +145,7 @@ public class AdminController {
             @PathVariable String id
     ) {
         try {
-            adminServiceImpl.deleteAdmin(Long.valueOf(id));
+            adminService.deleteAdmin(Long.valueOf(id));
             return ResponseEntity.noContent().build();
         } catch (InvalidElementException e) {
             return ResponseEntity.notFound().build();
@@ -159,21 +159,29 @@ public class AdminController {
     // --------------------------
     @PostMapping("/login")
     @Operation(summary = "Iniciar sesión como administrador",
-            description = "Valida las credenciales del administrador y devuelve sus datos si son correctos.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Inicio de sesión exitoso.",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdminDto.class))),
-            @ApiResponse(responseCode = "400", description = "Credenciales inválidas."),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor.")
-    })
-    public ResponseEntity<UserLoginDTO> loginAdmin(
-            @Parameter(description = "Credenciales del administrador (email, password).", required = true)
-            @RequestBody UserLoginDTO dto
-    ) {
+            description = "Valida las credenciales del administrador y devuelve un token JWT con sus datos.")
+    public ResponseEntity<JwtResponseDTO> loginAdmin(@RequestBody UserLoginDTO dto ) {
         try {
-            UserLoginDTO admin = adminServiceImpl.login(dto);
+            AdminDto adminDto = adminService.getAdminByEmail(dto.email());
+            UserLoginDTO admin = adminService.login(dto);
 
-            return ResponseEntity.ok(admin);
+            // Generar token JWT con email, id y rol
+            String token = jwtUtil.generateToken(
+                    admin.email(),
+                    adminDto.id(),
+                    "ADMINISTRADOR"
+            );
+
+            // Crear objeto de respuesta con el token
+            JwtResponseDTO response = new JwtResponseDTO(
+                    token,
+                    "Bearer",
+                    "ADMINISTRADOR",
+                    adminDto.id(),
+                    admin.email()
+            );
+
+            return ResponseEntity.ok(response);
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
         } catch (Exception e) {
@@ -181,6 +189,7 @@ public class AdminController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
 
     // --------------------------
     // RESET PASSWORD
@@ -193,7 +202,7 @@ public class AdminController {
             @RequestBody ResetPasswordDto dto
     ) {
         try {
-            adminServiceImpl.resetPassword(dto);
+            adminService.resetPassword(dto);
             return ResponseEntity.ok().build();
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
@@ -214,7 +223,7 @@ public class AdminController {
             @RequestBody ChangePasswordDto dto, Long idUser
     ) {
         try {
-            adminServiceImpl.changePassword(idUser, dto);
+            adminService.changePassword(idUser, dto);
             return ResponseEntity.ok().build();
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
