@@ -5,11 +5,9 @@ import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
 import com.gestion.alojamientos.exception.InvalidElementException;
 import com.gestion.alojamientos.service.EmailService;
-
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-
 import com.itextpdf.layout.element.Paragraph;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
@@ -21,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 /**
  * Inmplementación del servicio para enviar correos con pdf adjunto
  */

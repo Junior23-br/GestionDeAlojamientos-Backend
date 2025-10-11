@@ -1,13 +1,16 @@
 package com.gestion.alojamientos.mapper.users;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+
 import com.gestion.alojamientos.dto.guest.CreateGuestDto;
 import com.gestion.alojamientos.dto.guest.EditGuestDto;
 import com.gestion.alojamientos.dto.guest.GuestDto;
 import com.gestion.alojamientos.model.users.Guest;
-import org.mapstruct.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface GuestMapper {
