@@ -72,13 +72,5 @@ public record AccommodationCreateDTO(
          * Lista de IDs de servicios
          */
         List<Long> serviceIds
-
-
-
-
 ) {
-
-
-
-
 }

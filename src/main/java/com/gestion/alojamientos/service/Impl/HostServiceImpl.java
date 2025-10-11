@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.service.Impl;
 
+import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.Host.DeleteHostDTO;
 import com.gestion.alojamientos.dto.Host.HostCreateDTO;
 import com.gestion.alojamientos.dto.Host.HostDTO;
@@ -34,12 +35,24 @@ public class HostServiceImpl implements HostService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     // TODO: Implementar estos servicios cuando se tenga notificación y manejo de código de reseteo
     @Autowired(required = false)
     private ResetCodeServiceImpl resetCodeServiceImpl;
     @Autowired(required = false)
     private EmailServiceImpl emailServiceImpl;
+    
+    @Override
+    public HostDTO loginHost(UserLoginDTO dto) throws ElementNotFoundException, InvalidElementException {
+        Host host = hostRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new ElementNotFoundException("Host no encontrado con email: " + dto.email()));
+        if (!passwordEncoder.matches(dto.password(), host.getPassword())) {
+            throw new InvalidElementException("Contraseña incorrecta.");
+        }
+        if (host.getStatus() == StatesOfHost.DELETED) {
+            throw new ElementNotFoundException("El perfil ha sido eliminado.");
+        }
+        return hostMapper.toDTO(host);
+    }
 
     /**
      * Registra un nuevo Host en el sistema.

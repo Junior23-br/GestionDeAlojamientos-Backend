@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.service;
 
+import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.Host.DeleteHostDTO;
 import com.gestion.alojamientos.dto.Host.HostCreateDTO;
 import com.gestion.alojamientos.dto.Host.HostDTO;
@@ -18,6 +19,8 @@ public interface HostService {
      * Registra un nuevo Host en el sistema.
      */
     HostDTO registerHost(HostCreateDTO dto) throws RepeatedElementException, InvalidElementException;
+
+    HostDTO loginHost(UserLoginDTO dto) throws ElementNotFoundException, InvalidElementException;
 
     /**
      * Edita los datos de un Host existente.

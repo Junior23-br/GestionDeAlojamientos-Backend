@@ -1,9 +1,5 @@
 package com.gestion.alojamientos.dto.accommodation;
 
-
-
-import com.gestion.alojamientos.model.accomodation.Services;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

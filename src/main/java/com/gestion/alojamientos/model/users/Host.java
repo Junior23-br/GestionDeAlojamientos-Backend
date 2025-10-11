@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.model.users;
 
+import com.gestion.alojamientos.model.enums.Role;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.message.CommentHost;
 import com.gestion.alojamientos.model.transaction.FinancialAccount;
@@ -61,6 +62,13 @@ public class Host extends NormalUser {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "service_fee_id")
     private ServiceFee serviceFee;
+
+    /**
+     * Role of the user: GUEST or HOST.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 50)
+    private Role role;
 
 
     public Host() {

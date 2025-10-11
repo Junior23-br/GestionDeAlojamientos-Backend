@@ -3,6 +3,8 @@ package com.gestion.alojamientos.dto.Host;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 
+import com.gestion.alojamientos.model.enums.Role;
+
 import java.time.LocalDate;
 
 /**
@@ -34,7 +36,6 @@ public record HostCreateDTO(
          */
         @NotBlank @Email String email,
 
-
         /**
          * Descripcion del host
          * Campo obligatorio
@@ -47,7 +48,9 @@ public record HostCreateDTO(
          * Campo obligatorio con longitud mínima de 8 caracteres, cumpliendo las especificaciones
          */
         @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",message = "La contraseña debe contener mínimo 8 caracteres, entre: mayusculas,minusculas y números")
-        String password
+        String password,
+
+        Role role
 
 ) {
 }

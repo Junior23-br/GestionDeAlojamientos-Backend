@@ -1,34 +1,34 @@
-//package com.gestion.alojamientos.controller;
-//
-//// IMPORTACIONES PARA SWAGGER
-//import io.swagger.v3.oas.annotations.Operation;
-//import io.swagger.v3.oas.annotations.Parameter;
-//import io.swagger.v3.oas.annotations.media.Content;
-//import io.swagger.v3.oas.annotations.media.Schema;
-//import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
-//import io.swagger.v3.oas.annotations.tags.Tag;
-//import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-//
-//// IMPORTACIONES DE SPRING
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import com.gestion.alojamientos.dto.accommodation.AccommodationCreateDTO;
-//import com.gestion.alojamientos.dto.accommodation.AccommodationDTO;
-//import com.gestion.alojamientos.dto.accommodation.AccommodationUpdateDTO;
-//
-//import org.springframework.security.access.prepost.PreAuthorize;
-//
-//import java.util.List;
-//import java.util.UUID;
-//
-//@RestController
-//@RequestMapping("/api/v1/accommodations")
-//@Tag(name = "Accommodations", description = "Endpoints para la gestión de alojamientos. Incluye búsqueda pública y operaciones de creación, actualización y eliminación lógica para anfitriones (ROLE_HOST) con autenticación JWT. Integra Mapbox para ubicaciones y soporta hasta 10 imágenes por alojamiento.")
-//public class AccommodationController {
-//
-//    // ENDPOINT: GET /api/v1/accommodations
+package com.gestion.alojamientos.controller;
+
+// IMPORTACIONES PARA SWAGGER
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+// IMPORTACIONES DE SPRING
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.gestion.alojamientos.dto.accommodation.AccommodationCreateDTO;
+import com.gestion.alojamientos.dto.accommodation.AccommodationDTO;
+import com.gestion.alojamientos.dto.accommodation.AccommodationUpdateDTO;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/accommodations")
+@Tag(name = "Accommodations", description = "Endpoints para la gestión de alojamientos. Incluye búsqueda pública y operaciones de creación, actualización y eliminación lógica para anfitriones (ROLE_HOST) con autenticación JWT. Integra Mapbox para ubicaciones y soporta hasta 10 imágenes por alojamiento.")
+public class AccommodationController {
+
+   // ENDPOINT: GET /api/accommodations
 //    @GetMapping
 //    @Operation(
 //        summary = "Buscar alojamientos disponibles",
@@ -57,32 +57,33 @@
 //        // Lógica placeholder (en implementación real: consultar DB con filtros, integrar Mapbox, paginar)
 //        return ResponseEntity.ok(List.of(new AccommodationDTO()));
 //    }
-//
-//    // ENDPOINT: POST /api/v1/accommodations
-//    @PostMapping
-//    @PreAuthorize("hasRole('ROLE_HOST')")
-//    @SecurityRequirement(name = "bearerAuth")
-//    @Operation(
-//        summary = "Crear un nuevo alojamiento",
-//        description = "Crea un alojamiento por un anfitrión autenticado (ROLE_HOST), permitiendo hasta 10 imágenes (URLs externas) y datos como dirección, precio y capacidad. Valida propiedad y consistencia de datos antes de persistir. Cumple con el requerimiento de creación de alojamientos."
-//    )
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "201", description = "Alojamiento creado exitosamente, con ID generado y detalles retornados.",
-//            content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccommodationDTO.class))),
-//        @ApiResponse(responseCode = "400", description = "Validación fallida (e.g., más de 10 imágenes, datos incompletos)."),
-//        @ApiResponse(responseCode = "401", description = "Usuario no autenticado o token JWT inválido."),
-//        @ApiResponse(responseCode = "403", description = "Rol no autorizado (debe ser ROLE_HOST)."),
-//        @ApiResponse(responseCode = "500", description = "Error interno durante la creación.")
-//    })
-//    public ResponseEntity<AccommodationDTO> createAccommodation(
-//        @Parameter(description = "DTO con datos requeridos para el alojamiento (e.g., address, pricePerNight, images[0-9]). Validado en capa de servicio.", required = true)
-//        @RequestBody AccommodationCreateDTO dto
-//    ) {
-//        // Lógica placeholder (en implementación real: validar imágenes, asociar a host, persistir)
-//        return ResponseEntity.status(201).body(new AccommodationDTO());
-//    }
-//
-//    // ENDPOINT: GET /api/v1/accommodations/{id}
+
+   // ENDPOINT: POST /api/accommodations
+   @PostMapping("/new")
+   @PreAuthorize("hasRole('HOST')")
+   @SecurityRequirement(name = "bearerAuth")
+   @Operation(
+       summary = "Crear un nuevo alojamiento",
+       description = "Crea un alojamiento por un anfitrión autenticado (ROLE_HOST), permitiendo hasta 10 imágenes (URLs externas) y datos como dirección, precio y capacidad. Valida propiedad y consistencia de datos antes de persistir. Cumple con el requerimiento de creación de alojamientos."
+   )
+   @ApiResponses(value = {
+       @ApiResponse(responseCode = "201", description = "Alojamiento creado exitosamente, con ID generado y detalles retornados.",
+           content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccommodationDTO.class))),
+       @ApiResponse(responseCode = "400", description = "Validación fallida (e.g., más de 10 imágenes, datos incompletos)."),
+       @ApiResponse(responseCode = "401", description = "Usuario no autenticado o token JWT inválido."),
+       @ApiResponse(responseCode = "403", description = "Rol no autorizado (debe ser ROLE_HOST)."),
+       @ApiResponse(responseCode = "500", description = "Error interno durante la creación.")
+   })
+   @SecurityRequirement(name = "bearerAuth")
+   public ResponseEntity<AccommodationDTO> createAccommodation(
+       @Parameter(description = "DTO con datos requeridos para el alojamiento (e.g., address, pricePerNight, images[0-9]). Validado en capa de servicio.", required = true)
+       @RequestBody AccommodationCreateDTO dto
+   ) {
+       // Lógica placeholder (en implementación real: validar imágenes, asociar a host, persistir)
+       return ResponseEntity.status(201).body(null);
+   }
+
+//    // ENDPOINT: GET /api/accommodations/{id}
 //    @GetMapping("/{id}")
 //    @Operation(
 //        summary = "Obtener detalles de un alojamiento",
@@ -101,8 +102,8 @@
 //        // Lógica placeholder (en implementación real: consultar DB, calcular promedio de reviews, integrar Mapbox)
 //        return ResponseEntity.ok(new AccommodationDTO());
 //    }
-//
-//    // ENDPOINT: PUT /api/v1/accommodations/{id}
+
+//    // ENDPOINT: PUT /api/accommodations/{id}
 //    @PutMapping("/{id}")
 //    @PreAuthorize("hasRole('ROLE_HOST')")
 //    @SecurityRequirement(name = "bearerAuth")
@@ -128,8 +129,8 @@
 //        // Lógica placeholder (en implementación real: verificar propiedad, validar, actualizar)
 //        return ResponseEntity.ok(new AccommodationDTO());
 //    }
-//
-//    // ENDPOINT: DELETE /api/v1/accommodations/{id}
+
+//    // ENDPOINT: DELETE /api/accommodations/{id}
 //    @DeleteMapping("/{id}")
 //    @PreAuthorize("hasRole('ROLE_HOST')")
 //    @SecurityRequirement(name = "bearerAuth")
@@ -151,4 +152,4 @@
 //        // Lógica placeholder (en implementación real: verificar propiedad, actualizar estado a deleted)
 //        return ResponseEntity.noContent().build();
 //    }
-//}
+}
