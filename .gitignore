@@ -32,3 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 application.properties
+
+# Cloudinary
+cloudinary.cloud_name
+cloudinary.api_key
+cloudinary.api_secret

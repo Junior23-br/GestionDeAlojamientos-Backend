@@ -20,6 +20,7 @@ public interface GuestMapper {
     @Mapping(target = "paymentMethodsIds", expression = "java(mapPaymentMethodIds(guest))")
     @Mapping(target = "bookingIds", expression = "java(mapBookingIds(guest))")
     @Mapping(target = "transactionIds", expression = "java(mapTransactionIds(guest))")
+    @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
     GuestDto toDto(Guest guest);
 
     // ==========================================

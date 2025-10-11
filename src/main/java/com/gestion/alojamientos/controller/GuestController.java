@@ -91,7 +91,7 @@ public class GuestController {
     @Operation(
             summary = "Registrar un huesped",
             description = "Crea un nuevo huesped en la base de datos")
-    public ResponseEntity<GuestDto> registerGuest(@RequestBody CreateGuestDto dto) {
+    public ResponseEntity<GuestDto> registerGuest(@ModelAttribute CreateGuestDto dto) {
         try {
             return ResponseEntity.ok(guestService.registerGuest(dto));
         } catch (RepeatedElementException e) {
@@ -107,10 +107,10 @@ public class GuestController {
      * @param dto Objeto con los datos a actualizar.
      * @return ResponseEntity con el DTO del huesped actualizado
      */
-    @PutMapping("/edit")
+    @PutMapping("/edit/{id}")
     @Operation(summary = "Editar informacion especifica del huesped",
             description = "Edita los detalles de un huesped, solo los campos permitidos")
-    public ResponseEntity<GuestDto> editGuest(@PathVariable Long id, @Valid @RequestBody EditGuestDto dto) {
+    public ResponseEntity<GuestDto> editGuest(@PathVariable Long id, @Valid @ModelAttribute EditGuestDto dto) {
         try {
             return ResponseEntity.ok(guestService.editGuest(id, dto));
         } catch (ElementNotFoundException e) {
@@ -125,7 +125,7 @@ public class GuestController {
       * @param dto objeto con los datos a eliminar
       * @return ResponseEntity vacio si la operación es exitosa
       */
-     @DeleteMapping("/delete")
+     @DeleteMapping("/delete/{id}")
      @Operation(summary = "Eliminar un huesped",
              description = "Permite eliminar a un huesped de la base de datos")
      public ResponseEntity<Void> deleteGuest(@PathVariable Long id, @Valid @RequestBody DeleteGuestDto dto) {

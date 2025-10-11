@@ -160,6 +160,14 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-core</artifactId>
+			<version>1.38.0</version>
+		</dependency>
+
+
+
 		<!-- Compatibilidad Lombok + MapStruct -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

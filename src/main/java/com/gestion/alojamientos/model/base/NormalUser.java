@@ -8,13 +8,11 @@ import com.gestion.alojamientos.model.booking.Booking;
 import com.gestion.alojamientos.model.transaction.Transaction;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
-
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

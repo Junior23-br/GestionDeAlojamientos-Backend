@@ -3,6 +3,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
+
 /**
 *DTO para editar la informacion del huesped existente
 * Este objeto se utiliza para actualizar los datos de un huesped
@@ -15,6 +17,7 @@ public record EditGuestDto(
     @Length(max = 100) String name,
     @NotBlank @Pattern(regexp = "\\+57\\d{10}", message =
             "El phoneNumber debe contener solo números y exactamente 10 digitos") String phoneNumber,
-          String urlProfilePhoto
+    @NotNull(message = "La foto de perfil es obligatoria")
+    MultipartFile urlProfilePhoto // URL de Cloudinary
 ){
 }

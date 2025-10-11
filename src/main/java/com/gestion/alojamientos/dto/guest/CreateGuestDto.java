@@ -2,6 +2,8 @@ package com.gestion.alojamientos.dto.guest;
 import com.gestion.alojamientos.model.enums.Role;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDate;
 /**
 *DTO para registrar un nuevo huesped
@@ -40,6 +42,11 @@ public record CreateGuestDto(
          * Rol del usuario
          * Campo obligatorio, debe ser GUEST o HOST
          */
-        @NotNull(message = "El rol es obligatorio") Role role
+        @NotNull(message = "El rol es obligatorio") Role role,
+        /**
+         * URL de la foto de perfil del huésped.
+         */
+        @NotNull(message = "La foto de perfil es obligatoria")
+        MultipartFile urlProfilePhoto // URL de Cloudinary
 ) {
 }

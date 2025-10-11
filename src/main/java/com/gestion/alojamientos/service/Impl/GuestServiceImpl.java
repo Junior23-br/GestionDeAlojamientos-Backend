@@ -14,14 +14,16 @@ import com.gestion.alojamientos.mapper.users.GuestMapper;
 import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.repository.user.GuestRepository;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
+import com.gestion.alojamientos.service.CloudinaryService;
 import com.gestion.alojamientos.service.GuestService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 @Service
-
+@AllArgsConstructor
 public class GuestServiceImpl implements GuestService {
     @Autowired
     private GuestRepository guestRepository;
@@ -33,6 +35,8 @@ public class GuestServiceImpl implements GuestService {
     private EmailServiceImpl emailServiceImpl;
     @Autowired
     private ResetCodeServiceImpl resetCodeServiceImpl;
+    @Autowired
+    private final CloudinaryServiceImpl cloudinaryServiceImpl;
 
     @Override
     /**
@@ -62,6 +66,10 @@ public class GuestServiceImpl implements GuestService {
         System.out.println(guest.getEmail());
         guest.setPassword(passwordEncoder.encode(dto.password())); // Encripta la contraseña
         guest.setState(StatesOfGuest.ACTIVE);
+        if (dto.urlProfilePhoto() != null && !dto.urlProfilePhoto().isEmpty()) {
+            String imageUrl = cloudinaryServiceImpl.uploadPhoto(dto.urlProfilePhoto());
+            guest.setUrlProfilePhoto(imageUrl);
+        }
         guestRepository.save(guest);
         GuestDto guestDto = guestMapper.toDto(guest);
         emailServiceImpl.sendWelcomeEmail(guest.getEmail(), guestDto); //Mandar correo de bienvenida
@@ -85,6 +93,11 @@ public class GuestServiceImpl implements GuestService {
         if (!guest.getPhoneNumber().equals(dto.phoneNumber()) && guestRepository.existsByPhoneNumber(dto.phoneNumber())) {
             throw new InvalidElementException("El numero de telefono ya esta registrado");
         }
+        if (dto.urlProfilePhoto() != null && !dto.urlProfilePhoto().isEmpty()) {
+            String imageUrl = cloudinaryServiceImpl.uploadPhoto(dto.urlProfilePhoto());
+            guest.setUrlProfilePhoto(imageUrl);
+        }
+
         guestMapper.updateFromDto(dto, guest);
         return guestMapper.toDto(guestRepository.save(guest));
     }

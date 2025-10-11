@@ -1,6 +1,9 @@
 package com.gestion.alojamientos.dto.guest;
 import com.gestion.alojamientos.model.enums.Role;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDate;
 import java.util.List;
 /**
@@ -43,7 +46,8 @@ public record GuestDto(
         /**
          * URL de la foto de perfil del huésped.
          */
-        String urlProfilePhoto,
+        @NotNull(message = "La foto de perfil es obligatoria")
+        MultipartFile urlProfilePhoto, // URL de Cloudinary
 
         /**
          * Estado actual del huésped: ACTIVE, DELETED, SUSPENDED, INACTIVE.
