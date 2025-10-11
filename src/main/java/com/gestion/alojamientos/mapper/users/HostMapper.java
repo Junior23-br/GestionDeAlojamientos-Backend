@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface HostMapper {
 
-    // ===== ENTITY → DTO =====
+   // ===== ENTITY → DTO =====
     @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "username", source = "username")
@@ -30,10 +30,17 @@ public interface HostMapper {
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "birthDate", source = "birthDate")
     @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
-    @Mapping(target = "listAccommodationsIds", expression = "java(mapAccommodationsToIds(host.getListAccommodations()))")
-    @Mapping(target = "hostCommentIds", expression = "java(mapCommentsToIds(host.getHostCommentList()))")
-    @Mapping(target = "financialAccountId", expression = "java(host.getReceiptPayment() != null ? host.getReceiptPayment().getId() : null)")
-    @Mapping(target = "serviceFeeId", expression = "java(host.getServiceFee() != null ? host.getServiceFee().getId() : null)")
+    @Mapping(target = "status", source = "status")
+    @Mapping(target = "personalDescription", source = "personalDescription")
+    @Mapping(target = "role", source = "role") // NUEVO: mapeo del rol
+    @Mapping(target = "listAccommodationsIds",
+             expression = "java(mapAccommodationsToIds(host.getListAccommodations()))")
+    @Mapping(target = "hostCommentIds",
+             expression = "java(mapCommentsToIds(host.getHostCommentList()))")
+    @Mapping(target = "financialAccountId",
+             expression = "java(host.getReceiptPayment() != null ? host.getReceiptPayment().getId() : null)")
+    @Mapping(target = "serviceFeeId",
+             expression = "java(host.getServiceFee() != null ? host.getServiceFee().getId() : null)")
     HostDTO toDTO(Host host);
 
     // ===== DTO → ENTITY =====
@@ -42,6 +49,7 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "role", source = "role") // ✅ NUEVO
     Host toEntity(HostDTO hostDTO);
 
     // ===== UPDATE DTO → ENTITY =====
@@ -52,6 +60,7 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "role", ignore = true) // usualmente no se actualiza desde el DTO
     void updateHostFromDTO(HostUpdateDTO dto, @MappingTarget Host host);
 
     // ===== DELETE DTO → ENTITY =====
@@ -65,6 +74,7 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "role", ignore = true)
     Host toEntityDelete(DeleteHostDTO dto);
 
     // ===== CREATE DTO → ENTITY =====
@@ -75,6 +85,7 @@ public interface HostMapper {
     @Mapping(target = "hostCommentList", ignore = true)
     @Mapping(target = "receiptPayment", ignore = true)
     @Mapping(target = "serviceFee", ignore = true)
+    @Mapping(target = "role", constant = "HOST") // asignación por defecto para nuevos hosts
     Host toEntity(HostCreateDTO dto);
 
     // ===== Métodos auxiliares =====

@@ -3,10 +3,15 @@ package com.gestion.alojamientos.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.gestion.alojamientos.security.jwt.JwtAuthenticationFilter;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -18,10 +23,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
 
      private final CustomAuthenticationEntryPoint customAuthEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfig(CustomAuthenticationEntryPoint customAuthEntryPoint) {
+    public SecurityConfig(CustomAuthenticationEntryPoint customAuthEntryPoint,
+                          JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.customAuthEntryPoint = customAuthEntryPoint;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,16 +43,17 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Endpoints públicos (sin autenticación)
                 .requestMatchers(
-                    "/api/v1/auth/login",
-                    "/api/v1/auth/signup",
-                    "/api/v1/public/**",
+                    "/api/auth/**",
+                    "/api/public/**",
                     "/swagger-ui/**",
-                    "/v3/api-docs/**"
+                    "/api-docs/**"
                 ).permitAll()
-
                 // Todo lo demás requiere autenticación JWT
                 .anyRequest().authenticated()
             );
+
+        // Registramos el filtro JWT antes del UsernamePasswordAuthenticationFilter
+        http.addFilterBefore(jwtAuthenticationFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -58,21 +68,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+     // AuthenticationManager (para usar en caso de autenticar por AuthenticationManager)
     @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(
-            User.withUsername("admin")
-                .password("{noop}admin123") // {noop} indica sin codificar
-                .roles("ADMIN")
-                .build()
-        );
-        manager.createUser(
-            User.withUsername("user")
-                .password("{noop}user123")
-                .roles("USER")
-                .build()
-        );
-        return manager;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

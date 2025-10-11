@@ -164,7 +164,6 @@ public class GuestServiceImpl implements GuestService {
             throw new InvalidElementException("Credenciales inválidas");
         }
         GuestDto Guestdto = guestMapper.toDto(guest);
-        System.out.println(Guestdto.email());
         return Guestdto;
     }
 

@@ -1,4 +1,5 @@
 package com.gestion.alojamientos.dto.Host;
+import com.gestion.alojamientos.model.enums.Role;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 
 import java.util.Date;
@@ -80,6 +81,8 @@ public record HostDTO(
         /**
          * ID de la tarifa de servicio asociada
          */
-        Long serviceFeeId
+        Long serviceFeeId,
+
+        Role role
 
 ) { }
