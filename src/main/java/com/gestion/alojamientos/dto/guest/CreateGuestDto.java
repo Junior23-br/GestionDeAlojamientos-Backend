@@ -10,14 +10,9 @@ import java.time.LocalDate;
 public record CreateGuestDto(
         /**
          * Nombre del usuario
-         * Campo obligatorio con longitud máxima de 50 caracteres.
+         * Campo obligatorio con longitud máxima de 100 caracteres.
          */
-        @NotBlank @Length(max = 50) String firstName,
-        /**
-         * Apellido del usuario
-         * Campo obligatorio con longitud máxima de 60 caracteres.
-         */
-        @NotBlank @Length(max = 60) String lastName,
+        @NotBlank @Length(max = 100) String name,
         /**
          * Telefono del usuario
          * Campo obligatorio con longitud de 10 caracteres y formato de +57
@@ -38,7 +33,8 @@ public record CreateGuestDto(
          * Contraseña del usuario
          * Campo obligatorio con longitud mínima de 8 caracteres, cumpliendo las especificaciones
          */
-        @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",message = "La contraseña debe contener mínimo 8 caracteres, entre: mayusculas,minusculas y números")
+        @NotBlank @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$",
+                message = "La contraseña debe contener mínimo 8 caracteres, entre: mayusculas,minusculas y números")
         String password,
         /**
          * Rol del usuario

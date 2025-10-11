@@ -18,28 +18,18 @@ public record GuestDto(
          * Identificador único del huésped.
          */
         Long id,
-
         /**
          * Correo electrónico del huésped.
          */
         String email,
-
         /**
          * Nombre de usuario
          */
         String username,
-
         /**
          * Nombre del huésped.
          */
-        String firstName,
-
-        /**
-         * Apellido del huésped.
-         */
-        String lastName,
-
-
+        String name,
         /**
          * Número de teléfono del huésped.
          */

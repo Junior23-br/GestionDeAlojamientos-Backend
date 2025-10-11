@@ -15,8 +15,7 @@ public interface GuestMapper {
     // ==========================================
     // ENTITY → DTO (para consultas o responses)
     // ==========================================
-    @Mapping(target = "firstName", source = "name")
-    @Mapping(target = "lastName", ignore = true) // no está en la entidad
+    @Mapping(target = "name", source = "name")
     @Mapping(target = "birthDate", source = "birthDate") // LocalDate → LocalDate (sin conversión)
     @Mapping(target = "paymentMethodsIds", expression = "java(mapPaymentMethodIds(guest))")
     @Mapping(target = "bookingIds", expression = "java(mapBookingIds(guest))")
@@ -27,8 +26,8 @@ public interface GuestMapper {
     // CREATE DTO → ENTITY
     // ==========================================
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "username", expression = "java(dto.firstName() + '.' + dto.lastName())")
-    @Mapping(target = "name", source = "firstName")
+    @Mapping(target = "username", source = "name") //  name directamente para username
+    @Mapping(target = "name", source = "name")
     @Mapping(target = "state", expression = "java(StatesOfGuest.ACTIVE)")
     @Mapping(target = "role", source = "role")
     @Mapping(target = "birthDate", source = "birthDate") // LocalDate directo
@@ -52,7 +51,7 @@ public interface GuestMapper {
     @Mapping(target = "bookingList", ignore = true)
     @Mapping(target = "transactionHistory", ignore = true)
     @Mapping(target = "resetCode", ignore = true)
-    @Mapping(target = "name", source = "firstName")
+    @Mapping(target = "name", source = "name")
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
     void updateFromDto(EditGuestDto dto, @MappingTarget Guest guest);

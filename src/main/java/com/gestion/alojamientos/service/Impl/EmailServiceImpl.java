@@ -191,17 +191,17 @@ public class EmailServiceImpl implements EmailService {
         mimeMessageHelper.addAttachment(attachmentName, byteArrayDataSource);
         mailSender.send(mimeMessage);
     }
-    /**
-     * Construye el nombre completo desde GuestDTO.
-     * @param guestDTO DTO del huésped
-     * @return Nombre completo o "Huésped" si está vacío
-     */
-    private String buildGuestName(GuestDto guestDTO) {
-        String firstName = guestDTO.firstName() != null ? guestDTO.firstName() : "";
-        String lastName = guestDTO.lastName() != null ? guestDTO.lastName() : "";
-        String fullName = (firstName + " " + lastName).trim();
-        return fullName.isEmpty() ? "Huésped" : fullName;
-    }
+//    /**
+//     * Construye el nombre completo desde GuestDTO.
+//     * @param guestDTO DTO del huésped
+//     * @return Nombre completo o "Huésped" si está vacío
+//     */
+//    private String buildGuestName(GuestDto guestDTO) {
+//        String firstName = guestDTO.firstName() != null ? guestDTO.firstName() : "";
+//        String lastName = guestDTO.lastName() != null ? guestDTO.lastName() : "";
+//        String fullName = (firstName + " " + lastName).trim();
+//        return fullName.isEmpty() ? "Huésped" : fullName;
+//    }
 
     /**
      * Genera un pdf para el codigo de recuperacion
@@ -320,7 +320,7 @@ public class EmailServiceImpl implements EmailService {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Bienvenido a Rincón del Viajero "));
-        document.add(new Paragraph("Nombre: " + buildGuestName(guestDto)));
+        document.add(new Paragraph("Nombre: " + guestDto.name()));
         document.add(new Paragraph("Email: " + guestDto.email()));
         document.add(new Paragraph("Tu cuenta ha sido creada exitosamente. ¡Empieza a explorar alojamientos!"));
 
@@ -360,7 +360,7 @@ public class EmailServiceImpl implements EmailService {
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         document.add(new Paragraph("Confirmación de Cambio de Rol - Alojamiento Quindío"));
-        document.add(new Paragraph("Nombre: " + buildGuestName(guestDto)));
+        document.add(new Paragraph("Nombre: " + guestDto.name()));
         document.add(new Paragraph("Email: " + guestDto.email()));
         document.add(new Paragraph("Tu cuenta ha sido actualizada a rol de Anfitrión. Ahora puedes gestionar alojamientos."));
 
@@ -382,7 +382,7 @@ public class EmailServiceImpl implements EmailService {
         Document document = new Document(pdf);
 
         document.add(new Paragraph("Confirmación de Eliminación de Cuenta - Alojamiento Quindío"));
-        document.add(new Paragraph("Nombre: " + buildGuestName(guestDto)));
+        document.add(new Paragraph("Nombre: " + guestDto.name()));
         document.add(new Paragraph("Email: " + email));
         document.add(new Paragraph("Tu cuenta ha sido eliminada lógicamente. Si fue un error, contáctanos."));
 
