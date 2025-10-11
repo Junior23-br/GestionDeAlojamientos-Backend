@@ -1,5 +1,4 @@
 package com.gestion.alojamientos.service.Impl;
-
 import com.gestion.alojamientos.dto.Host.HostDTO;
 import com.gestion.alojamientos.dto.Message.MessageDTO;
 import com.gestion.alojamientos.dto.UserLoginDTO;
@@ -548,6 +547,3 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         adminRepository.save(admin);
     }
 }
-
-
-

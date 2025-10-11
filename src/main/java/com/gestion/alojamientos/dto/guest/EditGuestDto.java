@@ -17,7 +17,6 @@ public record EditGuestDto(
     @Length(max = 100) String name,
     @NotBlank @Pattern(regexp = "\\+57\\d{10}", message =
             "El phoneNumber debe contener solo números y exactamente 10 digitos") String phoneNumber,
-    @NotNull(message = "La foto de perfil es obligatoria")
     MultipartFile urlProfilePhoto // URL de Cloudinary
 ){
 }

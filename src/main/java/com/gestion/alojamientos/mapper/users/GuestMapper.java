@@ -20,7 +20,7 @@ public interface GuestMapper {
     @Mapping(target = "paymentMethodsIds", expression = "java(mapPaymentMethodIds(guest))")
     @Mapping(target = "bookingIds", expression = "java(mapBookingIds(guest))")
     @Mapping(target = "transactionIds", expression = "java(mapTransactionIds(guest))")
-    @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
+    @Mapping(target = "urlProfilePhoto", ignore = true)
     GuestDto toDto(Guest guest);
 
     // ==========================================
@@ -54,7 +54,7 @@ public interface GuestMapper {
     @Mapping(target = "resetCode", ignore = true)
     @Mapping(target = "name", source = "name")
     @Mapping(target = "phoneNumber", source = "phoneNumber")
-    @Mapping(target = "urlProfilePhoto", source = "urlProfilePhoto")
+    @Mapping(target = "urlProfilePhoto", ignore = true)
     @Mapping(target = "password", ignore = true)
     void updateFromDto(EditGuestDto dto, @MappingTarget Guest guest);
 

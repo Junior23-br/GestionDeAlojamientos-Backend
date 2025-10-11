@@ -11,11 +11,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)

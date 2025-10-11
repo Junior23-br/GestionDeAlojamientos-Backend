@@ -46,7 +46,6 @@ public record CreateGuestDto(
         /**
          * URL de la foto de perfil del huésped.
          */
-        @NotNull(message = "La foto de perfil es obligatoria")
         MultipartFile urlProfilePhoto // URL de Cloudinary
 ) {
 }
