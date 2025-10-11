@@ -87,10 +87,14 @@ public class GuestServiceImpl implements GuestService {
         Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Usuario no encontrado con ID: " + id));
         //Validaer estado del huesped
+
+        System.out.println("huesped encontrado: " + guest.getEmail() + " estado: " + guest.getState());
+
         if (guest.getState() == StatesOfGuest.DELETED) {
             throw new ElementNotFoundException("El perfil ha sido eliminado y no puede editar la informacion");
         }
         if (!guest.getPhoneNumber().equals(dto.phoneNumber()) && guestRepository.existsByPhoneNumber(dto.phoneNumber())) {
+            System.out.println("Telefono ya registrado: " + dto.phoneNumber());
             throw new InvalidElementException("El numero de telefono ya esta registrado");
         }
         if (dto.urlProfilePhoto() != null && !dto.urlProfilePhoto().isEmpty()) {
