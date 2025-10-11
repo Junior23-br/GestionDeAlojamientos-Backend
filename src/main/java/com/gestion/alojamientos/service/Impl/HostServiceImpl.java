@@ -12,6 +12,7 @@ import com.gestion.alojamientos.exception.InvalidElementException;
 import com.gestion.alojamientos.exception.RepeatedElementException;
 import com.gestion.alojamientos.mapper.users.HostMapper;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
+import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.model.users.Host;
 import com.gestion.alojamientos.repository.user.HostRepo;
 import com.gestion.alojamientos.service.HostService;
@@ -137,22 +138,30 @@ public class HostServiceImpl implements HostService {
 
     /**
      * Genera y envía un código de reseteo de contraseña.
-     * TODO: Implementar cuando se integre el sistema de notificaciones.
      */
     @Override
     public String generateResetCode(String email) throws ElementNotFoundException {
-        // TODO: Implementar una vez se integre ResetCodeServiceImpl y EmailServiceImpl
-        throw new UnsupportedOperationException("Funcionalidad pendiente de implementación.");
+        Host host = hostRepository.findByEmail(email)
+                .orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con email: " + email));
+        return resetCodeServiceImpl.generateAndSendCode(host);
     }
 
     /**
      * Cambia la contraseña de un Host.
-     * TODO: Implementar validación de la contraseña actual y actualización segura.
      */
     @Override
     public void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException {
-        // TODO: Implementar una vez se defina el flujo de autenticación.
-        throw new UnsupportedOperationException("Funcionalidad pendiente de implementación.");
+        Host host = hostRepository.findById(userId)
+                .orElseThrow(() -> new ElementNotFoundException("Usuario no encontrado con ID: " + userId));
+        if(!passwordEncoder.matches(dto.currentPassword(), host.getPassword())) {
+            throw  new InvalidElementException("Contraseña incorrecta");
+        }
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+        if(!dto.newPassword().matches(passwordPattern)) {
+            throw new InvalidElementException("La nueva contraseña no cumple las politicas de privacidad");
+        }
+        host.setPassword(passwordEncoder.encode(dto.newPassword()));
+        hostRepository.save(host);
     }
 
     /**
@@ -161,7 +170,29 @@ public class HostServiceImpl implements HostService {
      */
     @Override
     public void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException {
-        // TODO: Implementar una vez se integre ResetCodeServiceImpl y EmailServiceImpl
-        throw new UnsupportedOperationException("Funcionalidad pendiente de implementación.");
+        Host host = hostRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con email: " + dto.email()));
+        //validar codigo
+        try {
+            // Validar código
+            resetCodeServiceImpl.validateCode(host, dto.resetCode());
+        } catch (InvalidElementException e) {
+            if (e.getMessage().equals("Código de recuperación expirado.")) {
+                // Generar y enviar un nuevo código automáticamente
+                String newCode = resetCodeServiceImpl.generateAndSendCode(host);
+                throw new InvalidElementException("El código ha expirado. Se ha enviado un nuevo código a " + dto.email() + ". Por favor, usa el nuevo código para restablecer tu contraseña.");
+            }
+            // Si es otro error (ej. código incorrecto o no generado), relanzar la excepción original
+            throw e;
+        }
+        //validar politica calve
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
+        if (!dto.newPassword().matches(passwordPattern)) {
+            throw new InvalidElementException("La nueva contraseña no cumple con la política de seguridad.");
+        }
+        host.setPassword(passwordEncoder.encode(dto.newPassword()));
+        // Limpiar el resetCode para que no pueda reutilizarse
+        host.setResetCode(null); //limpiar
+        hostRepository.save(host);
     }
 }

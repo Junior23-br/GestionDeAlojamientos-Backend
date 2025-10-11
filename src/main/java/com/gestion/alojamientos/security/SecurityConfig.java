@@ -45,7 +45,8 @@ public class SecurityConfig {
                     "/api/public/**",
                     "/swagger-ui/**",
                     "/api-docs/**",
-                        "/api/admins/**"
+                    "/api/admins/**",
+                    "/api/hosts/**"
                 ).permitAll()
                 // Todo lo demás requiere autenticación JWT
                 .anyRequest().authenticated()

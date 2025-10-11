@@ -39,7 +39,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || path.startsWith("/api/public")
                 || path.startsWith("/swagger")
                 || path.startsWith("/v3/api-docs")   // OJO: Swagger moderno usa /v3/
-                || path.startsWith("/api/admins")) {
+                || path.startsWith("/api/admins")
+                || path.startsWith("/api/hosts")
+        ) {
             System.out.println(">>> Ruta pública detectada, saltando filtro JWT");
             filterChain.doFilter(request, response);
             return;
