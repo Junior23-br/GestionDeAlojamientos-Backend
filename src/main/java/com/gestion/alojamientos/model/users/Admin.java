@@ -22,7 +22,7 @@ public class Admin extends SuperUser {
 
     @Column(name = "access_level", nullable = false)
     private int access_level;
-    @Column(name = "statesAdmin", nullable = false)
+    @Column(name = "states_admin", nullable = false)
     private StatesAdmin statesAdmin;
 
 }

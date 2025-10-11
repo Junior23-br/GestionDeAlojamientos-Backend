@@ -28,6 +28,7 @@ import com.gestion.alojamientos.mapper.accomodation.CommentHostMapper;
 import com.gestion.alojamientos.model.accomodation.Accomodation;
 import com.gestion.alojamientos.model.accomodation.AccomodationCalification;
 import com.gestion.alojamientos.model.accomodation.OperationalStatus;
+import com.gestion.alojamientos.model.enums.StatesAdmin;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.users.Admin;
@@ -134,6 +135,8 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         admin.setUsername(username);
         // nivel de acceso por defecto (podría variar según la política)
         admin.setAccess_level(1);
+        admin.setStatesAdmin(StatesAdmin.ACTIVE);
+        System.out.println(admin.getEmail());
         // statesAdmin: si existe un enum, por defecto lo dejamos en ACTIVE (si no: TODO)
         // TODO: setear statesAdmin apropiadamente si existe el enum y valores
         // admin.setStatesAdmin(StatesAdmin.ACTIVE); // uncomment si StatesAdmin existe

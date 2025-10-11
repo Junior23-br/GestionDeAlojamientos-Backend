@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
+
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -23,41 +25,46 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
-
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+        String path = request.getServletPath();
+        System.out.println(">>> Filtro ejecutado para path: " + path);
+
+        // 🔓 Rutas que NO deben requerir token
+        if (path.startsWith("/api/auth")
+                || path.startsWith("/api/public")
+                || path.startsWith("/swagger")
+                || path.startsWith("/v3/api-docs")   // OJO: Swagger moderno usa /v3/
+                || path.startsWith("/api/admins")) {
+            System.out.println(">>> Ruta pública detectada, saltando filtro JWT");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // ⚙️ Si la ruta no está entre las públicas, validar JWT
         String authHeader = request.getHeader("Authorization");
-        System.out.println("Auth Header: " + authHeader); // Debugging line
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            System.out.println("Extracted Token: " + token); // Debugging line
-            System.out.println("Is Token Valid: " + jwtUtil.validateToken(token)); // Debugging line
+
             if (jwtUtil.validateToken(token)) {
                 String username = jwtUtil.getUsernameFromToken(token);
                 String role = jwtUtil.getRoleFromToken(token);
 
-                System.out.println("Username from Token: " + username); // Debugging line
-                System.out.println("Role from Token: " + role); // Debugging line
+                List<SimpleGrantedAuthority> authorities = role != null
+                        ? List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                        : Collections.emptyList();
 
-                 // Sin agregar "ROLE_" manualmente
-                List<SimpleGrantedAuthority> authorities = role != null ?
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role)) : Collections.emptyList();
-
-                System.out.println("Authorities: " + authorities); // Debugging line
-                
-                // // Spring espera roles con prefijo ROLE_
-                // String roleName = role != null ? "ROLE_" + role : null;
-                // List<SimpleGrantedAuthority> authorities = roleName != null ?
-                //         List.of(new SimpleGrantedAuthority(roleName)) : Collections.emptyList();
-
-                UsernamePasswordAuthenticationToken auth = 
+                UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
+
         filterChain.doFilter(request, response);
     }
+
 }
