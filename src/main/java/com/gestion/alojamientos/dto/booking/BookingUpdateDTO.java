@@ -48,18 +48,12 @@ public record BookingUpdateDTO(
         DetailBookingUpdateDTO detailBookingUpdateDTO,
 
         /**
-         * Identificador del alojamiento
+         * Identificador de la reserva
          * Campo obligatorio
          */
-        @NotBlank @NotNull @NotEmpty
-        Long idAccommodation,
+        @NotNull @NotEmpty @NotBlank
+        Long idBooking
 
-        /**
-         * Fecha de actualizacion
-         * Campo obligatorio
-         */
-        @NotBlank@NotNull@NotEmpty
-        LocalDateTime updateTime
 ) {
 
 }
