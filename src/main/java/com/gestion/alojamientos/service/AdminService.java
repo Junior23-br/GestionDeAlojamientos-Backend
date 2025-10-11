@@ -15,15 +15,9 @@ import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
 import com.gestion.alojamientos.dto.password.ChangePasswordDto;
 import com.gestion.alojamientos.dto.password.ResetPasswordDto;
-import com.gestion.alojamientos.model.accomodation.CommentAccomodation;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
-import com.gestion.alojamientos.model.users.Admin;
-import com.gestion.alojamientos.repository.user.AdminRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import com.gestion.alojamientos.exception.*;
 
 import java.util.List;
@@ -114,7 +108,7 @@ public interface AdminService {
 
     void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException;
 
-    GuestDto login(UserLoginDTO dto) throws InvalidElementException;
+    UserLoginDTO login(UserLoginDTO dto) throws InvalidElementException;
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo
     void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException;

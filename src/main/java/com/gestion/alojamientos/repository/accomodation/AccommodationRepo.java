@@ -43,7 +43,13 @@ public interface AccommodationRepo extends JpaRepository<Accomodation, Long>, Jp
            "GROUP BY a.approvalStatus")
     List<Object[]> countAccommodationsByApprovalStatus(@Param("hostId") Long hostId);
 
-
+       @Query("""
+              SELECT a FROM Accomodation a
+              LEFT JOIN FETCH a.ubication
+              LEFT JOIN FETCH a.host
+              WHERE a.id = :id
+       """)
+       Optional<Accomodation> findBaseById(@Param("id") Long id);
 
     //INFORMACIÓN BÁSICA CON RELACIONES ESENCIALES
     
@@ -72,17 +78,6 @@ public interface AccommodationRepo extends JpaRepository<Accomodation, Long>, Jp
     Optional<Accomodation> findByIdWithServices(@Param("id") Long id);
     
     //INFORMACIÓN COMPUESTA PARA DETALLES
-    
-    /**
-     * Encuentra Accommodation por ID con información completa para página de detalles
-     */
-    @Query("SELECT DISTINCT a FROM Accomodation a " +
-           "LEFT JOIN FETCH a.ubication " +
-           "LEFT JOIN FETCH a.urlPhotos " +
-           "LEFT JOIN FETCH a.servicesList " +
-           "LEFT JOIN FETCH a.host " +
-           "WHERE a.id = :id")
-    Optional<Accomodation> findByIdWithCompleteDetails(@Param("id") Long id);
     
     /**
      * Encuentra Accommodation por ID con Calificaciones

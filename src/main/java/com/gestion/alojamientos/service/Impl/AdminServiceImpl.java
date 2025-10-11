@@ -17,6 +17,8 @@ import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.exception.ElementNotFoundException;
 import com.gestion.alojamientos.exception.RepeatedElementException;
 import com.gestion.alojamientos.exception.InvalidElementException;
+import com.gestion.alojamientos.mapper.UserLoginMapper;
+import com.gestion.alojamientos.mapper.accomodation.AccommodationCalificationMapper;
 import com.gestion.alojamientos.mapper.users.AdminMapper;
 import com.gestion.alojamientos.mapper.users.GuestMapper;
 import com.gestion.alojamientos.mapper.users.HostMapper;
@@ -24,10 +26,12 @@ import com.gestion.alojamientos.mapper.accomodation.AccommodationMapper;
 import com.gestion.alojamientos.mapper.booking.BookingMapper;
 import com.gestion.alojamientos.mapper.accomodation.CommentAccomodationMapper;
 import com.gestion.alojamientos.mapper.accomodation.CommentHostMapper;
+import com.gestion.alojamientos.model.accomodation.Accomodation;
+import com.gestion.alojamientos.model.accomodation.AccomodationCalification;
+import com.gestion.alojamientos.model.accomodation.OperationalStatus;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.users.Admin;
-import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.repository.user.AdminRepository;
 import com.gestion.alojamientos.repository.user.GuestRepository;
 import com.gestion.alojamientos.repository.user.HostRepo;
@@ -43,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +67,11 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
 
     @Autowired
     private AdminMapper adminMapper;
+    @Autowired
+    private UserLoginMapper userLoginMapper;
+
+    @Autowired
+    private AccommodationCalificationMapper calificationMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -101,6 +111,8 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
     private CommentHostRepo commentHostRepo;
     @Autowired(required = false)
     private CommentHostMapper commentHostMapper;
+    @Autowired
+    private AccommodationCalificationMapper accommodationCalificationMapper;
 
     // TODO: Integrar NotificationService / PhotoService cuando estén disponibles
     // @Autowired private NotificationService notificationService;
@@ -147,8 +159,6 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
     public void deleteAdmin(Long id) throws ElementNotFoundException {
         Admin admin = adminRepository.findById(id)
                 .orElseThrow(() -> new ElementNotFoundException("Administrador no encontrado con ID: " + id));
-        // Eliminación física o lógica? Interfaz indica void deleteAdmin(Long id)
-        // Aquí hacemos eliminación física. Si prefiere lógica, cambiar por statesAdmin = DELETED.
         adminRepository.delete(admin);
     }
 
@@ -346,16 +356,16 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
 
     @Override
     public List<AccommodationCalificationDTO> getHostAccommodationCalificationHistory(Long id) {
-//        if (accommodationMapper == null) {
-//            throw new UnsupportedOperationException("AccommodationMapper no está disponible (CALIFICATIONS).");
-//        }
-//        // Suponemos existence de repo/método que devuelva calificaciones por host
-//        // TODO: implementar repo específico si no existe
-//        return accommodationRepo.findCalificationsByHostId(id)
-//                .stream()
-//                .map(accommodationMapper::toCalificationDto) // suponiendo método
-//                .collect(Collectors.toList());
-        return null;
+        if (accommodationMapper == null) {
+            throw new UnsupportedOperationException("AccommodationMapper no está disponible (CALIFICATIONS).");
+        }
+        List<AccommodationCalificationDTO> list = new ArrayList<>();
+        for(Accomodation accommodation : accommodationRepo.findByHostId(id)) {
+            for(AccomodationCalification accomodationCalification: accommodation.getAccomodationCalificationList()){
+                list.add(accommodationCalificationMapper.toDTO(accomodationCalification));
+            }
+        }
+        return list;
     }
     // ===== 3. Alojamientos =====
 
@@ -375,9 +385,10 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         if (accommodationRepo == null || accommodationMapper == null) {
             throw new UnsupportedOperationException("AccommodationRepo o AccommodationMapper no están disponibles (GET ACCOMMODATION BY ID).");
         }
-        return accommodationRepo.findByIdWithCompleteDetails(id)
-                .map(accommodationMapper::toDto)
-                .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + id));
+        // accommodationRepo.findByIdWithCompleteDetails(id)
+        //         .map(accommodationMapper::toDto)
+        //         .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + id))
+        return null;
     }
 
     @Override
@@ -385,13 +396,11 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         if (accommodationRepo == null) {
             throw new UnsupportedOperationException("AccommodationRepo no está disponible (DELETE ACCOMMODATION).");
         }
-        var accommodation = accommodationRepo.findById(id)
+        Accomodation accommodation = accommodationRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + id));
-        // Soft delete: marcar como eliminado si la entidad soporta operationalStatus
-        // accommodation.setOperationalStatus(OperationalStatus.DELETED);
-        // accommodationRepo.save(accommodation);
-        // Si no, borra físicamente:
-        accommodationRepo.delete(accommodation);
+
+        accommodation.setOperationalStatus(OperationalStatus.DELETED);
+        accommodationRepo.save(accommodation);
     }
 
     // ===== 4. Reservas =====
@@ -485,44 +494,46 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
 
     @Override
     public void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException {
-        Guest guest = guestRepository.findById(userId)
+        Admin admin = adminRepository.findById(userId)
                 .orElseThrow(() -> new ElementNotFoundException("Usuario no encontrado con ID: " + userId));
-        if(!passwordEncoder.matches(dto.currentPassword(), guest.getPassword())) {
+        if(!passwordEncoder.matches(dto.currentPassword(), admin.getPassword())) {
             throw  new InvalidElementException("Contraseña incorrecta");
         }
         String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
         if(!dto.newPassword().matches(passwordPattern)) {
             throw new InvalidElementException("La nueva contraseña no cumple las politicas de privacidad");
         }
-        guest.setPassword(passwordEncoder.encode(dto.newPassword()));
-        guestRepository.save(guest);
+        admin.setPassword(passwordEncoder.encode(dto.newPassword()));
+        adminRepository.save(admin);
     }
 
     @Override
-    public GuestDto login(UserLoginDTO dto) throws InvalidElementException {
-        Guest guest = guestRepository.findByEmail(dto.email())
+    public UserLoginDTO login(UserLoginDTO dto) throws InvalidElementException {
+        Admin admin = adminRepository.findByEmail(dto.email())
                 .orElseThrow(() -> new InvalidElementException("Credenciales inválidas"));
-        if (!passwordEncoder.matches(dto.password(), guest.getPassword())) {
+        if (!passwordEncoder.matches(dto.password(), admin.getPassword())) {
             throw new InvalidElementException("Credenciales inválidas");
         }
-        GuestDto Guestdto = guestMapper.toDto(guest);
-        System.out.println(Guestdto.email());
-        return Guestdto;
+        AdminDto adminDto = adminMapper.toDTO(admin);
+        System.out.println(adminDto.email());
+
+        UserLoginDTO userLoginDTO = userLoginMapper.toLoginDTO(adminDto);
+        return userLoginDTO;
     }
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo
     @Override
     public void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException {
-        Guest guest = guestRepository.findByEmail(dto.email())
+        Admin admin = adminRepository.findByEmail(dto.email())
                 .orElseThrow(() -> new ElementNotFoundException("Huésped no encontrado con email: " + dto.email()));
         //validar codigo
         try {
             // Validar código
-            resetCodeServiceImpl.validateCode(guest, dto.resetCode());
+            resetCodeServiceImpl.validateCode(admin, dto.resetCode());
         } catch (InvalidElementException e) {
             if (e.getMessage().equals("Código de recuperación expirado.")) {
                 // Generar y enviar un nuevo código automáticamente
-                String newCode = resetCodeServiceImpl.generateAndSendCode(guest);
+                String newCode = resetCodeServiceImpl.generateAndSendCode(admin);
                 throw new InvalidElementException("El código ha expirado. Se ha enviado un nuevo código a " + dto.email() + ". Por favor, usa el nuevo código para restablecer tu contraseña.");
             }
             // Si es otro error (ej. código incorrecto o no generado), relanzar la excepción original
@@ -533,10 +544,10 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         if (!dto.newPassword().matches(passwordPattern)) {
             throw new InvalidElementException("La nueva contraseña no cumple con la política de seguridad.");
         }
-        guest.setPassword(passwordEncoder.encode(dto.newPassword()));
+        admin.setPassword(passwordEncoder.encode(dto.newPassword()));
         // Limpiar el resetCode para que no pueda reutilizarse
-        guest.setResetCode(null); //limpiar
-        guestRepository.save(guest);
+        admin.setResetCode(null); //limpiar
+        adminRepository.save(admin);
     }
 }
 

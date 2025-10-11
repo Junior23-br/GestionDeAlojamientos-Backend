@@ -1,15 +1,19 @@
 package com.gestion.alojamientos.service.Impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gestion.alojamientos.dto.accommodation.AccommodationCreateDTO;
 import com.gestion.alojamientos.dto.accommodation.AccommodationDTO;
+import com.gestion.alojamientos.dto.accommodation.AccommodationUpdateDTO;
 import com.gestion.alojamientos.dto.accommodation.ServiceDTO;
 import com.gestion.alojamientos.mapper.accomodation.AccommodationMapper;
+import com.gestion.alojamientos.mapper.accomodation.ServicesMapper;
 import com.gestion.alojamientos.model.accomodation.Accomodation;
 import com.gestion.alojamientos.model.accomodation.ApprovalStatus;
 import com.gestion.alojamientos.model.accomodation.OperationalStatus;
@@ -24,7 +28,6 @@ import com.gestion.alojamientos.service.AccomodationService;
 
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
@@ -40,11 +43,11 @@ public class AccommodationServiceImpl implements AccomodationService {
     private ServicesRepo servicesRepo;
     @Autowired
     private AccommodationMapper accommodationMapper;
-
-
+    @Autowired
+    private ServicesMapper servicesMapper;
 
     @Override
-    public AccommodationDTO createAccommodation(Long hostId, AccommodationDTO accommodationDTO) throws Exception {
+    public AccommodationDTO createAccommodation(Long hostId, AccommodationCreateDTO accommodationDTO) throws Exception {
         // Validar que el host existe
         Host host = hostRepo.findById(hostId)
             .orElseThrow(() -> new EntityNotFoundException("Host no encontrado con ID: " + hostId));
@@ -56,7 +59,7 @@ public class AccommodationServiceImpl implements AccomodationService {
 
         // Mapear DTO a entidad
         Accomodation accommodation = accommodationMapper.toEntity(accommodationDTO);
-        
+        System.out.println("Accommodation mapped: " + accommodation.getAccomodationType());
         // Establecer relaciones y datos del sistema
         accommodation.setHost(host);
         accommodation.setApprovalStatus(ApprovalStatus.PENDING);
@@ -71,8 +74,8 @@ public class AccommodationServiceImpl implements AccomodationService {
         }
 
         // Validar y asociar servicios
-        if (accommodationDTO.services() != null) {
-            List<Services> validServices = validateAndGetServices(accommodationDTO.services());
+        if (accommodationDTO.serviceIds() != null) {
+            List<Services> validServices = validateAndGetServices(accommodationDTO.serviceIds());
             accommodation.setServicesList(validServices);
         }
 
@@ -84,14 +87,15 @@ public class AccommodationServiceImpl implements AccomodationService {
 
     @Override
     public AccommodationDTO getAccommodationById(Long accommodationId) {
-        Accomodation accommodation = accommodationRepo.findByIdWithCompleteDetails(accommodationId)
-            .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + accommodationId));
-        
+        Accomodation accommodation = accommodationRepo.findBaseById(accommodationId).orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + accommodationId));
+        // Paso 2: carga las colecciones usando las mismas entidades persistentes
+        accommodationRepo.findByIdWithPhotos(accommodationId).ifPresent(a -> accommodation.setUrlPhotos(a.getUrlPhotos()));
+        accommodationRepo.findByIdWithPhotos(accommodationId).ifPresent(a -> accommodation.setServicesList(a.getServicesList()));
         return accommodationMapper.toDto(accommodation);
     }
 
     @Override
-    public AccommodationDTO updateAccommodation(Long accommodationId, AccommodationDTO accommodationDTO) throws Exception {
+    public AccommodationDTO updateAccommodation(Long accommodationId, AccommodationUpdateDTO accommodationDTO) throws Exception {
         Accomodation existingAccommodation = accommodationRepo.findById(accommodationId)
             .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + accommodationId));
 
@@ -106,8 +110,8 @@ public class AccommodationServiceImpl implements AccomodationService {
         existingAccommodation.setUpdateTime(LocalDateTime.now());
 
         // Actualizar servicios si se proporcionan
-        if (accommodationDTO.services() != null) {
-            List<Services> updatedServices = validateAndGetServices(accommodationDTO.services());
+        if (accommodationDTO.serviceIds() != null) {
+            List<Services> updatedServices = validateAndGetServices(accommodationDTO.serviceIds());
             existingAccommodation.setServicesList(updatedServices);
         }
 
@@ -119,9 +123,10 @@ public class AccommodationServiceImpl implements AccomodationService {
     public boolean softDeleteAccommodation(Long accommodationId, Long hostId) throws Exception {
         Accomodation accommodation = accommodationRepo.findById(accommodationId)
             .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado"));
-
+        System.out.println("Host ID: " + accommodation.getHost().getId());
+        System.out.println("HOST ID PROPORCIONADO "+ hostId);
         // Validar propiedad
-        if (!accommodation.getHost().getId().equals(hostId)) {
+        if (accommodation.getHost().getId() != (hostId)) {
             throw new Exception("No tienes permisos para eliminar este alojamiento");
         }
 
@@ -152,26 +157,13 @@ public class AccommodationServiceImpl implements AccomodationService {
             .collect(Collectors.toList());
     }
 
-
-    @Override
-    public AccommodationDTO getAccommodationDetails(Long accommodationId) throws Exception {
-        Accomodation accommodation = accommodationRepo.findByIdWithCompleteDetails(accommodationId)
-            .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + accommodationId));
-
-        // Solo mostrar alojamientos aprobados y operacionales
-        if (accommodation.getApprovalStatus() != ApprovalStatus.APPROVED ||
-            accommodation.getOperationalStatus() != OperationalStatus.ACTIVE) {
-            throw new Exception("El alojamiento no está disponible");
-        }
-
-        return accommodationMapper.toDto(accommodation);
-    }
-
     // Método auxiliar para validar y obtener servicios
-    private List<Services> validateAndGetServices(List<ServiceDTO> serviceDTOs) {
-        return serviceDTOs.stream()
-            .map(serviceDTO -> servicesRepo.findById(serviceDTO.id())
-                .orElseThrow(() -> new EntityNotFoundException("Servicio no encontrado: " + serviceDTO.id())))
-            .collect(Collectors.toList());
+    private List<Services> validateAndGetServices(List<Long> serviceDTOs) {
+        List<Services> services = new ArrayList<>();
+        for (Long serviceDTO : serviceDTOs) {
+            servicesRepo.findById(serviceDTO)
+                .ifPresent(s -> services.add(servicesMapper.toEntity(new ServiceDTO(s.getId(), s.getName()))));
+        }
+        return services;
     }
 }

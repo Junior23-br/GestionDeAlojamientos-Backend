@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+import org.springframework.beans.factory.annotation.Autowired;
 // IMPORTACIONES DE SPRING
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +18,18 @@ import org.springframework.web.bind.annotation.*;
 import com.gestion.alojamientos.dto.accommodation.AccommodationCreateDTO;
 import com.gestion.alojamientos.dto.accommodation.AccommodationDTO;
 import com.gestion.alojamientos.dto.accommodation.AccommodationUpdateDTO;
+import com.gestion.alojamientos.dto.accommodation.DeleteAccommodationDTO;
+import com.gestion.alojamientos.service.AccomodationService;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/accommodations")
 @Tag(name = "Accommodations", description = "Endpoints para la gestión de alojamientos. Incluye búsqueda pública y operaciones de creación, actualización y eliminación lógica para anfitriones (ROLE_HOST) con autenticación JWT. Integra Mapbox para ubicaciones y soporta hasta 10 imágenes por alojamiento.")
 public class AccommodationController {
+
+    @Autowired
+    private AccomodationService accommodationService;
 
    // ENDPOINT: GET /api/accommodations
 //    @GetMapping
@@ -79,77 +82,105 @@ public class AccommodationController {
        @Parameter(description = "DTO con datos requeridos para el alojamiento (e.g., address, pricePerNight, images[0-9]). Validado en capa de servicio.", required = true)
        @RequestBody AccommodationCreateDTO dto
    ) {
+    AccommodationDTO createdAccommodation = null;
        // Lógica placeholder (en implementación real: validar imágenes, asociar a host, persistir)
-       return ResponseEntity.status(201).body(null);
+       try {
+        createdAccommodation = accommodationService.createAccommodation(dto.hostId(), dto);
+       } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body(null);
+       }
+       return ResponseEntity.status(201).body(createdAccommodation);
    }
 
-//    // ENDPOINT: GET /api/accommodations/{id}
-//    @GetMapping("/{id}")
-//    @Operation(
-//        summary = "Obtener detalles de un alojamiento",
-//        description = "Recupera detalles de un alojamiento específico, incluyendo ubicación (vía Mapbox), precio, capacidad y promedio de calificaciones de comentarios. Accesible públicamente para huéspedes y anfitriones."
-//    )
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "200", description = "Detalles del alojamiento recuperados exitosamente.",
-//            content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccommodationDTO.class))),
-//        @ApiResponse(responseCode = "404", description = "Alojamiento no encontrado por ID."),
-//        @ApiResponse(responseCode = "500", description = "Error interno durante la consulta o integración con Mapbox.")
-//    })
-//    public ResponseEntity<AccommodationDTO> getAccommodationById(
-//        @Parameter(description = "ID UUID del alojamiento a consultar. Debe existir.", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
-//        @PathVariable UUID id
-//    ) {
-//        // Lógica placeholder (en implementación real: consultar DB, calcular promedio de reviews, integrar Mapbox)
-//        return ResponseEntity.ok(new AccommodationDTO());
-//    }
+   // ENDPOINT: GET /api/accommodations/{id}
+   @GetMapping("/{id}")
+   @Operation(
+       summary = "Obtener detalles de un alojamiento",
+       description = "Recupera detalles de un alojamiento específico, incluyendo ubicación (vía Mapbox), precio, capacidad y promedio de calificaciones de comentarios. Accesible públicamente para huéspedes y anfitriones."
+   )
+   @ApiResponses(value = {
+       @ApiResponse(responseCode = "200", description = "Detalles del alojamiento recuperados exitosamente.",
+           content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccommodationDTO.class))),
+       @ApiResponse(responseCode = "404", description = "Alojamiento no encontrado por ID."),
+       @ApiResponse(responseCode = "500", description = "Error interno durante la consulta o integración con Mapbox.")
+   })
+   public ResponseEntity<AccommodationDTO> getAccommodationById(
+       @Parameter(description = "Id del alojamiento a consultar. Debe existir.", required = true, example = "1")
+       @PathVariable Long id
+   ) {
+        AccommodationDTO accommodation = null;
+       try {
+        accommodation = accommodationService.getAccommodationById(id);
+       } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body(null);
+       }
+       return ResponseEntity.ok(accommodation);
+   }
 
-//    // ENDPOINT: PUT /api/accommodations/{id}
-//    @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_HOST')")
-//    @SecurityRequirement(name = "bearerAuth")
-//    @Operation(
-//        summary = "Actualizar un alojamiento existente",
-//        description = "Actualiza parcialmente los datos de un alojamiento (e.g., precio, descripción) solo si el anfitrión autenticado es el propietario. Valida cambios y mantiene consistencia con reservas asociadas. Cumple con el requerimiento de soft update."
-//    )
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "200", description = "Alojamiento actualizado exitosamente, con detalles retornados.",
-//            content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccommodationDTO.class))),
-//        @ApiResponse(responseCode = "400", description = "Validación fallida (e.g., datos inválidos, conflicto con reservas)."),
-//        @ApiResponse(responseCode = "401", description = "Usuario no autenticado o token JWT inválido."),
-//        @ApiResponse(responseCode = "403", description = "No autorizado: anfitrión no es propietario."),
-//        @ApiResponse(responseCode = "404", description = "Alojamiento no encontrado por ID."),
-//        @ApiResponse(responseCode = "500", description = "Error interno durante la actualización.")
-//    })
-//    public ResponseEntity<AccommodationDTO> updateAccommodation(
-//        @Parameter(description = "ID UUID del alojamiento a actualizar. Debe existir y pertenecer al anfitrión.", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
-//        @PathVariable UUID id,
-//        @Parameter(description = "DTO con datos parciales a actualizar (e.g., pricePerNight, description). Validado en service.", required = true)
-//        @RequestBody AccommodationUpdateDTO dto
-//    ) {
-//        // Lógica placeholder (en implementación real: verificar propiedad, validar, actualizar)
-//        return ResponseEntity.ok(new AccommodationDTO());
-//    }
+   // ENDPOINT: PUT /api/accommodations/{id}
+   @PutMapping("/{id}")
+   @PreAuthorize("hasRole('ROLE_HOST')")
+   @SecurityRequirement(name = "bearerAuth")
+   @Operation(
+       summary = "Actualizar un alojamiento existente",
+       description = "Actualiza parcialmente los datos de un alojamiento (e.g., precio, descripción) solo si el anfitrión autenticado es el propietario. Valida cambios y mantiene consistencia con reservas asociadas. Cumple con el requerimiento de soft update."
+   )
+   @ApiResponses(value = {
+       @ApiResponse(responseCode = "200", description = "Alojamiento actualizado exitosamente, con detalles retornados.",
+           content = @Content(mediaType = "application/json", schema = @Schema(implementation = AccommodationDTO.class))),
+       @ApiResponse(responseCode = "400", description = "Validación fallida (e.g., datos inválidos, conflicto con reservas)."),
+       @ApiResponse(responseCode = "401", description = "Usuario no autenticado o token JWT inválido."),
+       @ApiResponse(responseCode = "403", description = "No autorizado: anfitrión no es propietario."),
+       @ApiResponse(responseCode = "404", description = "Alojamiento no encontrado por ID."),
+       @ApiResponse(responseCode = "500", description = "Error interno durante la actualización.")
+   })
+   public ResponseEntity<AccommodationDTO> updateAccommodation(
+       @Parameter(description = "ID del alojamiento a actualizar. Debe existir y pertenecer al anfitrión.", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+       @PathVariable Long id,
+       @Parameter(description = "DTO con datos parciales a actualizar (e.g., pricePerNight, description). Validado en service.", required = true)
+       @RequestBody AccommodationUpdateDTO dto
+   ) {
+       // Lógica placeholder (en implementación real: verificar propiedad, validar, actualizar)
+        AccommodationDTO accommodation = null;
+       try {
+        accommodation = accommodationService.updateAccommodation(dto.id(), dto);
+       } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body(null);
+       }
 
-//    // ENDPOINT: DELETE /api/accommodations/{id}
-//    @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ROLE_HOST')")
-//    @SecurityRequirement(name = "bearerAuth")
-//    @Operation(
-//        summary = "Eliminar lógicamente un alojamiento",
-//        description = "Marca un alojamiento como 'deleted' (soft delete) solo si el anfitrión autenticado es el propietario. No elimina físicamente para mantener historial de reservas asociadas. Cumple con el requerimiento de eliminación lógica."
-//    )
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "204", description = "Alojamiento eliminado lógicamente exitosamente (no content returned)."),
-//        @ApiResponse(responseCode = "401", description = "Usuario no autenticado o token JWT inválido."),
-//        @ApiResponse(responseCode = "403", description = "No autorizado: anfitrión no es propietario."),
-//        @ApiResponse(responseCode = "404", description = "Alojamiento no encontrado por ID."),
-//        @ApiResponse(responseCode = "500", description = "Error interno durante la eliminación.")
-//    })
-//    public ResponseEntity<Void> deleteAccommodation(
-//        @Parameter(description = "ID UUID del alojamiento a eliminar. Debe existir y pertenecer al anfitrión.", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
-//        @PathVariable UUID id
-//    ) {
-//        // Lógica placeholder (en implementación real: verificar propiedad, actualizar estado a deleted)
-//        return ResponseEntity.noContent().build();
-//    }
+       return ResponseEntity.ok(accommodation);
+   }
+
+   // ENDPOINT: DELETE /api/accommodations/{id}
+   @DeleteMapping("/{id}")
+   @PreAuthorize("hasRole('ROLE_HOST')")
+   @SecurityRequirement(name = "bearerAuth")
+   @Operation(
+       summary = "Eliminar lógicamente un alojamiento",
+       description = "Marca un alojamiento como 'deleted' (soft delete) solo si el anfitrión autenticado es el propietario. No elimina físicamente para mantener historial de reservas asociadas. Cumple con el requerimiento de eliminación lógica."
+   )
+   @ApiResponses(value = {
+       @ApiResponse(responseCode = "204", description = "Alojamiento eliminado lógicamente exitosamente (no content returned)."),
+       @ApiResponse(responseCode = "401", description = "Usuario no autenticado o token JWT inválido."),
+       @ApiResponse(responseCode = "403", description = "No autorizado: anfitrión no es propietario."),
+       @ApiResponse(responseCode = "404", description = "Alojamiento no encontrado por ID."),
+       @ApiResponse(responseCode = "500", description = "Error interno durante la eliminación.")
+   })
+   public ResponseEntity<Void> deleteAccommodation(
+       @PathVariable Long id,
+       @Parameter(description = "ID UUID del alojamiento a eliminar. Debe existir y pertenecer al anfitrión.", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+       @RequestBody DeleteAccommodationDTO dto
+   ) {
+       // Lógica placeholder (en implementación real: verificar propiedad, actualizar estado a deleted)
+         try {
+          accommodationService.softDeleteAccommodation(id, dto.idHost());
+         } catch (Exception e) {
+          e.printStackTrace();
+          return ResponseEntity.status(500).build();
+         }
+       return ResponseEntity.noContent().build();
+   }
 }

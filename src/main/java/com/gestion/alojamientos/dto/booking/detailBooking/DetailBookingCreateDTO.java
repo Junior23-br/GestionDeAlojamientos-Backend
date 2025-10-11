@@ -71,6 +71,6 @@ public record  DetailBookingCreateDTO (
          * Lista de servicios del alojamiento
          * Campo no obligatorio
          */
-        List<Services>listServicesIds         // IDs de los servicios seleccionados
+        List<Integer>listServicesIds         // IDs de los servicios seleccionados
 ) {
 }

@@ -10,11 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.gestion.alojamientos.dto.booking.*;
 import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingCreateDTO;
+import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingUpdateDTO;
 import com.gestion.alojamientos.mapper.booking.BookingMapper;
 import com.gestion.alojamientos.model.accomodation.*;
 import com.gestion.alojamientos.model.booking.Booking;
 import com.gestion.alojamientos.model.booking.DetailBooking;
 import com.gestion.alojamientos.model.enums.StatesOfBooking;
+import com.gestion.alojamientos.model.transaction.ServiceFee;
 import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.repository.accomodation.AccommodationRepo;
 import com.gestion.alojamientos.repository.booking.*;
@@ -50,10 +52,8 @@ public class BookingServiceImpl implements BookingService {
             throw new Exception("El alojamiento no está disponible para reservas");
         }
 
-        // OBTENER GUEST DEL CONTEXTO DE SEGURIDAD - ACTUALMENTE NO DISPONIBLE
-        // Guest guest = getAuthenticatedGuest();
-        // Por ahora usaremos un guest por defecto para testing
-        Guest guest = guestRepo.findById(1L) // TODO: Reemplazar con guest autenticado
+        // Validar que el huésped existe
+        Guest guest = guestRepo.findById(createBookingDTO.guestId())
             .orElseThrow(() -> new EntityNotFoundException("Huésped no encontrado"));
 
         // Validar fechas
@@ -90,6 +90,71 @@ public class BookingServiceImpl implements BookingService {
         // notificationService.sendBookingConfirmation(savedBooking);
 
         return bookingMapper.toDto(savedBooking);
+    }
+    
+    @Override
+    public BookingDTO updateBooking(BookingUpdateDTO updateBookingDTO) throws Exception {
+        Booking booking = bookingRepo.findById(updateBookingDTO.idBooking())
+            .orElseThrow(() -> new EntityNotFoundException("Reserva no encontrada"));
+        
+        if (updateBookingDTO.bookingState() != null) {
+        try {
+            booking.setBookingState(StatesOfBooking.valueOf(updateBookingDTO.bookingState().toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Estado de reserva no válido: " + updateBookingDTO.bookingState());
+        }
+    }
+        if (updateBookingDTO.totalPrice() != null) {
+            booking.setTotalPrice(updateBookingDTO.totalPrice());
+        }
+
+        if (updateBookingDTO.paymenStatus() != null) {
+            booking.setPaymentStatus(updateBookingDTO.paymenStatus());
+        }
+
+        // if (updateBookingDTO.idPaymentMethod() != null) {
+        //     PaymentMethod paymentMethod = paymentMethodRepo.findById(updateBookingDTO.idPaymentMethod())
+        //             .orElseThrow(() -> new EntityNotFoundException("Método de pago no encontrado con ID: " + updateBookingDTO.idPaymentMethod()));
+        //     booking.setPaymentMethod(paymentMethod);
+        // }
+
+        // Actualizar detalle de la reserva si existe
+        if (updateBookingDTO.detailBookingUpdateDTO() != null) {
+            DetailBooking detail = booking.getDetailBooking();
+
+            DetailBookingUpdateDTO detailDTO = updateBookingDTO.detailBookingUpdateDTO();
+
+            if (detailDTO.checkInDate() != null) {
+                detail.setCheckInDate(detailDTO.checkInDate());
+            }
+
+            if (detailDTO.checkOutDate() != null) {
+                detail.setCheckOutDate(detailDTO.checkOutDate());
+            }
+
+            if (detailDTO.numberOfGuest() != null) {
+                detail.setNumberOfGuest(detailDTO.numberOfGuest());
+            }
+
+            // if (detailDTO.serviceFeeId() != null) {
+            //     ServiceFee serviceFee = serviceFeeRepo.findById(detailDTO.serviceFeeId())
+            //             .orElseThrow(() -> new EntityNotFoundException("Cargo de servicio no encontrado con ID: " + detailDTO.serviceFeeId()));
+            //     detail.setServiceFee(serviceFee);
+            // }
+
+            // persistir el detalle actualizado
+            detailBookingRepo.save(detail);
+            booking.setDetailBooking(detail);
+        }
+
+        // Actualizar timestamps
+        booking.setUpdateTime(LocalDateTime.now());
+
+        // Guardar cambios en base de datos
+        Booking updatedBooking = bookingRepo.save(booking);
+
+        // Convertir y retornar DTO actualizado
+        return bookingMapper.toDto(updatedBooking);
     }
 
     @Override
