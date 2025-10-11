@@ -3,6 +3,7 @@ import com.gestion.alojamientos.model.base.SuperUser;
 import com.gestion.alojamientos.model.common.ResetCode;
 import com.gestion.alojamientos.model.users.Admin;
 import com.gestion.alojamientos.model.users.Guest;
+import com.gestion.alojamientos.repository.user.GuestRepository;
 import com.gestion.alojamientos.service.EmailService;
 import com.gestion.alojamientos.service.ResetCodeService;
 import com.gestion.alojamientos.exception.InvalidElementException;
@@ -16,6 +17,9 @@ public class ResetCodeServiceImpl implements ResetCodeService {
 
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private GuestRepository guestRepository;
+
 
     @Override
     public String generateAndSendCode(SuperUser guest) throws InvalidElementException {
@@ -26,9 +30,13 @@ public class ResetCodeServiceImpl implements ResetCodeService {
         resetCode.setResetCode(code);
         resetCode.setExpirationDate(LocalDateTime.now().plusMinutes(15));
         // Asignar al guest el code
+
+        System.out.println("SE SETEA EL CODIGO: " + code + " PARA EL EMAIL: " + guest.getEmail());
+
         guest.setResetCode(resetCode);
         // Enviar código por email
         emailService.SendResetCodeEmail(guest.getEmail(), code);
+        guestRepository.save((Guest)guest);
 
         return code;
     }

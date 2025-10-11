@@ -11,10 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.gestion.alojamientos.security.jwt.JwtAuthenticationFilter;
-
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -44,6 +40,8 @@ public class SecurityConfig {
                 // Endpoints públicos (sin autenticación)
                 .requestMatchers(
                     "/api/auth/**",
+                    "/api/guests/password/generate-reset-code",
+                    "/api/guests/password/reset",
                     "/api/public/**",
                     "/swagger-ui/**",
                     "/api-docs/**",
