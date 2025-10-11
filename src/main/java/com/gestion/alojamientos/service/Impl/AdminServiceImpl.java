@@ -17,6 +17,7 @@ import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.exception.ElementNotFoundException;
 import com.gestion.alojamientos.exception.RepeatedElementException;
 import com.gestion.alojamientos.exception.InvalidElementException;
+import com.gestion.alojamientos.mapper.UserLoginMapper;
 import com.gestion.alojamientos.mapper.accomodation.AccommodationCalificationMapper;
 import com.gestion.alojamientos.mapper.users.AdminMapper;
 import com.gestion.alojamientos.mapper.users.GuestMapper;
@@ -31,7 +32,6 @@ import com.gestion.alojamientos.model.accomodation.OperationalStatus;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.users.Admin;
-import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.repository.user.AdminRepository;
 import com.gestion.alojamientos.repository.user.GuestRepository;
 import com.gestion.alojamientos.repository.user.HostRepo;
@@ -67,6 +67,8 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
 
     @Autowired
     private AdminMapper adminMapper;
+    @Autowired
+    private UserLoginMapper userLoginMapper;
 
     @Autowired
     private AccommodationCalificationMapper calificationMapper;
@@ -505,7 +507,7 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
     }
 
     @Override
-    public AdminDto login(UserLoginDTO dto) throws InvalidElementException {
+    public UserLoginDTO login(UserLoginDTO dto) throws InvalidElementException {
         Admin admin = adminRepository.findByEmail(dto.email())
                 .orElseThrow(() -> new InvalidElementException("Credenciales inválidas"));
         if (!passwordEncoder.matches(dto.password(), admin.getPassword())) {
@@ -513,7 +515,9 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         }
         AdminDto adminDto = adminMapper.toDTO(admin);
         System.out.println(adminDto.email());
-        return adminDto;
+
+        UserLoginDTO userLoginDTO = userLoginMapper.toLoginDTO(adminDto);
+        return userLoginDTO;
     }
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo

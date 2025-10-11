@@ -108,7 +108,7 @@ public interface AdminService {
 
     void changePassword(Long userId, ChangePasswordDto dto) throws InvalidElementException, ElementNotFoundException;
 
-    AdminDto login(UserLoginDTO dto) throws InvalidElementException;
+    UserLoginDTO login(UserLoginDTO dto) throws InvalidElementException;
 
     //Verificar que el codigo exista, actualiza la contraseña, verifica expiracion codigo
     void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException;
