@@ -118,7 +118,6 @@ public class GuestController {
         }
     }
 
-
      /**
       *  Eliminar un huesped del sistema
       * @param id Identificador único del huesped
@@ -131,7 +130,7 @@ public class GuestController {
      public ResponseEntity<Void> deleteGuest(@PathVariable Long id, @Valid @RequestBody DeleteGuestDto dto) {
         try {
             guestService.deleteGuest(id, dto);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();  
         } catch (ElementNotFoundException | InvalidElementException e) {
             return ResponseEntity.badRequest().body(null);
         }

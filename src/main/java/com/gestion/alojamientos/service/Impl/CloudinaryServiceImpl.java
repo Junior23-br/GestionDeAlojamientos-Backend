@@ -20,7 +20,6 @@ import java.util.Map;
  * Esta clase utiliza la librería {@code Cloudinary} para subir imágenes a la nube y gestionar su eliminación.
  */
 @Service
-
 public class CloudinaryServiceImpl implements CloudinaryService {
 
     private final Cloudinary cloudinary;
