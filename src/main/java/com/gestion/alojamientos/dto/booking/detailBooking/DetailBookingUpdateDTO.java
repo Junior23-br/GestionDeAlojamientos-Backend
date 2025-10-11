@@ -15,20 +15,6 @@ import java.util.List;
 public record DetailBookingUpdateDTO(
 
         /**
-         * Identificador de la reserva
-         * Campo obligatorio
-         */
-        Long idBooking,
-
-
-        /**
-         * Identificador del alojamiento
-         * Campo obligatorio
-         */
-        Long idAccommodation,
-
-
-        /**
          * Identificador del detalle de reserva
          * Campo obligatorio
          */

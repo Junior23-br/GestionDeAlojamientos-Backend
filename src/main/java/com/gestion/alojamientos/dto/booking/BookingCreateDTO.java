@@ -48,8 +48,14 @@ public record BookingCreateDTO(
          * Campo obligatorio
          */
         @NotBlank @NotNull @NotEmpty
-        Long idAccommodation
+        Long idAccommodation,
 
+        /**
+         * Identificador del huesped
+         * Campo obligatorio
+         */
+        @NotBlank @NotNull @NotEmpty
+        Long guestId
 
         ) {
 
