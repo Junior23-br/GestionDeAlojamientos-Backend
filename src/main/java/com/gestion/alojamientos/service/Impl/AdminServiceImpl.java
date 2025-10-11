@@ -369,9 +369,10 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         if (accommodationRepo == null || accommodationMapper == null) {
             throw new UnsupportedOperationException("AccommodationRepo o AccommodationMapper no están disponibles (GET ACCOMMODATION BY ID).");
         }
-        return accommodationRepo.findByIdWithCompleteDetails(id)
-                .map(accommodationMapper::toDto)
-                .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + id));
+        // accommodationRepo.findByIdWithCompleteDetails(id)
+        //         .map(accommodationMapper::toDto)
+        //         .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + id))
+        return null;
     }
 
     @Override
