@@ -3,6 +3,7 @@ package com.gestion.alojamientos.resources.test;
 import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingDTO;
 import com.gestion.alojamientos.mapper.booking.BookingMapper;
+import com.gestion.alojamientos.model.accomodation.Services;
 import com.gestion.alojamientos.model.booking.Booking;
 import com.gestion.alojamientos.model.enums.StatesOfBooking;
 import com.gestion.alojamientos.repository.booking.BookingRepo;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -44,6 +46,8 @@ class AdminServiceGetAllBookingsTest {
     private BookingDTO bookingDTO2;
     private List<Booking> bookings;
     private List<BookingDTO> bookingDTOs;
+    private List<Services> servicesList = new ArrayList<>();
+
 
     @BeforeEach
     void setUp() {
@@ -55,16 +59,18 @@ class AdminServiceGetAllBookingsTest {
 
         booking2 = new Booking();
         booking2.setId(2L);
-        booking2.setBookingState(StatesOfBooking.COMPLETED);
+        booking2.setBookingState(StatesOfBooking.CONFIRMED);
         booking2.setTotalPrice(200.0);
         booking2.setPaymentStatus(true);
 
+
+
         DetailBookingDTO detailBookingDTO1 = new DetailBookingDTO(
-                1L, null, null, 2, 75.0, 0.0, null, null, 1L
+                1L, null, null, 2, 75.0, 0.0, null, null, servicesList, 1L
         );
 
         DetailBookingDTO detailBookingDTO2 = new DetailBookingDTO(
-                2L, null, null, 3, 100.0, 0.0, null, null, 2L
+                2L, null, null, 3, 100.0, 0.0, null, null, servicesList, 2L
         );
 
         bookingDTO1 = new BookingDTO(
@@ -73,7 +79,7 @@ class AdminServiceGetAllBookingsTest {
         );
 
         bookingDTO2 = new BookingDTO(
-                2L, LocalDateTime.now(), LocalDateTime.now(), StatesOfBooking.COMPLETED,
+                2L, LocalDateTime.now(), LocalDateTime.now(), StatesOfBooking.CHECK_OUT,
                 200.0, true, 1L, 2L, 1L, 1L, 1L, detailBookingDTO2
         );
 

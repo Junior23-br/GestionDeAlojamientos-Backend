@@ -66,7 +66,7 @@ class BookingServiceGetAccommodationBookingsTest {
 
         Booking booking2 = new Booking();
         booking2.setId(2L);
-        booking2.setBookingState(StatesOfBooking.COMPLETED);
+        booking2.setBookingState(StatesOfBooking.CHECK_OUT);
         booking2.setTotalPrice(300.0);
         booking2.setPaymentStatus(true);
         booking2.setCreationDate(LocalDateTime.now().minusDays(1));
@@ -90,7 +90,7 @@ class BookingServiceGetAccommodationBookingsTest {
         );
 
         BookingDTO bookingDTO2 = new BookingDTO(
-                2L, LocalDateTime.now().minusDays(1), LocalDateTime.now().minusDays(1), StatesOfBooking.COMPLETED,
+                2L, LocalDateTime.now().minusDays(1), LocalDateTime.now().minusDays(1), StatesOfBooking.CHECK_OUT,
                 300.0, true, 1L, 1L, 1L, 1L, 1L, detailBookingDTO2
         );
 
@@ -118,7 +118,7 @@ class BookingServiceGetAccommodationBookingsTest {
         assertEquals(1L, result.get(0).id());
         assertEquals(2L, result.get(1).id());
         assertEquals(StatesOfBooking.CONFIRMED, result.get(0).bookingState());
-        assertEquals(StatesOfBooking.COMPLETED, result.get(1).bookingState());
+        assertEquals(StatesOfBooking.CHECK_OUT, result.get(1).bookingState());
         verify(accommodationRepo).existsById(validAccommodationId);
         verify(bookingRepo).findByAccommodationId(validAccommodationId);
         verify(bookingMapper, times(2)).toDto(any(Booking.class));

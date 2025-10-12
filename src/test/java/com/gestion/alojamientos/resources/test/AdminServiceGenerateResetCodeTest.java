@@ -53,7 +53,7 @@ class AdminServiceGenerateResetCodeTest {
         admin.setPassword("encodedPassword");
         admin.setAccess_level(1);
         admin.setStatesAdmin(StatesAdmin.ACTIVE);
-        admin.setRole(Role.ADMIN);
+
     }
 
     /**

@@ -56,7 +56,6 @@ class AdminServiceChangePasswordTest {
         admin.setPassword("$2a$10$encodedCurrentPassword");
         admin.setAccess_level(1);
         admin.setStatesAdmin(StatesAdmin.ACTIVE);
-        admin.setRole(Role.ADMIN);
 
         validChangePasswordDto = new ChangePasswordDto(
                 "currentPassword123",    // currentPassword

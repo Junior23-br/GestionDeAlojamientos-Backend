@@ -99,7 +99,7 @@ class HostServiceRegisterHostTest {
         host.setUsername("juan@test.com");
         host.setName("Juan Pérez");
         host.setPhoneNumber("+571234567890");
-        host.setBirthDate(new Date());
+        host.setBirthDate(null);
         host.setPersonalDescription("Soy un anfitrión experimentado");
         host.setStatus(StatesOfHost.ACTIVE);
         host.setRole(Role.HOST);

@@ -54,7 +54,7 @@ class AdminServiceGetBookingByIdTest {
         booking.setPaymentStatus(true);
 
         DetailBookingDTO detailBookingDTO = new DetailBookingDTO(
-                1L, null, null, 2, 75.0, 0.0, null, null, 1L
+                1L, null, null, 2, 75.0, 0.0, null, null, null,1L
         );
 
         bookingDTO = new BookingDTO(

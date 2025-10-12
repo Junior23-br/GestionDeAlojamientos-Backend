@@ -65,21 +65,14 @@ class AdminServiceLoginTest {
         admin.setPassword("$2a$10$encodedPassword");
         admin.setAccess_level(1);
         admin.setStatesAdmin(StatesAdmin.ACTIVE);
-        admin.setRole(Role.ADMIN);
 
         adminDto = new AdminDto(
-                1L,                    // id
-                validEmail,            // email
-                "admin",               // username
-                "Admin Name",          // name
-                "123456789",           // phoneNumber
-                null,                  // birthDate
-                null,                  // urlProfilePhoto
-                StatesAdmin.ACTIVE,    // statesAdmin
-                "Admin description",   // personalDescription
-                null,                  // financialAccountId
-                null,                  // serviceFeeId
-                Role.ADMIN             // role
+                1L,
+                validEmail,
+                "admin",
+                1,
+                StatesAdmin.ACTIVE.toString(),
+                null
         );
 
         validLoginDTO = new UserLoginDTO(validEmail, validPassword);

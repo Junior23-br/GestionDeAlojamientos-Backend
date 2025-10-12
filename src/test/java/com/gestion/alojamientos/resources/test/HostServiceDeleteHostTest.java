@@ -59,7 +59,7 @@ class HostServiceDeleteHostTest {
         host.setUsername("juan@test.com");
         host.setName("Juan Pérez");
         host.setPhoneNumber("+571234567890");
-        host.setBirthDate(new Date());
+        host.setBirthDate(null);
         host.setPersonalDescription("Descripción personal");
         host.setStatus(StatesOfHost.ACTIVE);
         host.setRole(Role.HOST);
