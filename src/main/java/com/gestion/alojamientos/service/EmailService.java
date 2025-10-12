@@ -34,7 +34,7 @@ public interface EmailService {
      */
     void sendCancelledBookingEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException;
     /**
-     *
+     * Enviar email con detalles de reserva proxima a 24 horas
      * @param email email del destinatario huesped
      * @param bookingDTO detalles de la reserva proxima a check-in (24 horas antes del check in)
      * @throws InvalidElementException si el email es invalido o falla el envio
