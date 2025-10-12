@@ -33,6 +33,7 @@ import com.gestion.alojamientos.model.enums.StatesAdmin;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.users.Admin;
+import com.gestion.alojamientos.model.users.Guest;
 import com.gestion.alojamientos.repository.user.AdminRepository;
 import com.gestion.alojamientos.repository.user.GuestRepository;
 import com.gestion.alojamientos.repository.user.HostRepo;
@@ -222,7 +223,7 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
             throw new UnsupportedOperationException("GuestRepository no está disponible (DELETE GUEST).");
         }
         // Podríamos hacer soft delete, pero aquí se delega a cambiar estado si se desea:
-        var guest = guestRepository.findById(id)
+        Guest guest = guestRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Huésped no encontrado con ID: " + id));
         guest.setState(StatesOfGuest.DELETED);
         guestRepository.save(guest);

@@ -212,6 +212,14 @@ public class GuestServiceImpl implements GuestService {
         guest.setResetCode(null); //limpiar
         guestRepository.save(guest);
     }
+
+    public GuestDto getGuestByEmail(String mail) {
+
+        if(guestRepository.findByEmail(mail).isPresent()){
+            return guestMapper.toDto((guestRepository.findByEmail(mail)).orElseThrow());
+        }
+        return null;
+    }
 }
 
 
