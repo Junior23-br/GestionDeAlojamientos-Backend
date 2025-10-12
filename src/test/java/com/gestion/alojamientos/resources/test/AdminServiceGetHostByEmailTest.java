@@ -54,7 +54,7 @@ class AdminServiceGetHostByEmailTest {
         host.setUsername("hostUser");
         host.setName("Host Name");
         host.setPhoneNumber("123456789");
-        host.setBirthDate(new Date());
+        host.setBirthDate(null);
         host.setUrlProfilePhoto("http://example.com/photo.jpg");
         host.setStatus(StatesOfHost.ACTIVE);
         host.setPersonalDescription("Descripción del host");

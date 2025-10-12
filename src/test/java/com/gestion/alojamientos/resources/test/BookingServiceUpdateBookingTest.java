@@ -70,7 +70,7 @@ class BookingServiceUpdateBookingTest {
 
         updatedBooking = new Booking();
         updatedBooking.setId(validBookingId);
-        updatedBooking.setBookingState(StatesOfBooking.COMPLETED);
+        updatedBooking.setBookingState(StatesOfBooking.CHECK_OUT);
         updatedBooking.setTotalPrice(250.0);
         updatedBooking.setPaymentStatus(true);
         updatedBooking.setCreationDate(LocalDateTime.now());
@@ -117,7 +117,7 @@ class BookingServiceUpdateBookingTest {
         );
 
         bookingDTO = new BookingDTO(
-                validBookingId, LocalDateTime.now(), LocalDateTime.now(), StatesOfBooking.COMPLETED,
+                validBookingId, LocalDateTime.now(), LocalDateTime.now(), StatesOfBooking.CHECK_OUT,
                 250.0, true, 1L, 1L, 1L, 1L, 1L, detailBookingDTO
         );
     }
@@ -140,7 +140,7 @@ class BookingServiceUpdateBookingTest {
         // Then
         assertNotNull(result);
         assertEquals(validBookingId, result.id());
-        assertEquals(StatesOfBooking.COMPLETED, result.bookingState());
+        assertEquals(StatesOfBooking.CHECK_OUT, result.bookingState());
         assertEquals(250.0, result.totalPrice());
         verify(bookingRepo).findById(validBookingId);
         verify(detailBookingRepo).save(any(DetailBooking.class));

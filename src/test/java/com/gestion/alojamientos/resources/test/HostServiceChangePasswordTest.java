@@ -16,8 +16,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -56,7 +59,7 @@ class HostServiceChangePasswordTest {
         host.setUsername("juan@test.com");
         host.setName("Juan Pérez");
         host.setPhoneNumber("+571234567890");
-        host.setBirthDate(new Date());
+        host.setBirthDate(null);
         host.setPersonalDescription("Descripción personal");
         host.setStatus(StatesOfHost.ACTIVE);
         host.setRole(Role.HOST);

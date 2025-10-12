@@ -59,7 +59,7 @@ class HostServiceEditHostTest {
         host.setUsername("juan@test.com");
         host.setName("Juan Pérez");
         host.setPhoneNumber("+571234567890");
-        host.setBirthDate(new Date());
+        host.setBirthDate(null);
         host.setPersonalDescription("Descripción original");
         host.setUrlProfilePhoto("http://example.com/old-photo.jpg");
         host.setStatus(StatesOfHost.ACTIVE);
@@ -71,7 +71,7 @@ class HostServiceEditHostTest {
         updatedHost.setUsername("juan@test.com");
         updatedHost.setName("Juan Carlos Pérez");
         updatedHost.setPhoneNumber("+579876543210");
-        updatedHost.setBirthDate(new Date());
+        updatedHost.setBirthDate(null);
         updatedHost.setPersonalDescription("Nueva descripción personal");
         updatedHost.setUrlProfilePhoto("http://example.com/new-photo.jpg");
         updatedHost.setStatus(StatesOfHost.ACTIVE);

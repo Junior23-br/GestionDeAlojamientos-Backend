@@ -66,16 +66,16 @@ class AdminServiceGetHostBookingsHistoryTest {
 
         booking2 = new Booking();
         booking2.setId(2L);
-        booking2.setBookingState(StatesOfBooking.COMPLETED);
+        booking2.setBookingState(StatesOfBooking.CHECK_OUT);
         booking2.setTotalPrice(200.0);
         booking2.setPaymentStatus(true);
 
         DetailBookingDTO detailBookingDTO1 = new DetailBookingDTO(
-                1L, null, null, 2, 75.0, 0.0, null, null, 1L
+                1L, null, null, 2, 75.0, 0.0, null, null, null, 1L
         );
 
         DetailBookingDTO detailBookingDTO2 = new DetailBookingDTO(
-                2L, null, null, 3, 100.0, 0.0, null, null, 2L
+                2L, null, null, 3, 100.0, 0.0, null, null, null, 2L
         );
 
         bookingDTO1 = new BookingDTO(
@@ -84,7 +84,7 @@ class AdminServiceGetHostBookingsHistoryTest {
         );
 
         bookingDTO2 = new BookingDTO(
-                2L, LocalDateTime.now(), LocalDateTime.now(), StatesOfBooking.COMPLETED,
+                2L, LocalDateTime.now(), LocalDateTime.now(), StatesOfBooking.CHECK_OUT,
                 200.0, true, 1L, 2L, 1L, 1L, 1L, detailBookingDTO2
         );
 

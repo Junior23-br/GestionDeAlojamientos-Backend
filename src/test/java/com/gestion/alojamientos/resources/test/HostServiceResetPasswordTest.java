@@ -3,6 +3,7 @@ package com.gestion.alojamientos.resources.test;
 import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.exception.ElementNotFoundException;
 import com.gestion.alojamientos.exception.InvalidElementException;
+import com.gestion.alojamientos.model.common.ResetCode;
 import com.gestion.alojamientos.model.enums.Role;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
 import com.gestion.alojamientos.model.users.Host;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -49,7 +51,7 @@ class HostServiceResetPasswordTest {
     private ResetPasswordDto weakPasswordResetPasswordDto;
     private String validEmail;
     private String invalidEmail;
-    private String validResetCode;
+    private ResetCode validResetCode;
     private String expiredResetCode;
     private String newPassword;
 
@@ -57,7 +59,7 @@ class HostServiceResetPasswordTest {
     void setUp() {
         validEmail = "juan@test.com";
         invalidEmail = "nonexistent@test.com";
-        validResetCode = "123456";
+        validResetCode = new ResetCode("123456", LocalDateTime.now().plusMinutes(15));
         expiredResetCode = "expired123";
         newPassword = "NewPassword123";
         
@@ -67,7 +69,7 @@ class HostServiceResetPasswordTest {
         host.setUsername(validEmail);
         host.setName("Juan Pérez");
         host.setPhoneNumber("+571234567890");
-        host.setBirthDate(new Date());
+        host.setBirthDate(null);
         host.setPersonalDescription("Descripción personal");
         host.setStatus(StatesOfHost.ACTIVE);
         host.setRole(Role.HOST);
@@ -76,13 +78,13 @@ class HostServiceResetPasswordTest {
 
         validResetPasswordDto = new ResetPasswordDto(
                 validEmail,                     // email
-                validResetCode,                 // resetCode
+                validResetCode.getResetCode(),                 // resetCode
                 newPassword                     // newPassword
         );
 
         invalidEmailResetPasswordDto = new ResetPasswordDto(
                 invalidEmail,                   // email
-                validResetCode,                 // resetCode
+                validResetCode.getResetCode(),                 // resetCode
                 newPassword                     // newPassword
         );
 
@@ -94,7 +96,7 @@ class HostServiceResetPasswordTest {
 
         weakPasswordResetPasswordDto = new ResetPasswordDto(
                 validEmail,                     // email
-                validResetCode,                 // resetCode
+                validResetCode.getResetCode(),                 // resetCode
                 "weak"                          // newPassword (doesn't meet policy)
         );
     }
@@ -107,7 +109,7 @@ class HostServiceResetPasswordTest {
     void shouldResetPasswordSuccessfully_WhenDataIsValid() throws ElementNotFoundException, InvalidElementException {
         // Given
         when(hostRepository.findByEmail(validEmail)).thenReturn(Optional.of(host));
-        doNothing().when(resetCodeServiceImpl).validateCode(host, validResetCode);
+        doNothing().when(resetCodeServiceImpl).validateCode(host, validResetCode.getResetCode());
         when(passwordEncoder.encode(newPassword)).thenReturn("$2a$10$newEncodedPassword");
 
         // When
@@ -115,7 +117,7 @@ class HostServiceResetPasswordTest {
 
         // Then
         verify(hostRepository).findByEmail(validEmail);
-        verify(resetCodeServiceImpl).validateCode(host, validResetCode);
+        verify(resetCodeServiceImpl).validateCode(host, validResetCode.getResetCode());
         verify(passwordEncoder).encode(newPassword);
         verify(hostRepository).save(host);
         assertEquals("$2a$10$newEncodedPassword", host.getPassword());
@@ -177,7 +179,7 @@ class HostServiceResetPasswordTest {
     void shouldHandleEdgeCase_WhenNewPasswordDoesNotMeetPolicy() throws ElementNotFoundException {
         // Given
         when(hostRepository.findByEmail(validEmail)).thenReturn(Optional.of(host));
-        doNothing().when(resetCodeServiceImpl).validateCode(host, validResetCode);
+        doNothing().when(resetCodeServiceImpl).validateCode(host, validResetCode.getResetCode());
 
         // When & Then
         InvalidElementException exception = assertThrows(
@@ -187,7 +189,7 @@ class HostServiceResetPasswordTest {
 
         assertEquals("La nueva contraseña no cumple con la política de seguridad.", exception.getMessage());
         verify(hostRepository).findByEmail(validEmail);
-        verify(resetCodeServiceImpl).validateCode(host, validResetCode);
+        verify(resetCodeServiceImpl).validateCode(host, validResetCode.getResetCode());
         verify(passwordEncoder, never()).encode(anyString());
         verify(hostRepository, never()).save(any());
     }

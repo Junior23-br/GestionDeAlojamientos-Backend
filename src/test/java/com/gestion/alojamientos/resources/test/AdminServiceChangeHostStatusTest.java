@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -57,7 +58,7 @@ class AdminServiceChangeHostStatusTest {
         host.setUsername("hostUser");
         host.setName("Host Name");
         host.setPhoneNumber("123456789");
-        host.setBirthDate(new Date());
+        host.setBirthDate(null);
         host.setUrlProfilePhoto("http://example.com/photo.jpg");
         host.setStatus(StatesOfHost.ACTIVE);
         host.setPersonalDescription("Descripción del host");
@@ -69,7 +70,7 @@ class AdminServiceChangeHostStatusTest {
         updatedHost.setUsername("hostUser");
         updatedHost.setName("Host Name");
         updatedHost.setPhoneNumber("123456789");
-        updatedHost.setBirthDate(new Date());
+        updatedHost.setBirthDate(null);
         updatedHost.setUrlProfilePhoto("http://example.com/photo.jpg");
         updatedHost.setStatus(newStatus);
         updatedHost.setPersonalDescription("Descripción del host");
