@@ -65,43 +65,14 @@ public interface AdminService {
     // 3. Alojamientos
     List<AccommodationDTO> getAllAccommodations();
     AccommodationDTO getAccommodationById(Long id);
-//    AccommodationDTO approveAccommodation(Long id);
-//    AccommodationDTO suspendAccommodation(Long id, String reason);
+
     void deleteAccommodation(Long id);
-//    AccommodationMetricsDTO getAccommodationMetrics(Long id);
 
     // 4. Reservas
     List<BookingDTO> getAllBookings();
     BookingDTO getBookingById(Long id);
-//    BookingDTO resolveBookingConflict(Long bookingId, String resolution);
-//    BookingGlobalStatsDTO getBookingStatistics();
-
-//    // 5. Reportes
-//    SystemReportDTO generateFinancialReport(LocalDate startDate, LocalDate endDate);
-//    SystemReportDTO generateUserActivityReport(LocalDate startDate, LocalDate endDate);
-//    SystemReportDTO generatePlatformPerformanceReport(LocalDate startDate, LocalDate endDate);
-//    File exportReport(ReportType type, String format);
-
-//    // 6. Configuración del Sistema
-//    void updatePlatformCommission(double percentage);
-//    void updateHostCommission(double percentage);
-//    void updateCancellationPolicy(String policyText);
-//    void updateUsagePolicy(String policyText);
-//    void triggerSystemBackup();
-//    List<ActivityLogDTO> getSystemLogs();
-
-    // 7. Moderación de Contenido
-//    List<ReportDTO> getAllReports();
-//    ReportDTO classifyReport(Long reportId, ReportCategory category);
-    void approveComment(Long commentId);
-    void deleteComment(Long commentId);
-    void deletePhoto(Long photoId);
-
     // 8. Comunicaciones
     void sendEmailToUser( MessageDTO messageDTO);
-    void sendEmailToAllHosts(Long adminId);
-    void sendEmailToAllGuests(Long adminId);
-
     //Codigo aleatorio, busca al guest,
     // genera el código, lo asigna al guest y lo envía por email.
     String generateResetCode(String email) throws ElementNotFoundException;

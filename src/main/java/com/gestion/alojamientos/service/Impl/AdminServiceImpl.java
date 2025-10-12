@@ -28,6 +28,7 @@ import com.gestion.alojamientos.mapper.accomodation.CommentHostMapper;
 import com.gestion.alojamientos.model.accomodation.Accomodation;
 import com.gestion.alojamientos.model.accomodation.AccomodationCalification;
 import com.gestion.alojamientos.model.accomodation.OperationalStatus;
+import com.gestion.alojamientos.model.base.SuperUser;
 import com.gestion.alojamientos.model.enums.StatesAdmin;
 import com.gestion.alojamientos.model.enums.StatesOfGuest;
 import com.gestion.alojamientos.model.enums.StatesOfHost;
@@ -114,11 +115,6 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
     @Autowired
     private AccommodationCalificationMapper accommodationCalificationMapper;
 
-    // TODO: Integrar NotificationService / PhotoService cuando estén disponibles
-    // @Autowired private NotificationService notificationService;
-    // @Autowired private PhotoService photoService;
-
-    // ===== Admin CRUD =====
 
     @Override
     public AdminDto registerAdmin(CreateAdminDto dto) throws RepeatedElementException {
@@ -137,9 +133,6 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         admin.setAccess_level(1);
         admin.setStatesAdmin(StatesAdmin.ACTIVE);
         System.out.println(admin.getEmail());
-        // statesAdmin: si existe un enum, por defecto lo dejamos en ACTIVE (si no: TODO)
-        // TODO: setear statesAdmin apropiadamente si existe el enum y valores
-        // admin.setStatesAdmin(StatesAdmin.ACTIVE); // uncomment si StatesAdmin existe
 
         Admin saved = adminRepository.save(admin);
         return adminMapper.toDTO(saved);
@@ -387,10 +380,10 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
         if (accommodationRepo == null || accommodationMapper == null) {
             throw new UnsupportedOperationException("AccommodationRepo o AccommodationMapper no están disponibles (GET ACCOMMODATION BY ID).");
         }
-        // accommodationRepo.findByIdWithCompleteDetails(id)
-        //         .map(accommodationMapper::toDto)
-        //         .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + id))
-        return null;
+
+        return accommodationRepo.findById(id)
+                .map(accommodationMapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Alojamiento no encontrado con ID: " + id));
     }
 
     @Override
@@ -430,61 +423,13 @@ public class AdminServiceImpl implements com.gestion.alojamientos.service.AdminS
 
     // ===== Moderación de contenido =====
 
-    @Override
-    public void approveComment(Long commentId) {
-        if (commentAccomodationRepo == null && commentHostRepo == null) {
-            throw new UnsupportedOperationException("Repositorios de comentarios no disponibles.");
-        }
-        // TODO: Implementar la lógica real: distinguir si es comentario de alojamiento o de host,
-        // establecer estado 'approved' y notificar al autor.
-        throw new UnsupportedOperationException("approveComment aún no implementado - requiere lógica específica.");
-    }
-
-    @Override
-    public void deleteComment(Long commentId) {
-        if (commentAccomodationRepo == null && commentHostRepo == null) {
-            throw new UnsupportedOperationException("Repositorios de comentarios no disponibles.");
-        }
-        // Intentar borrar alojamiento o host comment si existe
-        if (commentAccomodationRepo != null && commentAccomodationRepo.existsById(commentId)) {
-            commentAccomodationRepo.deleteById(commentId);
-            return;
-        }
-        if (commentHostRepo != null && commentHostRepo.existsById(commentId)) {
-            commentHostRepo.deleteById(commentId);
-            return;
-        }
-        throw new EntityNotFoundException("Comentario no encontrado con ID: " + commentId);
-    }
-
-
-
-    @Override
-    public void deletePhoto(Long photoId) {
-        // TODO: Implementar cuando exista PhotoService/repository
-        throw new UnsupportedOperationException("deletePhoto no implementado - PhotoService requerido.");
-    }
-
     // ===== Comunicaciones =====
 
     @Override
     public void sendEmailToUser(MessageDTO messageDTO) {
-        // TODO: Integrar NotificationService / EmailService
-        throw new UnsupportedOperationException("sendEmailToUser no implementado - NotificationService requerido.");
+        String email = (guestRepository.findById(messageDTO.receiverId())).get().getEmail();
+        emailServiceImpl.sendEmaiil(email, messageDTO);
     }
-
-    @Override
-    public void sendEmailToAllHosts(Long adminId) {
-        // TODO: Implementar envío por lotes usando NotificationService y validación del admin
-        throw new UnsupportedOperationException("sendEmailToAllHosts no implementado - NotificationService requerido.");
-    }
-
-    @Override
-    public void sendEmailToAllGuests(Long adminId) {
-        // TODO: Implementar envío por lotes usando NotificationService y validación del admin
-        throw new UnsupportedOperationException("sendEmailToAllGuests no implementado - NotificationService requerido.");
-    }
-
     //Codigo aleatorio, busca al guest,
     // genera el código, lo asigna al guest y lo envía por email.
     @Override

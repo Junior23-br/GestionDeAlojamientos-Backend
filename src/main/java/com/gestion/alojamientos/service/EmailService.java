@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.service;
 
+import com.gestion.alojamientos.dto.Message.MessageDTO;
 import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
@@ -21,6 +22,9 @@ public interface EmailService {
      * @throws InvalidElementException si el email es invalido
      */
     void SendNewBookingEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException;
+
+
+    void sendEmaiil(String email, MessageDTO messageDTO) throws InvalidElementException;
 
     /**
      *Envia un email con los detalles de una reserva cancelada, tipo pdf

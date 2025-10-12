@@ -1,5 +1,6 @@
 package com.gestion.alojamientos.service.Impl;
 
+import com.gestion.alojamientos.dto.Message.MessageDTO;
 import com.gestion.alojamientos.dto.booking.BookingDTO;
 import com.gestion.alojamientos.dto.booking.detailBooking.DetailBookingDTO;
 import com.gestion.alojamientos.dto.guest.GuestDto;
@@ -18,6 +19,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -67,6 +69,57 @@ public class EmailServiceImpl implements EmailService {
 
     }
 
+    @Override
+    public void sendEmaiil(String email, MessageDTO messageDTO) throws InvalidElementException {
+        emailValidator(email);
+        try {
+            byte[] pdfBytes = generateNormalEmail(email, messageDTO);
+            sendEmail(email, "Mensaje de administrador",
+                    "Adjunto encontrarás informacion",
+                    "Information.pdf", pdfBytes);
+        } catch (Exception e) {
+            throw new InvalidElementException("Error al enviar el email de nueva reserva: " + e.getMessage());
+        }
+
+
+    }
+
+
+    private byte[] generateNormalEmail(String email, MessageDTO messageDTO) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+            // Formato de fecha legible
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            // Encabezado
+            document.add(new Paragraph("📧 MENSAJE NUEVO")
+                    .setBold()
+                    .setFontSize(16));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Detalles del mensaje:").setBold());
+            // Información del mensaje
+            document.add(new Paragraph("Fecha de envío: " + sdf.format(messageDTO.createDate())));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Contenido del mensaje:").setBold());
+            document.add(new Paragraph(messageDTO.text()));
+            // Si tiene adjunto
+            if (messageDTO.doc() != null && messageDTO.doc().length > 0) {
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph("Este mensaje contiene un archivo adjunto.").setItalic());
+            }
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Enviado a: " + email));
+            document.add(new Paragraph("Gracias por utilizar nuestro sistema de mensajería."));
+            document.close();
+            return byteArrayOutputStream.toByteArray();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     @Override
     public void sendCancelledBookingEmail(String email, BookingDTO bookingDTO, DetailBookingDTO detailBookingDTO) throws InvalidElementException {
         emailValidator(email);
