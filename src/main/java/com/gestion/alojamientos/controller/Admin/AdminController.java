@@ -169,7 +169,9 @@ public class AdminController {
     // CHANGE PASSWORD
     // --------------------------
     @PostMapping("/change-password")
-    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDto dto, Long idUser) {
+    public ResponseEntity<Void> changePassword(
+            @RequestParam Long idUser,
+            @RequestBody ChangePasswordDto dto) {
         try {
             adminService.changePassword(idUser, dto);
             return ResponseEntity.ok().build();
@@ -180,4 +182,5 @@ public class AdminController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
 }
