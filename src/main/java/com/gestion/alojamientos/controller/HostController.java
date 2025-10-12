@@ -3,6 +3,7 @@ import com.gestion.alojamientos.dto.JwtResponseDTO;
 import com.gestion.alojamientos.dto.UserLoginDTO;
 import com.gestion.alojamientos.dto.Host.*;
 import com.gestion.alojamientos.dto.password.ChangePasswordDto;
+import com.gestion.alojamientos.dto.password.GenerateResetCodeDto;
 import com.gestion.alojamientos.dto.password.ResetPasswordDto;
 import com.gestion.alojamientos.exception.ElementNotFoundException;
 import com.gestion.alojamientos.exception.InvalidElementException;
@@ -157,16 +158,34 @@ public class HostController {
     }
 
     // --------------------------
-    // CHANGE PASSWORD
+    // RESET PASSWORD - NO AUTHENTICATED 
     // --------------------------
-    @PostMapping("/change-password")
-    @Operation(summary = "Cambiar contraseña", description = "Permite al Host cambiar su contraseña actual por una nueva.")
-    public ResponseEntity<Void> changePassword(
-            @RequestParam Long idUser,
-            @Valid @RequestBody ChangePasswordDto dto
+    @PostMapping("/generate-reset-code")
+    @Operation(summary = "Restablecer contraseña", description = "Permite restablecer la contraseña del Host mediante un código de verificación.")
+    public ResponseEntity<?> generateResetCode(@Valid @RequestBody GenerateResetCodeDto dto) {
+        try {
+            hostService.generateResetCode(dto.email());
+            return ResponseEntity.ok().build();
+        } catch (InvalidElementException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (ElementNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+     // --------------------------
+    // CHANGE PASSWORD - NO AUTHENTICATED
+    // --------------------------
+    @PostMapping("/reset-password")
+    @Operation(summary = "Cambiar contraseña", description = "Permite restablecer la contraseña del Host mediante un código de verificación usando el codigo de verificacion proporcionado al email por resetPasswword.")
+    public ResponseEntity<Void> resetPassword(
+            @Valid @RequestBody ResetPasswordDto dto
     ) {
         try {
-            hostService.changePassword(idUser, dto);
+            hostService.resetPassword(dto);
             return ResponseEntity.ok().build();
         } catch (InvalidElementException e) {
             return ResponseEntity.badRequest().build();
@@ -179,16 +198,19 @@ public class HostController {
     }
 
     // --------------------------
-    // RESET PASSWORD
+    // CHANGE PASSWORD - AUTHENTICATED
     // --------------------------
-    @PostMapping("/reset-password")
-    @Operation(summary = "Restablecer contraseña", description = "Permite restablecer la contraseña del Host mediante un código de verificación.")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto dto) {
+    @PutMapping("/change-password/{id}")
+    @Operation(summary = "Cambiar contraseña", description = "Permite al Host cambiar su contraseña actual por una nueva.")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable Long id,
+            @Valid @RequestBody ChangePasswordDto dto
+    ) {
         try {
-            hostService.resetPassword(dto);
+            hostService.changePassword(id, dto);
             return ResponseEntity.ok().build();
         } catch (InvalidElementException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         } catch (ElementNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
@@ -196,4 +218,5 @@ public class HostController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
 }
