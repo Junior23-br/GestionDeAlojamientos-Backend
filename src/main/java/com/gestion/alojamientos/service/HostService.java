@@ -56,4 +56,5 @@ public interface HostService {
      * Restablece la contraseña del Host mediante un código enviado al correo.
      */
     void resetPassword(ResetPasswordDto dto) throws InvalidElementException, ElementNotFoundException;
+
 }
